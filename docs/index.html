@@ -135,6 +135,22 @@ dialog::backdrop{background:rgba(10,14,8,.62)}
     <a href="nestbox-wiring.svg" download>nestbox-wiring.svg</a>
     <a href="nest-box-bench-sheet.html" download id="dl-offline">this whole page as one offline file</a>
   </div>
+
+  <div class="note">
+    <p class="eyebrow">Run it before you build it</p>
+    <p style="max-width:62ch"><a href="https://wokwi.com" target="_blank" rel="noopener">Wokwi</a> is
+    a free browser simulator that shows real pictures of the boards, lets you drag wires between
+    pins, and runs the actual firmware. There's a ready-made project for this circuit —
+    <a href="https://github.com/H-Ashrafi/nestbox-door/tree/main/wokwi" target="_blank" rel="noopener">paste
+    two files in and press play</a>. Same GPIO numbers as the real build, so it maps pin for pin
+    against the diagram above.</p>
+    <p style="max-width:62ch">A green LED flashes at dawn, a red one mid-afternoon, and a servo
+    swings between them as the door. Turn the knob down past 11.9 V and watch the battery guard
+    park the boxes open. One day passes every thirty seconds.</p>
+    <p class="dim" style="font-size:14px;max-width:62ch">It proves the <em>logic</em>. It can't
+    catch a swapped VIN and VOUT, a cold joint, or a pull-down on a strapping pin — which is what
+    building in stages is for.</p>
+  </div>
 </section>
 
 <!-- ───────────── BOARDS ───────────── -->

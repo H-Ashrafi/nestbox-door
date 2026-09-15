@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "author": "nest box door",
+  "editor": "wokwi",
+  "parts": [
+    { "id": "esp", "type": "board-esp32-c3-devkitm-1", "top": 0, "left": 0, "attrs": {} },
+    { "id": "rtc", "type": "wokwi-ds1307", "top": -230, "left": -40, "attrs": {} },
+    { "id": "pot", "type": "wokwi-potentiometer", "top": 130, "left": -260,
+      "attrs": { "label": "battery volts" } },
+    { "id": "r1", "type": "wokwi-resistor", "top": -60, "left": 230, "attrs": { "value": "220" } },
+    { "id": "ledOpen", "type": "wokwi-led", "top": -80, "left": 360,
+      "attrs": { "color": "green", "label": "IN1 / OPEN" } },
+    { "id": "r2", "type": "wokwi-resistor", "top": 20, "left": 230, "attrs": { "value": "220" } },
+    { "id": "ledShut", "type": "wokwi-led", "top": 0, "left": 360,
+      "attrs": { "color": "red", "label": "IN2 / SHUT" } },
+    { "id": "rpd1", "type": "wokwi-resistor", "top": 130, "left": 230, "attrs": { "value": "10000" } },
+    { "id": "rpd2", "type": "wokwi-resistor", "top": 190, "left": 230, "attrs": { "value": "10000" } },
+    { "id": "servo", "type": "wokwi-servo", "top": -190, "left": 330, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "" ],
+    [ "esp:RX", "$serialMonitor:TX", "" ],
+
+    [ "esp:6", "rtc:SDA", "gold", [] ],
+    [ "esp:7", "rtc:SCL", "green", [] ],
+    [ "esp:3V3", "rtc:5V", "magenta", [] ],
+    [ "esp:GND.1", "rtc:GND", "black", [] ],
+
+    [ "esp:3", "r1:1", "blue", [] ],
+    [ "r1:2", "ledOpen:A", "blue", [] ],
+    [ "ledOpen:C", "esp:GND.2", "black", [] ],
+
+    [ "esp:5", "r2:1", "cyan", [] ],
+    [ "r2:2", "ledShut:A", "cyan", [] ],
+    [ "ledShut:C", "esp:GND.2", "black", [] ],
+
+    [ "esp:3", "rpd1:1", "blue", [] ],
+    [ "rpd1:2", "esp:GND.2", "black", [] ],
+    [ "esp:5", "rpd2:1", "cyan", [] ],
+    [ "rpd2:2", "esp:GND.2", "black", [] ],
+
+    [ "pot:VCC", "esp:3V3", "red", [] ],
+    [ "pot:GND", "esp:GND.1", "black", [] ],
+    [ "pot:SIG", "esp:4", "purple", [] ],
+
+    [ "servo:PWM", "esp:10", "orange", [] ],
+    [ "servo:V+", "esp:5V", "red", [] ],
+    [ "servo:GND", "esp:GND.1", "black", [] ]
+  ]
+}
