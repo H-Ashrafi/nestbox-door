@@ -33,20 +33,57 @@ file is styled with no network; run it with internet access.
 
 ## Bill of materials
 
-Australian sourcing, checked 15 September 2026. Roughly **$240–$300** plus tools.
+Australian sourcing, every link checked 15 September 2026. **$360–$472** for the parts,
+plus about $166 of tools if you own none. The full list with prices, links and a line on
+why each thing is there is on the [bench sheet](https://h-ashrafi.github.io/nestbox-door/#parts).
 
-- Seeed XIAO ESP32-C3 — $10.65, Core Electronics
-- DFRobot DS3231M clock (DFR0641) — $11.75, Core Electronics
-- Adafruit DRV8871 motor driver — $13.80, Core Electronics
-- Pololu D36V6F5 5 V buck — $9.95, Core Electronics
-- 12 V 7.2 Ah SLA battery — $34.95 Jaycar SB2486, or
-  [$38.98 on Amazon AU](https://www.amazon.com.au/dp/B0G6K9KNLK) (AGM, F2 blade terminals, 4.2★)
-- 12 V 1 A automatic SLA charger — $32.95 Jaycar MB3619, or
-  [NOCO GENIUS1, $70.95](https://www.amazon.com.au/dp/B08D6WV445) (4.6★). **Jaycar wins here** —
-  1 A is the right size for a 7 Ah battery and it's less than half the price.
-- 12 V linear actuator, 300 mm stroke, built-in limit switches — $56–$118, eBay AU
+**The four boards — $46.15, one order from Core Electronics**
 
-Tools and consumables are on the [bench sheet](https://h-ashrafi.github.io/nestbox-door/),
+| Part | Price | Link |
+|---|---|---|
+| Seeed XIAO ESP32-C3 | $10.65 | [Core Electronics](https://core-electronics.com.au/seeed-studio-xiao-esp32c3-tiny-mcu-board-with-wi-fi-and-ble-battery-charge-supported-power-efficiency-and-rich-interface.html) |
+| DS3231M MEMS RTC (DFRobot DFR0641) | $11.75 | [Core Electronics](https://core-electronics.com.au/ds3231m-mems-precise-rtc.html) |
+| Adafruit DRV8871 motor driver | $13.80 | [Core Electronics](https://core-electronics.com.au/adafruit-drv8871-dc-motor-driver-breakout-board-3-6a-max.html) |
+| Pololu D36V6F5 5 V buck | $9.95 | [Core Electronics](https://core-electronics.com.au/pololu-5v-600ma-step-down-voltage-regulator-d36v6f5.html) |
+
+**Power — $74.00**
+
+| Part | Price | Link |
+|---|---|---|
+| 12 V 7.2 Ah SLA battery | ≈$34.95 | [Jaycar SB2486](https://www.jaycar.com.au/12v-7-2ah-sla-back-up-battery-nbn-alarm-ufb/p/SB2486), or [$38.98 Amazon AU](https://www.amazon.com.au/dp/B0G6K9KNLK) |
+| 12 V 1 A automatic SLA charger | $32.95 | [Jaycar MB3619](https://www.jaycar.com.au/12v-1a-sla-battery-charger/p/MB3619). **Jaycar wins** — the [NOCO GENIUS1](https://www.amazon.com.au/dp/B08D6WV445) is $70.95 and adds nothing for one small battery |
+| Inline blade fuse holder, water resistant | $4.95 | [Jaycar SZ2042](https://www.jaycar.com.au/30a-32vdc-water-resistant-inline-standard-blade-fuse-holder/p/SZ2042) |
+| 2 A blade fuse | $1.15 | [Jaycar SF2127](https://www.jaycar.com.au/2a-grey-standard-blade-fuse/p/SF2127) — separate line, the holder comes empty |
+
+**The moving part — $108–$220**
+
+| Part | Price | Link |
+|---|---|---|
+| 12 V linear actuator, 300 mm, limit switches | $88.42 | [Justech, Amazon AU](https://www.amazon.com.au/dp/B0F6TV1ZVJ) — IP54, 6 mm/s, brackets included |
+| …or the weatherproof one | $199.69 | [Motion Dynamics, IP65](https://www.motiondynamics.com.au/linear-actuator-300mm-stroke-20mm-sec-12v-400n-clevis-end.html) — worth it if rain reaches the actuator |
+| Cord, pulley, two eye bolts, turnbuckle | ≈$20 | any hardware shop |
+
+**Loose components — $27.40**
+
+| Part | Price | Link |
+|---|---|---|
+| Resistor pack, 300 pieces (has 220k, 33k, 10k) | $12.95 | [Jaycar RR1680](https://www.jaycar.com.au/1-4-watt-carbon-film-resistors-300-pieces/p/RR1680) |
+| 100 nF monolithic capacitor | $0.35 | [Jaycar RC5490](https://www.jaycar.com.au/100nf-50vdc-monolithic-capacitor/p/RC5490) |
+| CR1220 coin cell (for the clock) | $4.95 | [Jaycar SB2527](https://www.jaycar.com.au/cr1220-3v-lithium-battery/p/SB2527) |
+| Male header, 2.54 mm, 1×40 — buy two | $0.45 ea | [Core Electronics CE07828](https://core-electronics.com.au/male-pin-header-2-54mm-1x40.html) |
+| Experimenters board, 2 pack | $8.25 | [Jaycar HP9556](https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556) |
+
+**The box and the wire — $104.51**
+
+| Part | Price | Link |
+|---|---|---|
+| Sealed IP65 ABS enclosure, 171×121×80 | $24.95 | [Jaycar HB6129](https://www.jaycar.com.au/sealed-abs-enclosure-171-x-121-x-80mm/p/HB6129) |
+| PG7 cable glands, 20 pack | $20.00 | [Amazon AU](https://www.amazon.com.au/Cable-Lokman-Plastic-Waterproof-Adjustable/dp/B06Y5HGYK2), or [2 pack from Jaycar, $5.95](https://www.jaycar.com.au/3-6-5mm-dia-waterproof-cable-glands-pack-of-2/p/HP0720) |
+| 18 AWG 2-core red/black, 12 m | $14.61 | [Amazon AU](https://www.amazon.com.au/dp/B01LZRV0HV) |
+| Hook-up wire, 8 colours, 26 AWG | $39.95 | [Jaycar WH3009](https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009) |
+| Cable ties | ≈$5 | any hardware shop |
+
+Tools are listed separately on the [bench sheet](https://h-ashrafi.github.io/nestbox-door/#tools),
 priced both ways — Jaycar and Amazon AU.
 
 ## Two things that bite

@@ -56,6 +56,10 @@ tailwind.config = {
   .tbl td { @apply py-2.5 pr-3 border-b border-rule align-top; }
   .tbl tr:last-child td { @apply border-b-0; }
   .scroller { @apply overflow-x-auto min-w-0; }
+  .buytbl { min-width: 620px; }
+  .buytbl th:nth-child(1), .buytbl td:nth-child(1) { width: 3.5rem; }
+  .buytbl th:nth-child(2), .buytbl td:nth-child(2) { width: 34%; }
+  .buytbl th:nth-child(4), .buytbl td:nth-child(4) { width: 6rem; text-align: right; }
   .steps { counter-reset: s; @apply list-none p-0 m-0 flex flex-col; }
   .steps > li { counter-increment: s; @apply relative pl-14 pb-6 ml-[18px] border-l border-rule; }
   .steps > li:last-child { @apply border-l-transparent pb-0; }
@@ -108,6 +112,7 @@ tailwind.config = {
     <a class="navlink no-underline" href="#boards">Boards</a>
     <a class="navlink no-underline" href="#loose">Loose parts</a>
     <a class="navlink no-underline" href="#wire">Wire</a>
+    <a class="navlink no-underline" href="#parts">Buy the parts</a>
     <a class="navlink no-underline" href="#tools">Tools</a>
     <a class="navlink no-underline" href="#solder">Solder</a>
     <a class="navlink no-underline" href="#build">Build</a>
@@ -133,8 +138,8 @@ tailwind.config = {
   <div class="flex flex-wrap gap-x-8 gap-y-3">
     <div><p class="kicker">Joints to solder</p><p class="mono text-[15px]">about 30</p></div>
     <div><p class="kicker">Bench time</p><p class="mono text-[15px]">one evening</p></div>
-    <div><p class="kicker">Tools, if you own none</p><p class="mono text-[15px]">about $230</p></div>
-    <div><p class="kicker">Wire and small parts</p><p class="mono text-[15px]">about $90</p></div>
+    <div><p class="kicker">Parts</p><p class="mono text-[15px]">$360 to $472</p></div>
+    <div><p class="kicker">Tools, if you own none</p><p class="mono text-[15px]">about $166</p></div>
   </div>
 </header>
 
@@ -353,10 +358,20 @@ tailwind.config = {
   <p class="max-w-[62ch]">Ten metres of 1 mm² figure-8 loses about a third of a volt while the motor pulls 2 A. That loss is nothing. The same run in thin 26 AWG hook-up wire would lose over three volts and get hot. This effect is called <button type="button" class="term" data-t="vdrop">voltage drop</button>.</p></div>
 </section>
 
+<!-- ───────────── PARTS ───────────── -->
+<section class="section" id="parts">
+  <div><p class="kicker">Shopping, part one</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Buy the parts</h2></div>
+  <p class="lede">Everything that ends up in the finished controller. The tools you need to assemble it are in the
+  next section. Prices were checked on 15 September 2026 and the ≈ sign means close but not verified.</p>
+  <div id="parts-tables" class="flex flex-col gap-8"></div>
+  <div id="parts-total"></div>
+</section>
+
 <!-- ───────────── TOOLS ───────────── -->
 <section class="section" id="tools">
-  <div><p class="kicker">Shopping</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Tools and consumables</h2></div>
-  <p class="lede">There are two ways to buy it all. You can walk into Jaycar today. Amazon is cheaper on more than half the list.
+  <div><p class="kicker">Shopping, part two</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Tools and consumables</h2></div>
+  <p class="lede">These are the things you use to build it rather than things that end up inside it. Skip any you already own.
+  There are two ways to buy: you can walk into Jaycar today, or wait a few days and pay less at Amazon.
   Prices and ratings were checked on 15 September 2026. The ≈ sign means close but not verified. <strong>Bold marks the better buy.</strong></p>
   <div class="scroller"><table class="tbl">
     <thead><tr><th>Item</th><th>Jaycar</th><th>Amazon AU</th><th>Why</th></tr></thead>
@@ -372,30 +387,6 @@ tailwind.config = {
         <td><a href="https://www.jaycar.com.au/0-71mm-duratech-solder-200gm/p/NS3005" target="_blank" rel="noopener">NS3005</a><br><span class="mono">≈$25</span> <span class="text-muted">200 g</span></td>
         <td><a href="https://www.amazon.com.au/dp/B0H4FQMW5L" target="_blank" rel="noopener">Sn63/Pb37, 4 × 30 g</a><br><strong class="mono">$12.99</strong> <span class="text-muted">4.8★</span></td>
         <td class="text-[14px]">Leaded solder melts at a lower temperature and forgives mistakes far better than lead-free. Sn63/Pb37 beats 60/40 too. It sets instantly instead of going through a pasty stage, so a nudged joint is less likely to come out grainy.</td>
-      </tr>
-      <tr>
-        <td>Hook-up wire, one colour per net</td>
-        <td><a href="https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009" target="_blank" rel="noopener">WH3009</a><br><strong class="mono">$39.95</strong> <span class="text-muted">8 × 25 m, 26 AWG</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B07TX6BX47" target="_blank" rel="noopener">TUOFENG 22 AWG solid</a><br><span class="mono">$41.99</span> <span class="text-muted">6 × 9 m · 4.7★</span></td>
-        <td class="text-[14px]">This one is a line-ball call. Jaycar gives far more wire and two extra colours. The Amazon wire is solid-core, which pokes through <button type="button" class="term" data-t="perfboard">perfboard</button> holes more easily than stranded wire does.</td>
-      </tr>
-      <tr>
-        <td>2-core wire for battery and motor</td>
-        <td><a href="https://www.jaycar.com.au/medium-duty-fig-8-speaker-cable/p/WB1706" target="_blank" rel="noopener">WB1706</a><br><span class="mono">≈$2.50/m</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B01LZRV0HV" target="_blank" rel="noopener">TYUMEN 18 AWG red/black, 12 m</a><br><strong class="mono">$14.61</strong> <span class="text-muted">4.7★</span></td>
-        <td class="text-[14px]">You get twelve metres for the price of six. One roll covers the battery leads, the driver feed and the actuator run. Mark one end of the motor pair with tape so you do not mix it up with the 12 V pair.</td>
-      </tr>
-      <tr>
-        <td>Prototyping board</td>
-        <td><a href="https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556" target="_blank" rel="noopener">HP9556</a><br><strong class="mono">$8.25</strong> <span class="text-muted">2 boards</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0772FK81G" target="_blank" rel="noopener">Elegoo 32 pcs, 5 sizes</a><br><span class="mono">$19.99</span> <span class="text-muted">4.8★</span></td>
-        <td class="text-[14px]">Choose Jaycar if you want one board and a spare. Choose Elegoo if you would rather own thirty and never think about it again. The Elegoo boards are double-sided with plated holes, which makes soldering kinder.</td>
-      </tr>
-      <tr>
-        <td><button type="button" class="term" data-t="header">Header pins</button></td>
-        <td><a href="https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211" target="_blank" rel="noopener">HM3211</a><br><strong class="mono">≈$1.50</strong> <span class="text-muted">male only</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B07CWSXY7P" target="_blank" rel="noopener">Glarks 112 pcs male + female</a><br><span class="mono">$19.99</span> <span class="text-muted">4.6★</span></td>
-        <td class="text-[14px]">Buy three Jaycar strips and you are done for $4.50. The Glarks kit includes <em>female</em> sockets, which you want if you would rather plug the boards in than solder them down. That is worth the extra if you think you might ever kill one.</td>
       </tr>
       <tr>
         <td><button type="button" class="term" data-t="multimeter">Multimeter</button></td>
@@ -424,9 +415,10 @@ tailwind.config = {
     </tbody>
   </table></div>
   <div class="note">
-    <p class="kicker text-accentdeep">If you buy the whole list</p>
-    <p class="max-w-[62ch]">Amazon comes out about <strong>$40 cheaper</strong> overall. Almost all of that saving sits in the multimeter, the solder and the 2-core wire.
-    Jaycar is the better buy on the station, the protoboard and the header strips, and you can have it this afternoon rather than next week.</p>
+    <p class="kicker text-accentdeep">If you own no tools at all</p>
+    <p class="max-w-[62ch]">This table comes to about <strong>$166 at Amazon</strong> or about <strong>$217 at Jaycar</strong>. The gap is almost entirely
+    the multimeter and the solder. Jaycar wins on the soldering station, and you can have the lot this afternoon rather than next week.
+    If you already own a soldering iron and a multimeter, you need roughly $45 of this table.</p>
   </div>
 </section>
 
@@ -1452,6 +1444,164 @@ document.addEventListener('click', e => {
     h += '</div></div>';
   });
   document.getElementById('glossary-list').innerHTML = h;
+})();
+
+/* ────────────────────────────────────────────────────────────────────
+   The shopping list. One row per thing you buy.
+   low/high are the dollar range that row contributes to the total.
+   ──────────────────────────────────────────────────────────────────── */
+const PARTS_LIST = [
+  {
+    kicker: 'Group 1 of 5',
+    name: 'The four boards',
+    intro: 'These four do all the thinking. Core Electronics stocks every one of them, so this group is a single order.',
+    items: [
+      { qty: '1', low: 10.65, high: 10.65,
+        buy: { name: 'Seeed Studio XIAO ESP32-C3', where: 'Core Electronics', code: 'SS113991054', price: '$10.65', url: 'https://core-electronics.com.au/seeed-studio-xiao-esp32c3-tiny-mcu-board-with-wi-fi-and-ble-battery-charge-supported-power-efficiency-and-rich-interface.html' },
+        why: 'The [[mcu|brain]]. It works out sunrise and sunset and decides when the door moves.' },
+      { qty: '1', low: 11.75, high: 11.75,
+        buy: { name: 'DS3231M MEMS Precise RTC', where: 'Core Electronics', code: 'DFRobot DFR0641', price: '$11.75', url: 'https://core-electronics.com.au/ds3231m-mems-precise-rtc.html' },
+        why: 'The [[rtc|clock]]. Without it the brain has no idea what day it is.' },
+      { qty: '1', low: 13.80, high: 13.80,
+        buy: { name: 'Adafruit DRV8871 DC Motor Driver Breakout, 3.6 A max', where: 'Core Electronics', code: 'ADA3190', price: '$13.80', url: 'https://core-electronics.com.au/adafruit-drv8871-dc-motor-driver-breakout-board-3-6a-max.html' },
+        why: 'The [[driver|motor driver]]. It turns a tiny signal into 12 V at 2 A for the actuator.' },
+      { qty: '1', low: 9.95, high: 9.95,
+        buy: { name: 'Pololu 5 V, 600 mA Step-Down Voltage Regulator D36V6F5', where: 'Core Electronics', code: 'POLOLU-3792', price: '$9.95', url: 'https://core-electronics.com.au/pololu-5v-600ma-step-down-voltage-regulator-d36v6f5.html' },
+        why: 'The [[buck]]. It turns the battery\'s 12 V into the 5 V the brain needs.' },
+    ],
+    note: ['Order these together', 'All four come from one shop, so you pay postage once. Core Electronics ships from Newcastle, usually next day.'],
+  },
+  {
+    kicker: 'Group 2 of 5',
+    name: 'Power',
+    intro: 'The battery, the thing that refills it, and the fuse that stops a shorted wire becoming a fire.',
+    items: [
+      { qty: '1', low: 34.95, high: 34.95,
+        buy: { name: '12 V 7.2 Ah SLA battery', where: 'Jaycar', code: 'SB2486', price: '≈$34.95', url: 'https://www.jaycar.com.au/12v-7-2ah-sla-back-up-battery-nbn-alarm-ufb/p/SB2486' },
+        alt: { name: 'AGM 12 V 7.2 Ah with F2 terminals', where: 'Amazon AU', price: '$38.98', url: 'https://www.amazon.com.au/dp/B0G6K9KNLK' },
+        why: 'The [[sla|battery]]. One charge runs the door for many weeks.' },
+      { qty: '1', low: 32.95, high: 32.95,
+        buy: { name: '12 V 1 A automatic SLA charger', where: 'Jaycar', code: 'MB3619', price: '$32.95', url: 'https://www.jaycar.com.au/12v-1a-sla-battery-charger/p/MB3619' },
+        alt: { name: 'NOCO GENIUS1', where: 'Amazon AU', price: '$70.95', url: 'https://www.amazon.com.au/dp/B08D6WV445' },
+        why: 'It refills the battery every ten weeks or so. 1 A is the right size for a 7 Ah battery, and the automatic part means you can leave it connected.' },
+      { qty: '1', low: 4.95, high: 4.95,
+        buy: { name: 'Water-resistant inline blade fuse holder, 30 A 32 V', where: 'Jaycar', code: 'SZ2042', price: '$4.95', url: 'https://www.jaycar.com.au/30a-32vdc-water-resistant-inline-standard-blade-fuse-holder/p/SZ2042' },
+        why: 'The holder that the [[fuse]] clips into. It splices into the red battery lead.' },
+      { qty: '1', low: 1.15, high: 1.15,
+        buy: { name: '2 A grey standard blade fuse', where: 'Jaycar', code: 'SF2127', price: '$1.15', url: 'https://www.jaycar.com.au/2a-grey-standard-blade-fuse/p/SF2127' },
+        why: 'The fuse itself. It is a separate line on the order, because a holder is usually sold empty.' },
+    ],
+    note: ['Order the fuse as well as the holder', 'Assume the holder arrives with nothing in it. A holder with no fuse passes no current, so you would wire the whole thing up and find the circuit dead. At $1.15, buy two.'],
+  },
+  {
+    kicker: 'Group 3 of 5',
+    name: 'The moving part',
+    intro: 'The actuator is the most expensive item on the list. It is also the only one where paying more genuinely buys you something, namely a better weather seal.',
+    items: [
+      { qty: '1', low: 88.42, high: 199.69,
+        buy: { name: 'Justech 12 V linear actuator, 300 mm stroke, 2000 N', where: 'Amazon AU', code: '6 mm/s · IP54 · brackets included', price: '$88.42', url: 'https://www.amazon.com.au/dp/B0F6TV1ZVJ' },
+        alt: { name: 'Motion Dynamics 300 mm, 400 N, IP65', where: 'Motion Dynamics', price: '$199.69', url: 'https://www.motiondynamics.com.au/linear-actuator-300mm-stroke-20mm-sec-12v-400n-clevis-end.html' },
+        why: 'The [[actuator]] that lifts the door. Both have [[limitswitch|limit switches]] inside. The Justech is half the price and includes the mounting brackets. The Motion Dynamics one is sealed to IP65 rather than IP54, ships from Australia and carries a warranty, which is worth it if the actuator sits anywhere rain reaches. The Justech takes about 50 seconds to travel the full 300 mm.' },
+      { qty: '1 set', low: 20, high: 20,
+        buy: { name: 'Cord, a small pulley, two eye bolts and a turnbuckle', where: 'Bunnings or any hardware shop', price: '≈$20' },
+        why: 'The actuator must pull the door through a <strong>cord</strong>, never a rigid link. Gravity then closes the door with only the panel\'s own weight behind it, about 10 N. Bolted straight on, it drives 100 N down onto whatever is underneath.' },
+    ],
+    note: ['Time the stroke before you write the code', 'Run the actuator end to end with a stopwatch, add 20 per cent, and that number in milliseconds becomes [[runms|RUN_MS]]. For the Justech that is roughly 50 seconds, so about 60000.'],
+  },
+  {
+    kicker: 'Group 4 of 5',
+    name: 'The loose components',
+    intro: 'Small, cheap, and the easiest group to forget. Buy the multi-packs. You will drop at least one resistor on the floor and never see it again.',
+    items: [
+      { qty: '1 pack', low: 12.95, high: 12.95,
+        buy: { name: 'Carbon film resistors, 1/4 W, 300 pieces', where: 'Jaycar', code: 'RR1680', price: '$12.95', url: 'https://www.jaycar.com.au/1-4-watt-carbon-film-resistors-300-pieces/p/RR1680' },
+        why: 'This pack contains all three values you need: [[r220k|220 kΩ]], [[r33k|33 kΩ]] and [[r10k|10 kΩ]], five of each. Buying them singly costs more once you add postage.' },
+      { qty: '1', low: 0.35, high: 0.35,
+        buy: { name: '100 nF 50 V monolithic capacitor', where: 'Jaycar', code: 'RC5490', price: '$0.35', url: 'https://www.jaycar.com.au/100nf-50vdc-monolithic-capacitor/p/RC5490' },
+        alt: { name: 'pack of 100', where: 'Jaycar', price: '$11.95', url: 'https://www.jaycar.com.au/0-1uf-50v-blue-chip-monolithic-capacitor-pack-of-100/p/RC5496' },
+        why: 'The [[capacitor]] that steadies the battery reading. You need exactly one, so buy the single if you are already in the shop.' },
+      { qty: '1', low: 4.95, high: 4.95,
+        buy: { name: 'CR1220 3 V lithium battery', where: 'Jaycar', code: 'SB2527', price: '$4.95', url: 'https://www.jaycar.com.au/cr1220-3v-lithium-battery/p/SB2527' },
+        why: 'The [[coincell|coin cell]] for the clock. It is not supplied with the clock board, and without it the clock forgets the time whenever you take the main battery off.' },
+      { qty: '2', low: 0.90, high: 0.90,
+        buy: { name: 'Male pin header, 2.54 mm, 1 × 40', where: 'Core Electronics', code: 'CE07828', price: '$0.45 each', url: 'https://core-electronics.com.au/male-pin-header-2-54mm-1x40.html' },
+        alt: { name: '28-pin header strip', where: 'Jaycar', price: '≈$1.50', url: 'https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211' },
+        why: 'The [[header|header pins]] you solder into all four boards. One strip of 40 covers the 25 pins this build uses. Buy two so a bent pin costs you nothing.' },
+      { qty: '1', low: 8.25, high: 8.25,
+        buy: { name: 'Ultra mini experimenters board, 2 pack', where: 'Jaycar', code: 'HP9556', price: '$8.25', url: 'https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556' },
+        alt: { name: 'Elegoo 32 pieces, 5 sizes', where: 'Amazon AU', price: '$19.99', url: 'https://www.amazon.com.au/dp/B0772FK81G' },
+        why: 'The [[perfboard]] everything mounts on. The Jaycar pack gives you one board and a spare, which is exactly right. Practise your soldering on the spare.' },
+    ],
+  },
+  {
+    kicker: 'Group 5 of 5',
+    name: 'The box and the wire',
+    intro: 'What keeps the rain out, and what carries the current. This group is easy to underestimate and comes to more than the four boards put together.',
+    items: [
+      { qty: '1', low: 24.95, high: 24.95,
+        buy: { name: 'Sealed ABS enclosure, 171 × 121 × 80 mm', where: 'Jaycar', code: 'HB6129', price: '$24.95', url: 'https://www.jaycar.com.au/sealed-abs-enclosure-171-x-121-x-80mm/p/HB6129' },
+        why: 'The [[ip65|IP65 box]] the electronics live in. It has a gasket in the lid and mounting holes outside the seal, so screwing it to a wall does not put a hole through the waterproofing.' },
+      { qty: '1 pack', low: 20, high: 20,
+        buy: { name: 'PG7 waterproof cable glands, 20 pack', where: 'Amazon AU', code: 'fits 3 to 6.5 mm cable', price: '$20.00', url: 'https://www.amazon.com.au/Cable-Lokman-Plastic-Waterproof-Adjustable/dp/B06Y5HGYK2' },
+        alt: { name: 'pack of 2', where: 'Jaycar', price: '$5.95', url: 'https://www.jaycar.com.au/3-6-5mm-dia-waterproof-cable-glands-pack-of-2/p/HP0720' },
+        why: 'The [[gland|cable glands]] every cable passes through on its way into the box. You need three. Point them downwards so water runs off rather than in.' },
+      { qty: '1 roll', low: 14.61, high: 14.61,
+        buy: { name: 'TYUMEN 18 AWG 2-core red/black, 12 m', where: 'Amazon AU', price: '$14.61', url: 'https://www.amazon.com.au/dp/B01LZRV0HV' },
+        alt: { name: 'medium duty figure-8, per metre', where: 'Jaycar', price: '≈$2.50/m', url: 'https://www.jaycar.com.au/medium-duty-fig-8-speaker-cable/p/WB1706' },
+        why: 'The thick [[fig8|figure-8]] for the battery leads, the driver feed and the actuator run. Twelve metres covers all three. Mark one end of the motor pair with tape so you never confuse it with the 12 V pair.' },
+      { qty: '1 pack', low: 39.95, high: 39.95,
+        buy: { name: 'Light duty hook-up wire, 8 colours', where: 'Jaycar', code: 'WH3009 · 8 × 25 m, 26 AWG', price: '$39.95', url: 'https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009' },
+        alt: { name: 'TUOFENG 22 AWG solid, 6 colours', where: 'Amazon AU', price: '$41.99', url: 'https://www.amazon.com.au/dp/B07TX6BX47' },
+        why: 'The thin [[hookup|hook-up wire]] for every signal. One colour per [[net]] is what keeps the build readable a year from now. Jaycar gives far more wire and two more colours for slightly less.' },
+      { qty: '1 pack', low: 5, high: 5,
+        buy: { name: 'Cable ties, 100 mm', where: 'any hardware shop', price: '≈$5' },
+        why: 'For [[strainrelief|strain relief]]. A wire that can flex where it is soldered snaps in about a month, usually in the rain.' },
+    ],
+    note: ['Do not skip the box', 'A coop is wet, dusty and full of ammonia. Bare electronics on a shelf last one winter at best.'],
+  },
+];
+
+
+function money(v) { return '$' + v.toFixed(2); }
+
+function partsTable(group) {
+  let h = '<div class="flex flex-col gap-3"><div><p class="kicker">' + esc(group.kicker) + '</p>' +
+          '<h3 class="text-[1.25rem] font-bold">' + esc(group.name) + '</h3></div>';
+  if (group.intro) h += '<p class="lede">' + link(group.intro, false) + '</p>';
+  h += '<div class="scroller card"><table class="tbl buytbl"><thead><tr><th class="pl-4">Qty</th><th>What to buy</th><th>Why you need it</th><th class="pr-4">Price</th></tr></thead><tbody>';
+  group.items.forEach(it => {
+    const buy = it.buy;
+    const title = buy.url
+      ? '<a href="' + buy.url + '" target="_blank" rel="noopener" class="font-semibold">' + esc(buy.name) + '</a>'
+      : '<span class="font-semibold">' + esc(buy.name) + '</span>';
+    const alt = it.alt
+      ? '<br><span class="text-[13px]">or ' + (it.alt.url ? '<a href="' + it.alt.url + '" target="_blank" rel="noopener">' + esc(it.alt.name) + '</a>' : esc(it.alt.name)) +
+        ', ' + esc(it.alt.price) + ' at ' + esc(it.alt.where) + '</span>'
+      : '';
+    h += '<tr><td class="pl-4 mono">' + esc(it.qty) + '</td>' +
+         '<td>' + title +
+         '<br><span class="text-muted text-[13px]">' + esc(buy.where) + (buy.code ? ' · ' + esc(buy.code) : '') + '</span>' + alt + '</td>' +
+         '<td class="text-[14px]">' + link(it.why, false) + '</td>' +
+         '<td class="pr-4 mono whitespace-nowrap">' + esc(buy.price) + '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  if (group.note) h += '<div class="note"><p class="kicker text-accentdeep">' + esc(group.note[0]) + '</p><p class="max-w-[62ch]">' + link(group.note[1], false) + '</p></div>';
+  return h + '</div>';
+}
+
+(function () {
+  const host = document.getElementById('parts-tables');
+  if (!host || typeof PARTS_LIST === 'undefined') return;
+  host.innerHTML = PARTS_LIST.filter(g => g.items.length).map(partsTable).join('');
+  let lo = 0, hi = 0;
+  PARTS_LIST.forEach(g => g.items.forEach(it => { lo += it.low; hi += it.high; }));
+  document.getElementById('parts-total').innerHTML =
+    '<div class="card p-5 flex flex-col gap-3"><p class="kicker">What the parts come to</p>' +
+    '<p class="text-[1.6rem] font-display font-extrabold">' + money(lo) + ' to ' + money(hi) + '</p>' +
+    '<p class="max-w-[62ch]">The spread is almost entirely the actuator. The cheaper one is sealed to IP54 and the dearer one to IP65, ' +
+    'so what you are paying for is how much weather it will survive. Everything else on the list is fixed.</p>' +
+    '<p class="max-w-[62ch] text-muted text-[15px]">The four boards come to ' + money(46.15) + ' of that. The box, the glands and the wire come to ' + money(104.51) + ', ' +
+    'which surprises most people. Tools are separate and are in the next section.</p></div>';
 })();
 
 // ── the four board cards get the same drawings as the pop-ups ──
