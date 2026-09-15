@@ -38,9 +38,15 @@ Australian sourcing, checked 15 September 2026. Roughly **$240–$300** plus too
 - DFRobot DS3231M clock (DFR0641) — $11.75, Core Electronics
 - Adafruit DRV8871 motor driver — $13.80, Core Electronics
 - Pololu D36V6F5 5 V buck — $9.95, Core Electronics
-- 12 V 7.2 Ah SLA battery (SB2486) — $34.95, Jaycar
-- 12 V 1 A automatic SLA charger (MB3619) — $32.95, Jaycar
+- 12 V 7.2 Ah SLA battery — $34.95 Jaycar SB2486, or
+  [$38.98 on Amazon AU](https://www.amazon.com.au/dp/B0G6K9KNLK) (AGM, F2 blade terminals, 4.2★)
+- 12 V 1 A automatic SLA charger — $32.95 Jaycar MB3619, or
+  [NOCO GENIUS1, $70.95](https://www.amazon.com.au/dp/B08D6WV445) (4.6★). **Jaycar wins here** —
+  1 A is the right size for a 7 Ah battery and it's less than half the price.
 - 12 V linear actuator, 300 mm stroke, built-in limit switches — $56–$118, eBay AU
+
+Tools and consumables are on the [bench sheet](https://h-ashrafi.github.io/nestbox-door/),
+priced both ways — Jaycar and Amazon AU.
 
 ## Two things that bite
 
