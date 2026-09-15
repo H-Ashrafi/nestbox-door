@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nest Box Bench Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --ground:#EDEFE8; --surface:#F8F9F4; --surface-2:#E2E6DA;
+  --ink:#1D231D; --soft:#5A6356; --line:#C9D0C2;
+  --accent:#C77A08; --deep:#8F5606; --wash:#F6E9CF;
+  --alert:#9B2C22; --alert-wash:#F3DEDA;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ground:#14170F; --surface:#1C2018; --surface-2:#262B21;
+  --ink:#E9ECE1; --soft:#A2AA98; --line:#353B2E;
+  --accent:#E9A32E; --deep:#F0B44C; --wash:#33290F;
+  --alert:#E68A7D; --alert-wash:#3A211C;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font:16.5px/1.6 'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:40px 18px 80px}
+h1,h2,h3{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;line-height:1.02;letter-spacing:-.025em}
+h2{font-size:1.65rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0}
+.eyebrow{font:600 11px/1.4 'IBM Plex Mono',monospace;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--deep);margin:0}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+section{border-top:1px solid var(--line);margin-top:46px;padding-top:32px;
+  display:flex;flex-direction:column;gap:22px}
+.head{display:flex;align-items:baseline;gap:16px}
+.lede{color:var(--soft);max-width:62ch}
+.dim{color:var(--soft)}
+a{color:var(--deep);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.board{background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.board .photo{background:#fff;border-bottom:1px solid var(--line)}
+.board .photo img{display:block;width:100%;height:auto}
+.board .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.board .cap{font:11.5px/1.5 'IBM Plex Mono',monospace;color:var(--soft);
+  padding:9px 18px;border-top:1px solid var(--line);margin:0}
+
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{font:600 10.5px/1.4 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--soft);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.pin{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--deep);white-space:nowrap}
+.no{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--alert);white-space:nowrap}
+.scroller{overflow-x:auto}
+.box{font-family:'IBM Plex Mono',monospace;color:var(--soft)}
+
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:15px 18px;
+  display:flex;flex-direction:column;gap:8px}
+.warn{border-left:3px solid var(--alert);background:var(--surface);padding:15px 18px;
+  display:flex;flex-direction:column;gap:8px}
+
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:flex;flex-direction:column}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 20px 52px;
+  border-left:1px solid var(--line);margin-left:17px}
+ol.steps>li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.steps>li::before{content:counter(s,decimal-leading-zero);position:absolute;left:-17px;top:-2px;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);color:var(--deep);
+  font:600 12px 'IBM Plex Mono',monospace}
+
+/* ── interactive diagram ── */
+.diagram{background:#FAFAF7;border:1px solid var(--line);overflow-x:auto;border-radius:3px}
+.diagram svg{display:block;min-width:960px;width:100%;height:auto}
+.hint{display:flex;align-items:center;gap:10px;font:600 12px 'IBM Plex Mono',monospace;
+  color:var(--deep);background:var(--wash);border-radius:3px;padding:10px 14px}
+.hint span{font-size:16px}
+
+/* ── modal ── */
+dialog{border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);
+  padding:0;max-width:min(680px,94vw);width:100%;max-height:88vh;overflow:auto}
+dialog::backdrop{background:rgba(10,14,8,.62)}
+.m-top{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line);
+  padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;z-index:2}
+.m-top h3{font-size:1.2rem;font-weight:800;letter-spacing:-.01em}
+.m-close{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
+  border-radius:3px;cursor:pointer;font:600 12px 'IBM Plex Mono',monospace;padding:7px 11px;flex:none}
+.m-body{padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px}
+.m-photo{background:#fff;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.m-photo img{display:block;width:100%;height:auto}
+.m-photo p{font:11.5px/1.5 'IBM Plex Mono',monospace;color:var(--soft);
+  padding:8px 12px;border-top:1px solid var(--line);background:var(--surface)}
+.m-nophoto{border:1px dashed var(--line);border-radius:3px;padding:14px 16px;color:var(--soft);font-size:14px}
+
+.dl{display:flex;flex-wrap:wrap;gap:12px}
+.dl a{display:inline-block;border:1px solid var(--line);background:var(--surface);
+  padding:9px 14px;border-radius:3px;text-decoration:none;font:600 12px 'IBM Plex Mono',monospace}
+.chips{display:flex;flex-wrap:wrap;gap:26px}
+.chips div p:first-child{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft)}
+.chips div p:last-child{font-family:'IBM Plex Mono',monospace;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:18px">
+  <p class="eyebrow">Bench sheet · battery version · click the diagram</p>
+  <h1>Nest Box Bench Sheet</h1>
+  <p class="lede" style="font-size:1.1rem">
+    Every part on the wiring diagram is clickable. Click one and you get the photo of that board,
+    which pin is which, and what to do with it.
+  </p>
+  <div class="chips">
+    <div><p>Joints to solder</p><p>about 30</p></div>
+    <div><p>Bench time</p><p>an evening</p></div>
+    <div><p>Tools, if you own none</p><p>~$230</p></div>
+    <div><p>Wire + bits</p><p>~$90</p></div>
+  </div>
+</header>
+
+<!-- ───────────── INTERACTIVE DIAGRAM ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">01</span><h2>The wiring diagram</h2></div>
+  <p class="hint"><span>👆</span> Click any component — battery, fuse, buck, clock, XIAO, driver, divider, actuator.</p>
+  <div class="diagram" id="diagram">
+    <img src="nestbox-wiring.svg" alt="Wiring diagram" style="display:block;min-width:960px;width:100%">
+  </div>
+  <p class="lede">A filled dot is a join; a small bridge is a crossing that is <em>not</em> joined.</p>
+  <div class="dl">
+    <a href="nestbox-wiring.dxf" download>nestbox-wiring.dxf — AutoCAD R2000, A4 landscape</a>
+    <a href="nestbox-wiring.svg" download>nestbox-wiring.svg</a>
+    <a href="nest-box-bench-sheet.html" download id="dl-offline">this whole page as one offline file</a>
+  </div>
+</section>
+
+<!-- ───────────── BOARDS ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">02</span><h2>The four boards</h2></div>
+  <p class="lede">Same content as the pop-ups, laid out to read straight through. Amber = a pin you
+  use. Red = a pin that must stay empty.</p>
+
+  <div class="board">
+    <div class="photo"><img src="img/xiao-pinmap.png" alt="Official Seeed pin map for the XIAO ESP32-C3"></div>
+    <div class="body">
+      <h3>Seeed XIAO ESP32-C3 — the brain</h3>
+      <p class="dim" style="font-size:14px">21 × 17.8 mm. USB-C at the top. Pin names printed underneath.</p>
+      <div class="scroller"><table>
+        <thead><tr><th>Pin</th><th>GPIO</th><th>Goes to</th></tr></thead>
+        <tbody>
+          <tr><td class="no">D0</td><td class="mono">GPIO2</td><td class="no">LEAVE EMPTY — boot strapping pin</td></tr>
+          <tr><td class="pin">D1</td><td class="mono">GPIO3</td><td>driver <span class="pin">IN1</span></td></tr>
+          <tr><td class="pin">D2</td><td class="mono">GPIO4</td><td>battery sense divider</td></tr>
+          <tr><td class="pin">D3</td><td class="mono">GPIO5</td><td>driver <span class="pin">IN2</span></td></tr>
+          <tr><td class="pin">D4</td><td class="mono">GPIO6</td><td>clock <span class="pin">SDA</span></td></tr>
+          <tr><td class="pin">D5</td><td class="mono">GPIO7</td><td>clock <span class="pin">SCL</span></td></tr>
+          <tr><td class="dim">D6</td><td class="mono dim">GPIO21</td><td class="dim">spare</td></tr>
+          <tr><td class="pin">5V</td><td class="mono">—</td><td>buck <span class="pin">VOUT</span></td></tr>
+          <tr><td class="pin">GND</td><td class="mono">—</td><td>the ground spine</td></tr>
+          <tr><td class="pin">3V3</td><td class="mono">—</td><td>clock <span class="pin">VCC</span></td></tr>
+          <tr><td class="dim">D10</td><td class="mono dim">GPIO10</td><td class="dim">spare</td></tr>
+          <tr><td class="no">D9</td><td class="mono">GPIO9</td><td class="no">LEAVE EMPTY — boot button</td></tr>
+          <tr><td class="no">D8</td><td class="mono">GPIO8</td><td class="no">LEAVE EMPTY — boot strapping pin</td></tr>
+          <tr><td class="dim">D7</td><td class="mono dim">GPIO20</td><td class="dim">spare</td></tr>
+        </tbody>
+      </table></div>
+      <div class="warn"><p class="eyebrow" style="color:var(--alert)">The three red pins</p>
+      <p style="max-width:60ch">The chip reads D0, D8 and D9 at power-up to decide how to boot. A
+      pull-down on any of them and the board will not start — which is why IN1 and IN2 go to D1 and
+      D3 rather than the obvious D0 and D1.</p></div>
+    </div>
+    <p class="cap">Photo: <a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed Studio wiki</a></p>
+  </div>
+
+  <div class="board">
+    <div class="photo"><img src="img/drv8871.jpg" alt="Adafruit DRV8871 showing MOTOR and POWER screw terminals and the IN2 IN1 VM GND header"></div>
+    <div class="body">
+      <h3>Adafruit DRV8871 — the motor driver</h3>
+      <p class="dim" style="font-size:14px">Read the silkscreen in the photo: <span class="mono">MOTOR</span>
+      with screws <span class="mono">2</span> and <span class="mono">1</span>, <span class="mono">POWER</span>
+      with <span class="mono">+</span> and <span class="mono">−</span>, four header holes along the bottom.</p>
+      <div class="scroller"><table>
+        <thead><tr><th>Terminal / pin</th><th>Goes to</th><th>Solder?</th></tr></thead>
+        <tbody>
+          <tr><td class="pin">POWER +</td><td>+12 V, from the fuse</td><td class="dim">no — screw terminal</td></tr>
+          <tr><td class="pin">POWER −</td><td>ground spine</td><td class="dim">no — screw terminal</td></tr>
+          <tr><td class="pin">MOTOR 1</td><td>actuator wire A</td><td class="dim">no — screw terminal</td></tr>
+          <tr><td class="pin">MOTOR 2</td><td>actuator wire B</td><td class="dim">no — screw terminal</td></tr>
+          <tr><td class="pin">IN2</td><td>XIAO <span class="pin">D3</span></td><td>yes</td></tr>
+          <tr><td class="pin">IN1</td><td>XIAO <span class="pin">D1</span></td><td>yes</td></tr>
+          <tr><td class="dim">VM</td><td class="dim">skip — the POWER terminal already feeds it</td><td class="dim">no</td></tr>
+          <tr><td class="pin">GND</td><td>ground spine, plus both 10 kΩ pull-downs</td><td>yes</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note"><p class="eyebrow">Good news</p>
+      <p style="max-width:60ch">The green screw terminals arrive already soldered, so the two
+      highest-current connections need no iron at all.</p></div>
+    </div>
+    <p class="cap">Photo: <a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit Learning System</a></p>
+  </div>
+
+  <div class="board">
+    <div class="photo"><img src="img/pololu.jpg" alt="Underside of the Pololu D36V6F5 showing pads VOUT GND VIN SHDN beside a coin"></div>
+    <div class="body">
+      <h3>Pololu D36V6F5 — the 5 V buck</h3>
+      <p class="dim" style="font-size:14px">10 × 13 mm — that's a US quarter beside it. Names are printed
+      on the <strong>underside</strong>, the face shown here.</p>
+      <div class="scroller"><table>
+        <thead><tr><th>Pad</th><th>Goes to</th></tr></thead>
+        <tbody>
+          <tr><td class="pin">VOUT</td><td>XIAO <span class="pin">5V</span></td></tr>
+          <tr><td class="pin">GND</td><td>ground spine</td></tr>
+          <tr><td class="pin">VIN</td><td>+12 V, from the fuse</td></tr>
+          <tr><td class="no">SHDN</td><td class="no">leave empty</td></tr>
+        </tbody>
+      </table></div>
+      <div class="warn"><p class="eyebrow" style="color:var(--alert)">Read this order twice</p>
+      <p style="max-width:60ch">Left to right: <span class="mono">VOUT · GND · VIN · SHDN</span>.
+      VIN and VOUT are two pads apart with ground between them. Swap them and 12 V goes into the
+      ESP32. Measure VOUT before you connect the XIAO.</p></div>
+    </div>
+    <p class="cap">Photo: <a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu</a></p>
+  </div>
+
+  <div class="board">
+    <div class="photo"><img src="img/ds3231m.jpg" alt="DFRobot Fermion DS3231M MEMS RTC breakout board"></div>
+    <div class="body">
+      <h3>DFRobot DS3231M — the clock</h3>
+      <p class="dim" style="font-size:14px">22.5 × 21 mm. CR1220 coin cell on the reverse, seven pads
+      in one row.</p>
+      <div class="scroller"><table>
+        <thead><tr><th>Pad</th><th>Position</th><th>Goes to</th></tr></thead>
+        <tbody>
+          <tr><td class="pin">VCC</td><td class="mono">1st</td><td>XIAO <span class="pin">3V3</span></td></tr>
+          <tr><td class="pin">GND</td><td class="mono">2nd</td><td>ground spine</td></tr>
+          <tr><td class="pin">SCL</td><td class="mono">3rd</td><td>XIAO <span class="pin">D5</span></td></tr>
+          <tr><td class="pin">SDA</td><td class="mono">4th</td><td>XIAO <span class="pin">D4</span></td></tr>
+          <tr><td class="dim">INT</td><td class="mono dim">5th</td><td class="dim">not used</td></tr>
+          <tr><td class="dim">RST</td><td class="mono dim">6th</td><td class="dim">not used</td></tr>
+          <tr><td class="dim">32K</td><td class="mono dim">7th</td><td class="dim">not used</td></tr>
+        </tbody>
+      </table></div>
+      <div class="warn"><p class="eyebrow" style="color:var(--alert)">SCL comes before SDA</p>
+      <p style="max-width:60ch">The opposite of most clock modules. Wire it from muscle memory and
+      you'll get it backwards — the clock just won't answer.</p></div>
+    </div>
+    <p class="cap">Photo: <a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot, DFR0641</a></p>
+  </div>
+</section>
+
+<!-- ───────────── WIRE ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">03</span><h2>Which wire goes where</h2></div>
+  <p class="lede">Two wire types, and the difference matters: the thin stuff carries 0.6 A and drops
+  voltage badly on the motor run.</p>
+  <div class="scroller"><table>
+    <thead><tr><th>Run</th><th>Wire</th><th>Colour</th><th>Buy</th></tr></thead>
+    <tbody>
+      <tr><td>Battery + and − to the board, via the fuse</td><td>Figure-8, medium duty <span class="dim">≈1 mm²</span></td><td>red / black</td><td class="mono">1 m</td></tr>
+      <tr><td>Board to the driver's POWER terminal</td><td>Figure-8, medium duty</td><td>red / black</td><td class="mono">0.3 m</td></tr>
+      <tr><td>Driver's MOTOR terminal to the actuator</td><td>Figure-8, medium duty</td><td>brown / grey</td><td class="mono">your run + 1 m</td></tr>
+      <tr><td>5 V, 3V3, SDA, SCL, IN1, IN2, sense</td><td>Light-duty hook-up <span class="dim">26 AWG</span></td><td>one colour each</td><td class="mono">8-colour pack</td></tr>
+      <tr><td>Grounds between modules</td><td>Light-duty hook-up</td><td>black</td><td class="mono">from the pack</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p class="eyebrow">On the actuator run</p>
+  <p style="max-width:62ch">Ten metres of figure-8 at 1 mm² drops about a third of a volt at 2 A,
+  which is nothing. The same run in 26 AWG would drop over three volts and cook the wire.</p></div>
+</section>
+
+<!-- ───────────── TOOLS ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">04</span><h2>Tools and consumables</h2></div>
+  <p class="lede">All Jaycar, all in store. Prices checked 15 September 2026; ≈ means close but
+  not verified.</p>
+  <div class="scroller"><table>
+    <thead><tr><th>Item</th><th>Cat.</th><th>Price</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://www.jaycar.com.au/duratech-48w-temperature-controlled-soldering-station/p/TS1620" target="_blank" rel="noopener">Duratech 48 W soldering station</a></td><td class="mono">TS1620</td><td class="mono">$61.95</td><td style="font-size:13.5px">The purchase that decides whether this is pleasant or miserable. A $20 pencil iron can't hold temperature, so solder won't flow, so you press harder, so you tear a pad off.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/0-71mm-duratech-solder-200gm/p/NS3005" target="_blank" rel="noopener">0.71 mm 60/40 resin-core solder, 200 g</a></td><td class="mono">NS3005</td><td class="mono">≈$25</td><td style="font-size:13.5px">Leaded — flows cooler and is far more forgiving than lead-free. Wash your hands.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009" target="_blank" rel="noopener">Hook-up wire pack, 8 colours × 25 m</a></td><td class="mono">WH3009</td><td class="mono">$39.95</td><td style="font-size:13.5px">26 AWG. One colour per net is what makes the diagram usable.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/medium-duty-fig-8-speaker-cable/p/WB1706" target="_blank" rel="noopener">Medium-duty figure-8 cable, per metre</a></td><td class="mono">WB1706</td><td class="mono">≈$2.50/m</td><td style="font-size:13.5px">Battery, driver power, and the actuator run.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556" target="_blank" rel="noopener">Ultra Mini Experimenters Board</a></td><td class="mono">HP9556</td><td class="mono">$8.25</td><td style="font-size:13.5px">Snap-apart pair — one to build on, one to practise on.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211" target="_blank" rel="noopener">28-pin header strip</a></td><td class="mono">HM3211</td><td class="mono">≈$1.50</td><td style="font-size:13.5px">Snap to length. Buy three — you need 7+7+4+3 and you will bend some.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/cat-iii-multimeter-with-temperature/p/QM1323" target="_blank" rel="noopener">Cat III multimeter</a></td><td class="mono">QM1323</td><td class="mono">$61.95</td><td style="font-size:13.5px"><strong>Not optional.</strong> Checks the buck before it touches the ESP32, calibrates the divider, finds every mistake.</td></tr>
+      <tr><td><a href="https://www.jaycar.com.au/heatshrink-assortment-trade-pack/p/WH5524" target="_blank" rel="noopener">Heatshrink assortment</a></td><td class="mono">WH5524</td><td class="mono">$29.95</td><td style="font-size:13.5px">160 pieces. Over every joint outside the box.</td></tr>
+      <tr><td>6.35 mm female spade crimps</td><td class="mono">—</td><td class="mono">≈$8</td><td style="font-size:13.5px">SLA posts are 6.35 mm blades. Pull the battery in ten seconds.</td></tr>
+      <tr><td>Side cutters and wire strippers</td><td class="mono">—</td><td class="mono">≈$30</td><td style="font-size:13.5px">If you don't own them.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ───────────── SOLDERING ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">05</span><h2>Soldering, if you never have</h2></div>
+  <p class="lede">Practise on the spare half of the experimenters board. Twenty throwaway joints and
+  you'll have it.</p>
+  <ol class="steps">
+    <li><h3>350 °C, wet sponge</h3><p class="dim">Not hotter. Hotter doesn't make it faster, it makes it lift pads.</p></li>
+    <li><h3>Tin the tip</h3><p class="dim">Melt a little solder on, wipe on the sponge. Bright silver. A dull grey tip transfers almost no heat — re-tin every few joints.</p></li>
+    <li><h3>Heat the metal, not the solder</h3><p class="dim">Tip against the pad <em>and</em> the pin at once. Count two.</p></li>
+    <li><h3>Feed solder into the joint, not onto the iron</h3><p class="dim">Touch it to the far side from the tip. It should run and wrap the pin in half a second.</p></li>
+    <li><h3>Solder away first, then the iron</h3><p class="dim">Hold still three seconds. Move it while setting and you get a grainy joint that fails in the coop.</p></li>
+    <li><h3>Look at it</h3><p class="dim">Shiny and cone-shaped, like a tiny volcano hugging the pin. A dull ball sitting on top is a cold joint — reheat until it collapses and flows.</p></li>
+  </ol>
+  <div class="warn"><p class="eyebrow" style="color:var(--alert)">The four ways this goes wrong</p>
+  <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;max-width:60ch">
+    <li><strong>Carrying a blob over on the tip.</strong> It sticks, it looks finished, it isn't connected.</li>
+    <li><strong>Ten seconds on one pad.</strong> The copper lifts off and that module is scrap. Not flowing in three seconds? Iron away, cool, retry.</li>
+    <li><strong>Bridging two pads.</strong> Easy on 2.54 mm headers. Check every adjacent pair on continuity before powering anything.</li>
+    <li><strong>No strain relief.</strong> A wire flexing at the joint snaps in about a month, usually in the rain.</li>
+  </ol></div>
+</section>
+
+<!-- ───────────── BUILD ORDER ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">06</span><h2>Build it in stages</h2></div>
+  <p class="lede">Never wire the whole thing and then switch on. Add one module, test, add the next —
+  then a fault is always in the thing you just touched.</p>
+  <ol class="steps">
+    <li><h3>Headers on all four modules. Nothing else.</h3><p class="dim">Meter on continuity: every pin to its own pad, and <em>not</em> to its neighbour.</p></li>
+    <li><h3>The buck alone</h3><p class="dim">Battery → fuse → VIN and GND. Meter VOUT to GND: <span class="mono">5.0 V ± 0.1</span>. If it reads 12 V you have VIN and VOUT swapped — and you just saved your ESP32.</p></li>
+    <li><h3>Add the XIAO</h3><p class="dim">VOUT → 5V, GND → GND. Upload Blink.</p></li>
+    <li><h3>Add the clock</h3><p class="dim">3V3, GND, SDA, SCL. Print <span class="mono">rtc.now()</span>. If the time counts up, I²C is sound.</p></li>
+    <li><h3>Add the divider</h3><p class="dim">220 kΩ, 33 kΩ, 100 nF. Compare <span class="mono">batteryVolts()</span> to the meter, set <span class="mono">VBAT_CAL</span>.</p></li>
+    <li><h3>Driver and actuator — on the bench, off the panel</h3><p class="dim">Both pull-downs in. <span class="mono">TEST_MODE = true</span>. Ten cycles before it goes near the coop.</p></li>
+    <li><h3>Now mount it</h3><p class="dim">IP65 box under cover, glands down. Battery in a ventilated crate below, on spade terminals.</p></li>
+  </ol>
+</section>
+
+<!-- ───────────── CHECKLIST ───────────── -->
+<section>
+  <div class="head"><span class="eyebrow">07</span><h2>Tick them off</h2></div>
+  <div class="scroller"><table>
+    <thead><tr><th></th><th>From</th><th>To</th><th>Wire</th></tr></thead>
+    <tbody>
+      <tr><td class="box">☐</td><td>Battery +</td><td class="pin">fuse → +12 V</td><td>fig-8 red</td></tr>
+      <tr><td class="box">☐</td><td>Battery −</td><td class="pin">ground spine</td><td>fig-8 black</td></tr>
+      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">buck VIN</td><td>fig-8 red</td></tr>
+      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">driver POWER +</td><td>fig-8 red</td></tr>
+      <tr><td class="box">☐</td><td>Ground spine</td><td class="pin">buck GND</td><td>hook-up black</td></tr>
+      <tr><td class="box">☐</td><td>Ground spine</td><td class="pin">driver POWER −</td><td>fig-8 black</td></tr>
+      <tr><td class="box">☐</td><td>Buck VOUT</td><td class="pin">XIAO 5V</td><td>hook-up orange</td></tr>
+      <tr><td class="box">☐</td><td>XIAO GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="box">☐</td><td>XIAO 3V3</td><td class="pin">clock VCC</td><td>hook-up pink</td></tr>
+      <tr><td class="box">☐</td><td>Clock GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="box">☐</td><td>XIAO D4</td><td class="pin">clock SDA</td><td>hook-up yellow</td></tr>
+      <tr><td class="box">☐</td><td>XIAO D5</td><td class="pin">clock SCL</td><td>hook-up green</td></tr>
+      <tr><td class="box">☐</td><td>XIAO D1</td><td class="pin">driver IN1</td><td>hook-up blue</td></tr>
+      <tr><td class="box">☐</td><td>XIAO D3</td><td class="pin">driver IN2</td><td>hook-up white</td></tr>
+      <tr><td class="box">☐</td><td>Driver IN1</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
+      <tr><td class="box">☐</td><td>Driver IN2</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
+      <tr><td class="box">☐</td><td>Driver GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">220 kΩ → sense node</td><td>resistor legs</td></tr>
+      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">33 kΩ → ground spine</td><td>resistor legs</td></tr>
+      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">100 nF → ground spine</td><td>cap legs</td></tr>
+      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">XIAO D2</td><td>hook-up violet</td></tr>
+      <tr><td class="box">☐</td><td>Driver MOTOR 1</td><td class="pin">actuator wire A</td><td>fig-8 brown</td></tr>
+      <tr><td class="box">☐</td><td>Driver MOTOR 2</td><td class="pin">actuator wire B</td><td>fig-8 grey</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer style="border-top:1px solid var(--line);margin-top:46px;padding-top:28px;
+  display:flex;flex-direction:column;gap:10px">
+  <p class="eyebrow">Where the pinouts came from</p>
+  <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--soft)">
+    <li><a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed wiki — XIAO ESP32C3 pin map</a></li>
+    <li><a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot wiki — DFR0641</a></li>
+    <li><a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit — DRV8871 pinouts</a></li>
+    <li><a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu — D36V6F5</a></li>
+  </ul>
+  <p class="dim" style="font-size:13.5px;max-width:62ch">Board photos are the manufacturers' own,
+  reproduced for reference while building. Boards get revised — check the printed labels against
+  the tables before the iron comes out.</p>
+</footer>
+
+</div>
+
+<dialog id="modal" aria-labelledby="m-title">
+  <div class="m-top">
+    <h3 id="m-title"></h3>
+    <button class="m-close" id="m-close" type="button">CLOSE ✕</button>
+  </div>
+  <div class="m-body" id="m-body"></div>
+</dialog>
+
+<script>
+const PARTS = {
+  battery: {
+    title: "12 V 7.2 Ah battery",
+    sub: "Jaycar SB2486 · sealed lead-acid",
+    rows: [["+ post", "red fig-8 → the 2 A fuse", ""],
+           ["− post", "black fig-8 → the ground spine", ""]],
+    steps: [
+      "Crimp a 6.35 mm female spade onto each wire. The posts on an SLA are 6.35 mm blades — don't solder to them, you'll cook the seal.",
+      "Red on +, black on −. Check twice: this is the one mistake that costs you the whole circuit.",
+      "Put the fuse in the RED lead only, within 100 mm of the post.",
+      "Battery sits in a ventilated crate BELOW the electronics box. Lead-acid vents."
+    ],
+    warn: ["Never leave it flat", "An SLA left discharged is a dead SLA. The divider stops the motor at 11.9 V, but set a phone reminder for every 10 weeks anyway."],
+    link: ["Jaycar SB2486", "https://www.jaycar.com.au/12v-7-2ah-sla-back-up-battery-nbn-alarm-ufb/p/SB2486"]
+  },
+  fuse: {
+    title: "2 A inline fuse",
+    sub: "In the positive lead, close to the battery",
+    rows: [["In", "battery +", ""], ["Out", "the 12 V line", ""]],
+    steps: [
+      "Inline blade-fuse holder, 2 A fuse.",
+      "It goes in the RED lead only, as close to the battery post as the holder allows.",
+      "Its job is not to protect the electronics. Its job is to stop a shorted wire turning a 7 Ah battery into a fire."
+    ]
+  },
+  buck: {
+    title: "Pololu D36V6F5 — 5 V buck",
+    sub: "10 × 13 mm · names printed on the UNDERSIDE",
+    photo: ["img/pololu.jpg", "Pololu", "https://www.pololu.com/product/3792"],
+    rows: [["VOUT", "XIAO 5V pin", "1st pad"],
+           ["GND", "ground spine", "2nd pad"],
+           ["VIN", "+12 V from the fuse", "3rd pad"],
+           ["SHDN", "leave empty", "4th pad"]],
+    steps: [
+      "Solder a 3-pin header into the first three pads. Headers come loose in the bag.",
+      "VIN to the 12 V line, GND to the spine. Nothing else connected yet.",
+      "Power it up and put the meter across VOUT and GND. It must read 5.0 V ± 0.1.",
+      "Only when that reads right do you connect the XIAO's 5V pin."
+    ],
+    warn: ["Read the order twice", "Left to right it is VOUT · GND · VIN · SHDN. VIN and VOUT are two pads apart with ground between them. Swap them and 12 V goes straight into the ESP32."]
+  },
+  clock: {
+    title: "DFRobot DS3231M — the clock",
+    sub: "DFR0641 · 22.5 × 21 mm · seven pads in one row",
+    photo: ["img/ds3231m.jpg", "DFRobot wiki", "https://wiki.dfrobot.com/dfr0641/"],
+    rows: [["VCC", "XIAO 3V3", "1st pad"],
+           ["GND", "ground spine", "2nd pad"],
+           ["SCL", "XIAO D5", "3rd pad"],
+           ["SDA", "XIAO D4", "4th pad"],
+           ["INT · RST · 32K", "not used", "5th–7th"]],
+    steps: [
+      "The four pads you need are the first four, so one 4-pin header strip covers them.",
+      "Fit the CR1220 cell — it is NOT supplied. Supermarket, about $5.",
+      "Without that cell the clock forgets the time every time you take the battery away to charge it.",
+      "Test it before adding anything else: print rtc.now() to Serial and watch the seconds count up."
+    ],
+    warn: ["SCL comes BEFORE SDA", "The opposite of most clock modules. Wire it from muscle memory and you will get it backwards, and the clock simply won't answer."]
+  },
+  xiao: {
+    title: "Seeed XIAO ESP32-C3 — the brain",
+    sub: "21 × 17.8 mm · USB-C at the top · names printed underneath",
+    photo: ["img/xiao-pinmap.png", "Seeed Studio wiki", "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"],
+    rows: [["D1 · GPIO3", "driver IN1", "left side"],
+           ["D2 · GPIO4", "battery sense divider", "left side"],
+           ["D3 · GPIO5", "driver IN2", "left side"],
+           ["D4 · GPIO6", "clock SDA", "left side"],
+           ["D5 · GPIO7", "clock SCL", "left side"],
+           ["5V", "buck VOUT", "right side"],
+           ["GND", "ground spine", "right side"],
+           ["3V3", "clock VCC", "right side"],
+           ["D0 · D8 · D9", "LEAVE EMPTY", "boot pins"]],
+    steps: [
+      "Solder a 7-pin header strip down each side. The strip holds itself straight; separate pins do not.",
+      "Feed it from the buck on the 5V pin — not the 3V3 pin.",
+      "3V3 is an OUTPUT here: it powers the clock module.",
+      "Upload Blink first. If the light blinks, the power chain is sound and you can add the clock."
+    ],
+    warn: ["D0, D8 and D9 stay empty", "The chip reads them at power-up to decide how to boot. A pull-down on any of them and the board will not start. That is exactly why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1."]
+  },
+  driver: {
+    title: "Adafruit DRV8871 — motor driver",
+    sub: "Screw terminals on top, 4-hole header on the bottom",
+    photo: ["img/drv8871.jpg", "Adafruit Learning System", "https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts"],
+    rows: [["POWER +", "+12 V from the fuse", "screw — no solder"],
+           ["POWER −", "ground spine", "screw — no solder"],
+           ["MOTOR 1", "actuator wire A", "screw — no solder"],
+           ["MOTOR 2", "actuator wire B", "screw — no solder"],
+           ["IN1", "XIAO D1", "solder"],
+           ["IN2", "XIAO D3", "solder"],
+           ["VM", "skip it", "fed by POWER already"],
+           ["GND", "spine + both pull-downs", "solder"]],
+    steps: [
+      "The green screw terminals arrive already soldered. The two highest-current connections need no iron at all.",
+      "Solder a 4-pin header into the bottom holes. Reading left to right they are IN2 · IN1 · VM · GND.",
+      "Fit a 10 kΩ resistor from IN1 to GND, and another from IN2 to GND. Do not skip these — without them the inputs float while the ESP32 boots and the motor twitches.",
+      "IN1 drives MOTOR 1, IN2 drives MOTOR 2. If the actuator runs the wrong way, swap either pair."
+    ]
+  },
+  divider: {
+    title: "Battery sense divider",
+    sub: "220 kΩ + 33 kΩ + 100 nF · three components",
+    rows: [["220 kΩ", "+12 V line → sense node", ""],
+           ["33 kΩ", "sense node → ground spine", ""],
+           ["100 nF", "across the 33 kΩ", ""],
+           ["Sense node", "XIAO D2", ""]],
+    steps: [
+      "This is what a solar charge controller would have given you for free: it stops the motor before a flat battery is ruined.",
+      "Solder the two resistors in series between the 12 V line and ground. Where they meet is the sense node.",
+      "Put the 100 nF capacitor across the 33 kΩ — it steadies the reading.",
+      "12.6 V arrives at D2 as about 1.64 V, comfortably inside the ADC's range.",
+      "Calibrate it: compare batteryVolts() against the multimeter and set VBAT_CAL to (real ÷ reported)."
+    ],
+    warn: ["Get this wrong in either direction", "Too high and the guard never fires and you kill the battery. Too low and it parks the boxes open on a healthy battery. Check it against a meter once."]
+  },
+  actuator: {
+    title: "12 V linear actuator",
+    sub: "300 mm stroke · lead screw · limit switches inside",
+    rows: [["Wire A", "driver MOTOR 1", ""],
+           ["Wire B", "driver MOTOR 2", ""]],
+    steps: [
+      "Two wires, into the MOTOR screw terminal. Either way round — if it runs backwards, swap them.",
+      "Run it in medium-duty figure-8, not hook-up wire. Measure the real distance and add a metre.",
+      "It stops itself at each end on internal limit switches, so the code just runs it for a fixed time.",
+      "Drive the panel through a CORD over a pulley, never bolted rigidly. Gravity closes the door; the actuator only ever lifts it.",
+      "Time the full stroke with a stopwatch, add 20%, and that is your RUN_MS."
+    ],
+    warn: ["Never a rigid link", "Bolted straight to the panel it pushes down with 100 N onto whatever is underneath. Through a cord, the closing force is just the panel's own weight — about 10 N."]
+  }
+};
+
+const modal = document.getElementById('modal');
+const mTitle = document.getElementById('m-title');
+const mBody  = document.getElementById('m-body');
+document.getElementById('m-close').onclick = () => modal.close();
+modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function openPart(key){
+  const d = PARTS[key];
+  if (!d) return;
+  mTitle.textContent = d.title;
+  let h = '';
+  if (d.sub) h += '<p class="dim" style="font-size:14px;margin-top:-4px">' + esc(d.sub) + '</p>';
+  if (d.photo) {
+    h += '<div class="m-photo"><img src="' + d.photo[0] + '" alt="' + esc(d.title) + '">' +
+         '<p>Photo: <a href="' + d.photo[2] + '" target="_blank" rel="noopener">' + esc(d.photo[1]) + '</a></p></div>';
+  } else {
+    h += '<div class="m-nophoto">No board photo for this one — it is wire, a fuse holder, or loose components rather than a module.</div>';
+  }
+  if (d.rows && d.rows.length) {
+    h += '<div class="scroller"><table><thead><tr><th>Pin / part</th><th>Goes to</th><th>Note</th></tr></thead><tbody>';
+    for (const r of d.rows) {
+      const cls = /LEAVE EMPTY|leave empty|skip it|not used/.test(r[1]) ? 'no' : 'pin';
+      h += '<tr><td class="' + cls + '">' + esc(r[0]) + '</td><td>' + esc(r[1]) +
+           '</td><td class="dim" style="font-size:13px">' + esc(r[2] || '') + '</td></tr>';
+    }
+    h += '</tbody></table></div>';
+  }
+  if (d.steps) {
+    h += '<ol class="steps">';
+    for (const s of d.steps) h += '<li><p>' + esc(s) + '</p></li>';
+    h += '</ol>';
+  }
+  if (d.warn) {
+    h += '<div class="warn"><p class="eyebrow" style="color:var(--alert)">' + esc(d.warn[0]) +
+         '</p><p style="max-width:60ch">' + esc(d.warn[1]) + '</p></div>';
+  }
+  if (d.link) {
+    h += '<p style="font-size:14px"><a href="' + d.link[1] + '" target="_blank" rel="noopener">' +
+         esc(d.link[0]) + ' →</a></p>';
+  }
+  mBody.innerHTML = h;
+  mBody.scrollTop = 0;
+  modal.showModal();
+}
+
+// Inline the SVG so its parts become clickable.
+fetch('nestbox-wiring.svg')
+  .then(r => r.text())
+  .then(txt => {
+    const host = document.getElementById('diagram');
+    host.innerHTML = txt;
+    host.querySelectorAll('g[data-part]').forEach(g => {
+      const key = g.getAttribute('data-part');
+      g.addEventListener('click', () => openPart(key));
+      g.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPart(key); }
+      });
+    });
+  })
+  .catch(() => { /* leave the plain <img> fallback in place */ });
+</script>
+</body>
+</html>
