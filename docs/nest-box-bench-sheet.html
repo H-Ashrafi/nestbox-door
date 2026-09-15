@@ -115,7 +115,8 @@ tailwind.config = {
 </script>
 <style type="text/tailwindcss">
 @layer base {
-  html { scroll-padding-top: 64px; }
+  html { scroll-padding-top: 92px; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body { @apply font-body text-[18px] leading-relaxed text-ink bg-ground antialiased; }
   h1, h2, h3 { @apply font-display text-ink; text-wrap: balance; }
   a { @apply text-accent underline decoration-accent/40 underline-offset-[3px] hover:decoration-accent; }
@@ -179,27 +180,50 @@ tailwind.config = {
   g.pinmark.no.hot text { fill: #B42318; }
   @keyframes pinpulse { 0%, 100% { opacity: .18; } 50% { opacity: .38; } }
   @media (prefers-reduced-motion: reduce) { g.pinmark.hot circle { animation: none; } }
-  .navstrip { scrollbar-width: none; }
-  .navstrip::-webkit-scrollbar { display: none; }
+  .navlink.here { @apply bg-white text-ink shadow-sm; }
 }
 </style>
 </head>
 <body>
 
-<nav class="sticky top-0 z-20 bg-ground/90 backdrop-blur border-b border-rule">
-  <div class="navstrip max-w-[900px] mx-auto px-4 flex items-center gap-1 overflow-x-auto py-1.5">
-    <a class="navlink no-underline" href="#basics">Basics</a>
-    <a class="navlink no-underline" href="#diagram-section">Diagram</a>
-    <a class="navlink no-underline" href="#story">How it works</a>
-    <a class="navlink no-underline" href="#boards">Boards</a>
-    <a class="navlink no-underline" href="#loose">Loose parts</a>
-    <a class="navlink no-underline" href="#wire">Wire</a>
-    <a class="navlink no-underline" href="#parts">Buy the parts</a>
-    <a class="navlink no-underline" href="#tools">Tools</a>
-    <a class="navlink no-underline" href="#solder">Solder</a>
-    <a class="navlink no-underline" href="#build">Build</a>
-    <a class="navlink no-underline" href="#checklist">Checklist</a>
-    <a class="navlink no-underline" href="#glossary">Glossary</a>
+<nav class="sticky top-0 z-30 bg-ground/95 backdrop-blur border-b border-rule">
+  <div class="max-w-[940px] mx-auto px-4 py-2">
+    <!-- Narrow screens: one dropdown, so nothing can hide off the edge. -->
+    <label class="flex items-center gap-2 lg:hidden">
+      <span class="kicker shrink-0">Jump to</span>
+      <select id="jump" class="flex-1 min-w-0 rounded-lg border border-rule bg-white px-3 py-2 font-body text-[15px] text-ink">
+        <option value="">Choose a section…</option>
+        <option value="#basics">Six words you need first</option>
+        <option value="#diagram-section">The wiring diagram</option>
+        <option value="#story">How it works</option>
+        <option value="#boards">The four boards</option>
+        <option value="#loose">The loose parts</option>
+        <option value="#wire">Which wire goes where</option>
+        <option value="#parts">Shopping list: the parts</option>
+        <option value="#tools">Shopping list: the tools</option>
+        <option value="#solder">Soldering</option>
+        <option value="#build">Build it in stages</option>
+        <option value="#checklist">Tick them off</option>
+        <option value="#glossary">Glossary</option>
+      </select>
+    </label>
+    <!-- Wide screens: every link visible, wrapping to a second line if it must. -->
+    <div class="hidden lg:flex items-center flex-wrap gap-x-0.5 gap-y-1">
+      <a class="navlink no-underline" href="#basics">Basics</a>
+      <a class="navlink no-underline" href="#diagram-section">Diagram</a>
+      <a class="navlink no-underline" href="#story">How it works</a>
+      <a class="navlink no-underline" href="#boards">Boards</a>
+      <a class="navlink no-underline" href="#loose">Loose parts</a>
+      <a class="navlink no-underline" href="#wire">Wire</a>
+      <span class="w-px h-4 bg-rule mx-1.5" aria-hidden="true"></span>
+      <a class="navlink no-underline text-accentdeep" href="#parts">Shopping list</a>
+      <a class="navlink no-underline text-accentdeep" href="#tools">Tools</a>
+      <span class="w-px h-4 bg-rule mx-1.5" aria-hidden="true"></span>
+      <a class="navlink no-underline" href="#solder">Solder</a>
+      <a class="navlink no-underline" href="#build">Build</a>
+      <a class="navlink no-underline" href="#checklist">Checklist</a>
+      <a class="navlink no-underline" href="#glossary">Glossary</a>
+    </div>
   </div>
 </nav>
 
@@ -222,6 +246,10 @@ tailwind.config = {
     <div><p class="kicker">Bench time</p><p class="mono text-[15px]">one evening</p></div>
     <div><p class="kicker">Parts</p><p class="mono text-[15px]">$360 to $472</p></div>
     <div><p class="kicker">Tools, if you own none</p><p class="mono text-[15px]">about $166</p></div>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    <a href="#parts" class="no-underline rounded-xl bg-accent px-5 py-3 font-semibold text-white hover:bg-accentdeep">Go to the shopping list →</a>
+    <a href="#basics" class="no-underline card px-5 py-3 font-semibold hover:border-accent">Start from the beginning</a>
   </div>
 </header>
 
@@ -1928,6 +1956,28 @@ function partsTable(group) {
     });
     wirePins(card);
   });
+})();
+
+// ── the menu: dropdown on narrow screens, highlight the section you are in ──
+(function () {
+  const sel = document.getElementById('jump');
+  if (sel) sel.addEventListener('change', () => {
+    if (!sel.value) return;
+    const t = document.querySelector(sel.value);
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+    sel.value = '';
+  });
+
+  const links = [...document.querySelectorAll('nav a[href^="#"]')];
+  const targets = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+  let current = null;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) current = e.target.id; });
+    links.forEach(a => a.classList.toggle('here', a.getAttribute('href') === '#' + current));
+    if (sel && current) sel.value = '';
+  }, { rootMargin: '-64px 0px -70% 0px' });
+  targets.forEach(t => io.observe(t));
 })();
 
 // ── the checklist remembers its ticks in this browser ──
