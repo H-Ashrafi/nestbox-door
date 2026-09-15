@@ -13,7 +13,7 @@ actuator that shuts every box at once.
 
 | Path | What it is |
 |---|---|
-| `docs/index.html` | The bench sheet. Every part on the wiring diagram is clickable — photo, pinout, and what to do with it. |
+| `docs/index.html` | The bench sheet, written for someone with no electronics background. Every part on the wiring diagram is clickable (photo, pinout, what to do with it), every technical word opens a plain-English explanation, and the resistors are drawn with their real colour bands. Styled with Tailwind from its public CDN. |
 | `docs/nestbox-wiring.svg` | The wiring diagram. Clickable parts are `<g data-part="...">`. |
 | `docs/nestbox-wiring.dxf` | Same drawing, AutoCAD R2000, 288 × 188 mm (A4 landscape). |
 | `docs/nest-box-bench-sheet.html` | The whole page folded into one file — images, diagram and DXF inlined. Opens off a USB stick with no network. |
@@ -28,7 +28,8 @@ python bundle.py          # -> docs/nest-box-bench-sheet.html
 ```
 
 `bundle.py` uses Pillow to downscale oversized photos if it's installed, and works
-without it.
+without it. It also fetches the Tailwind script once and pastes it in, so the offline
+file is styled with no network; run it with internet access.
 
 ## Bill of materials
 

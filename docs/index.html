@@ -7,638 +7,1260 @@
 <title>Nest Box Bench Sheet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-:root{
-  --ground:#EDEFE8; --surface:#F8F9F4; --surface-2:#E2E6DA;
-  --ink:#1D231D; --soft:#5A6356; --line:#C9D0C2;
-  --accent:#C77A08; --deep:#8F5606; --wash:#F6E9CF;
-  --alert:#9B2C22; --alert-wash:#F3DEDA;
+  /* Painted before Tailwind arrives, so the page never flashes unstyled. */
+  body{margin:0;background:#F4F5F7;color:#16191D;font-family:"Source Sans 3",system-ui,sans-serif}
+</style>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#16191D', muted: '#5B6470', rule: '#E3E6EA', ground: '#F4F5F7',
+        accent: '#0F766E', accentsoft: '#E6F4F1', accentdeep: '#0B5C56',
+        danger: '#B42318', dangersoft: '#FDECEA',
+      },
+      fontFamily: {
+        display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+        body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'Consolas', 'monospace'],
+      },
+    },
+  },
+};
+</script>
+<style type="text/tailwindcss">
+@layer base {
+  html { scroll-padding-top: 64px; }
+  body { @apply font-body text-[18px] leading-relaxed text-ink bg-ground antialiased; }
+  h1, h2, h3 { @apply font-display text-ink; text-wrap: balance; }
+  a { @apply text-accent underline decoration-accent/40 underline-offset-[3px] hover:decoration-accent; }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-white rounded-sm; }
 }
-@media (prefers-color-scheme:dark){:root{
-  --ground:#14170F; --surface:#1C2018; --surface-2:#262B21;
-  --ink:#E9ECE1; --soft:#A2AA98; --line:#353B2E;
-  --accent:#E9A32E; --deep:#F0B44C; --wash:#33290F;
-  --alert:#E68A7D; --alert-wash:#3A211C;
-}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);
-  font:16.5px/1.6 'Source Serif 4',Georgia,serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:940px;margin:0 auto;padding:40px 18px 80px}
-h1,h2,h3{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;text-wrap:balance;margin:0}
-h1{font-size:clamp(2.2rem,7vw,3.4rem);font-weight:800;line-height:1.02;letter-spacing:-.025em}
-h2{font-size:1.65rem;font-weight:800;letter-spacing:-.02em}
-h3{font-size:1.05rem;font-weight:600}
-p{margin:0}
-.eyebrow{font:600 11px/1.4 'IBM Plex Mono',monospace;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--deep);margin:0}
-.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
-section{border-top:1px solid var(--line);margin-top:46px;padding-top:32px;
-  display:flex;flex-direction:column;gap:22px}
-.head{display:flex;align-items:baseline;gap:16px}
-.lede{color:var(--soft);max-width:62ch}
-.dim{color:var(--soft)}
-a{color:var(--deep);text-underline-offset:3px}
-a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-.board{background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden}
-.board .photo{background:#fff;border-bottom:1px solid var(--line)}
-.board .photo img{display:block;width:100%;height:auto}
-.board .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px}
-.board .cap{font:11.5px/1.5 'IBM Plex Mono',monospace;color:var(--soft);
-  padding:9px 18px;border-top:1px solid var(--line);margin:0}
-
-table{width:100%;border-collapse:collapse;font-size:14.5px}
-th{font:600 10.5px/1.4 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--soft);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
-tr:last-child td{border-bottom:none}
-.pin{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--deep);white-space:nowrap}
-.no{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--alert);white-space:nowrap}
-.scroller{overflow-x:auto}
-.box{font-family:'IBM Plex Mono',monospace;color:var(--soft)}
-
-.note{border-left:3px solid var(--accent);background:var(--surface);padding:15px 18px;
-  display:flex;flex-direction:column;gap:8px}
-.warn{border-left:3px solid var(--alert);background:var(--surface);padding:15px 18px;
-  display:flex;flex-direction:column;gap:8px}
-
-ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:flex;flex-direction:column}
-ol.steps>li{counter-increment:s;position:relative;padding:0 0 20px 52px;
-  border-left:1px solid var(--line);margin-left:17px}
-ol.steps>li:last-child{border-left-color:transparent;padding-bottom:0}
-ol.steps>li::before{content:counter(s,decimal-leading-zero);position:absolute;left:-17px;top:-2px;
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:999px;
-  background:var(--surface);border:1px solid var(--line);color:var(--deep);
-  font:600 12px 'IBM Plex Mono',monospace}
-
-/* ── interactive diagram ── */
-.diagram{background:#FAFAF7;border:1px solid var(--line);overflow-x:auto;border-radius:3px}
-.diagram svg{display:block;min-width:960px;width:100%;height:auto}
-.hint{display:flex;align-items:center;gap:10px;font:600 12px 'IBM Plex Mono',monospace;
-  color:var(--deep);background:var(--wash);border-radius:3px;padding:10px 14px}
-.hint span{font-size:16px}
-
-/* ── modal ── */
-dialog{border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);
-  padding:0;max-width:min(680px,94vw);width:100%;max-height:88vh;overflow:auto}
-dialog::backdrop{background:rgba(10,14,8,.62)}
-.m-top{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line);
-  padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;z-index:2}
-.m-top h3{font-size:1.2rem;font-weight:800;letter-spacing:-.01em}
-.m-close{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
-  border-radius:3px;cursor:pointer;font:600 12px 'IBM Plex Mono',monospace;padding:7px 11px;flex:none}
-.m-body{padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px}
-.m-photo{background:#fff;border:1px solid var(--line);border-radius:3px;overflow:hidden}
-.m-photo img{display:block;width:100%;height:auto}
-.m-photo p{font:11.5px/1.5 'IBM Plex Mono',monospace;color:var(--soft);
-  padding:8px 12px;border-top:1px solid var(--line);background:var(--surface)}
-.m-nophoto{border:1px dashed var(--line);border-radius:3px;padding:14px 16px;color:var(--soft);font-size:14px}
-
-.dl{display:flex;flex-wrap:wrap;gap:12px}
-.dl a{display:inline-block;border:1px solid var(--line);background:var(--surface);
-  padding:9px 14px;border-radius:3px;text-decoration:none;font:600 12px 'IBM Plex Mono',monospace}
-.chips{display:flex;flex-wrap:wrap;gap:26px}
-.chips div p:first-child{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--soft)}
-.chips div p:last-child{font-family:'IBM Plex Mono',monospace;font-size:14px}
+@layer components {
+  /* A word you can click for a plain-English explanation. */
+  .term { font: inherit; color: inherit; @apply inline cursor-pointer bg-transparent p-0 m-0 text-left align-baseline border-b-2 border-dotted border-accent/70 rounded-none transition-colors hover:bg-accentsoft hover:border-accent; }
+  .pin  { @apply font-mono font-semibold text-accentdeep whitespace-nowrap; }
+  .no   { @apply font-mono font-semibold text-danger whitespace-nowrap; }
+  .mono { @apply font-mono; font-variant-numeric: tabular-nums; }
+  .card { @apply bg-white border border-rule rounded-2xl; }
+  .kicker { @apply font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted; }
+  .note { @apply border-l-4 border-accent bg-accentsoft/70 rounded-r-xl px-5 py-4 flex flex-col gap-2; }
+  .warn { @apply border-l-4 border-danger bg-dangersoft/80 rounded-r-xl px-5 py-4 flex flex-col gap-2; }
+  .lede { @apply text-muted max-w-[62ch]; }
+  .section { @apply flex flex-col gap-6 pt-12 mt-12 border-t border-rule; }
+  .tbl { @apply w-full border-collapse text-[15px]; }
+  .tbl th { @apply font-mono text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted text-left pb-2 pr-3 border-b border-rule whitespace-nowrap; }
+  .tbl td { @apply py-2.5 pr-3 border-b border-rule align-top; }
+  .tbl tr:last-child td { @apply border-b-0; }
+  .scroller { @apply overflow-x-auto; }
+  .steps { counter-reset: s; @apply list-none p-0 m-0 flex flex-col; }
+  .steps > li { counter-increment: s; @apply relative pl-14 pb-6 ml-[18px] border-l border-rule; }
+  .steps > li:last-child { @apply border-l-transparent pb-0; }
+  .steps > li::before { content: counter(s); @apply absolute -left-[18px] -top-0.5 w-9 h-9 flex items-center justify-center rounded-full bg-white border border-rule text-accentdeep font-mono text-[13px] font-semibold; }
+  .steps h3 { @apply text-[1.05rem] font-bold; }
+  .steps p { @apply text-muted; }
+  .part-card { @apply card p-5 flex flex-col gap-3 text-left w-full transition-shadow hover:shadow-md hover:border-accent/60 cursor-pointer; }
+  .navlink { @apply text-[13px] font-semibold text-muted hover:text-ink whitespace-nowrap px-2.5 py-1.5 rounded-md hover:bg-white; }
+  dialog { @apply p-0 m-auto w-[min(700px,94vw)] max-h-[88vh] overflow-auto rounded-2xl border border-rule bg-white text-ink shadow-2xl; }
+  dialog::backdrop { background: rgba(22, 25, 29, .55); }
+  .m-top { @apply sticky top-0 bg-white border-b border-rule px-6 py-4 flex justify-between items-start gap-4 z-10; }
+  .m-body { @apply px-6 pt-5 pb-7 flex flex-col gap-5; }
+  .m-close { @apply bg-ground border border-rule rounded-lg px-3 py-1.5 font-mono text-[12px] font-semibold cursor-pointer hover:bg-rule shrink-0; }
+  .swatch { @apply inline-block w-4 h-4 rounded-sm border border-black/10 align-middle mr-2; }
+  summary::-webkit-details-marker { display: none; }
+  .navstrip { scrollbar-width: none; }
+  .navstrip::-webkit-scrollbar { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header style="display:flex;flex-direction:column;gap:18px">
-  <p class="eyebrow">Bench sheet · battery version · click the diagram</p>
-  <h1>Nest Box Bench Sheet</h1>
-  <p class="lede" style="font-size:1.1rem">
-    Every part on the wiring diagram is clickable. Click one and you get the photo of that board,
-    which pin is which, and what to do with it.
+<nav class="sticky top-0 z-20 bg-ground/90 backdrop-blur border-b border-rule">
+  <div class="navstrip max-w-[900px] mx-auto px-4 flex items-center gap-1 overflow-x-auto py-1.5">
+    <a class="navlink no-underline" href="#basics">Basics</a>
+    <a class="navlink no-underline" href="#diagram-section">Diagram</a>
+    <a class="navlink no-underline" href="#story">How it works</a>
+    <a class="navlink no-underline" href="#boards">Boards</a>
+    <a class="navlink no-underline" href="#loose">Loose parts</a>
+    <a class="navlink no-underline" href="#wire">Wire</a>
+    <a class="navlink no-underline" href="#tools">Tools</a>
+    <a class="navlink no-underline" href="#solder">Solder</a>
+    <a class="navlink no-underline" href="#build">Build</a>
+    <a class="navlink no-underline" href="#checklist">Checklist</a>
+    <a class="navlink no-underline" href="#glossary">Glossary</a>
+  </div>
+</nav>
+
+<div class="max-w-[900px] mx-auto px-4 pt-12 pb-24">
+
+<header class="flex flex-col gap-5">
+  <p class="kicker">Bench sheet · battery version · no mains, no wi-fi</p>
+  <h1 class="text-[clamp(2.4rem,7vw,4rem)] font-extrabold leading-[1.0] tracking-[-0.02em]">Nest box door</h1>
+  <p class="text-[1.2rem] leading-snug max-w-[58ch]">
+    A small controller that shuts the chicken nest boxes mid-afternoon and opens them again before dawn.
+    This sheet explains every part and every wire for someone who has never built a circuit.
   </p>
-  <div class="chips">
-    <div><p>Joints to solder</p><p>about 30</p></div>
-    <div><p>Bench time</p><p>an evening</p></div>
-    <div><p>Tools, if you own none</p><p>~$230</p></div>
-    <div><p>Wire + bits</p><p>~$90</p></div>
+  <div class="note">
+    <p class="kicker text-accentdeep">How to use this page</p>
+    <p class="max-w-[60ch]">Any word with a <button type="button" class="term" data-t="term">dotted line under it</button> opens a plain-English explanation. Click it.
+    Every part on the wiring diagram opens too. Nothing on this page assumes you already know what a volt is.</p>
+  </div>
+  <div class="flex flex-wrap gap-x-8 gap-y-3">
+    <div><p class="kicker">Joints to solder</p><p class="mono text-[15px]">about 30</p></div>
+    <div><p class="kicker">Bench time</p><p class="mono text-[15px]">one evening</p></div>
+    <div><p class="kicker">Tools, if you own none</p><p class="mono text-[15px]">about $230</p></div>
+    <div><p class="kicker">Wire and small parts</p><p class="mono text-[15px]">about $90</p></div>
   </div>
 </header>
 
-<!-- ───────────── INTERACTIVE DIAGRAM ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">01</span><h2>The wiring diagram</h2></div>
-  <p class="hint"><span>👆</span> Click any component — battery, fuse, buck, clock, XIAO, driver, divider, actuator.</p>
-  <div class="diagram" id="diagram">
-    <img src="nestbox-wiring.svg" alt="Wiring diagram" style="display:block;min-width:960px;width:100%">
-  </div>
-  <p class="lede">A filled dot is a join; a small bridge is a crossing that is <em>not</em> joined.</p>
-  <div class="dl">
-    <a href="nestbox-wiring.dxf" download>nestbox-wiring.dxf — AutoCAD R2000, A4 landscape</a>
-    <a href="nestbox-wiring.svg" download>nestbox-wiring.svg</a>
-    <a href="nest-box-bench-sheet.html" download id="dl-offline">this whole page as one offline file</a>
-  </div>
-
+<!-- ───────────── BASICS ───────────── -->
+<section class="section" id="basics">
+  <div><p class="kicker">Start here</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Six words you need before anything else</h2></div>
+  <p class="lede">Electricity behaves a lot like water in pipes. Every word below has a water version. Click any card for the longer story.</p>
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" id="basics-grid"></div>
   <div class="note">
-    <p class="eyebrow">Run it before you build it</p>
-    <p style="max-width:62ch"><a href="https://wokwi.com" target="_blank" rel="noopener">Wokwi</a> is
-    a free browser simulator that shows real pictures of the boards, lets you drag wires between
-    pins, and runs the actual firmware. There's a ready-made project for this circuit —
-    <a href="https://github.com/H-Ashrafi/nestbox-door/tree/main/wokwi" target="_blank" rel="noopener">paste
-    two files in and press play</a>. Same GPIO numbers as the real build, so it maps pin for pin
-    against the diagram above.</p>
-    <p style="max-width:62ch">A green LED flashes at dawn, a red one mid-afternoon, and a servo
-    swings between them as the door. Turn the knob down past 11.9 V and watch the battery guard
-    park the boxes open. One day passes every thirty seconds.</p>
-    <p class="dim" style="font-size:14px;max-width:62ch">It proves the <em>logic</em>. It can't
-    catch a swapped VIN and VOUT, a cold joint, or a pull-down on a strapping pin — which is what
-    building in stages is for.</p>
+    <p class="kicker text-accentdeep">The one rule</p>
+    <p class="max-w-[60ch]">Electricity only flows in a loop. It leaves the battery's <span class="mono">+</span> post, goes through the parts, and comes back to the <span class="mono">−</span> post.
+    Every wire on this page either carries it out or brings it back. The "bring it back" wires are all called <button type="button" class="term" data-t="ground">ground</button>.</p>
   </div>
 </section>
 
-<!-- ───────────── BOARDS ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">02</span><h2>The four boards</h2></div>
-  <p class="lede">Same content as the pop-ups, laid out to read straight through. Amber = a pin you
-  use. Red = a pin that must stay empty.</p>
+<!-- ───────────── DIAGRAM ───────────── -->
+<section class="section" id="diagram-section">
+  <div><p class="kicker">The map</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">The wiring diagram</h2></div>
+  <p class="flex items-center gap-3 font-mono text-[12.5px] font-semibold text-accentdeep bg-accentsoft rounded-lg px-4 py-3">
+    <span class="text-lg">👆</span> Click any part: the battery, the fuse, each board, the resistors, and even the long black ground wire.
+  </p>
+  <div class="card overflow-x-auto" id="diagram">
+    <img src="nestbox-wiring.svg" alt="Wiring diagram" style="display:block;min-width:960px;width:100%">
+  </div>
+  <div class="grid gap-3 sm:grid-cols-3 text-[15px]">
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">Colours</p><p>Each colour is one <button type="button" class="term" data-t="net">net</button>. All wires of one colour join together somewhere, so they all sit at the same voltage.</p></div>
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">Dots and bridges</p><p>A filled dot means the wires join. A small arch means one wire crosses over another and does <em>not</em> join.</p></div>
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">Small squares</p><p>Each white square on a board is a <button type="button" class="term" data-t="pin">pin</button>. The label next to it is what the board prints on itself.</p></div>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold text-ink hover:border-accent" href="nestbox-wiring.dxf" download>Download the DXF (AutoCAD, A4 landscape)</a>
+    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold text-ink hover:border-accent" href="nestbox-wiring.svg" download>Download the SVG</a>
+    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold text-ink hover:border-accent" href="nest-box-bench-sheet.html" download id="dl-offline">Download this whole page as one offline file</a>
+  </div>
+  <div class="note">
+    <p class="kicker text-accentdeep">Run it on screen before you build it</p>
+    <p class="max-w-[62ch]"><a href="https://wokwi.com" target="_blank" rel="noopener">Wokwi</a> is a free simulator that runs in your browser. It shows pictures of the boards, lets you drag wires between pins, and runs the real program.
+    A ready-made project for this circuit lives <a href="https://github.com/H-Ashrafi/nestbox-door/tree/main/wokwi" target="_blank" rel="noopener">in the repo</a>. You paste two files in and press play.</p>
+    <p class="max-w-[62ch]">A green light flashes at dawn and a red one flashes mid-afternoon. A little servo swings between them to stand in for the door. Turn the knob down past 11.9 V and watch the battery guard park the boxes open.</p>
+    <p class="text-muted text-[15px] max-w-[62ch]">The simulator proves the <em>logic</em>. It cannot catch a swapped VIN and VOUT, a bad solder joint, or a wire on a <button type="button" class="term" data-t="strapping">strapping pin</button>. Building in stages catches those.</p>
+  </div>
+</section>
 
-  <div class="board">
-    <div class="photo"><img src="img/xiao-pinmap.png" alt="Official Seeed pin map for the XIAO ESP32-C3"></div>
-    <div class="body">
-      <h3>Seeed XIAO ESP32-C3 — the brain</h3>
-      <p class="dim" style="font-size:14px">21 × 17.8 mm. USB-C at the top. Pin names printed underneath.</p>
-      <div class="scroller"><table>
-        <thead><tr><th>Pin</th><th>GPIO</th><th>Goes to</th></tr></thead>
+<!-- ───────────── STORY ───────────── -->
+<section class="section" id="story">
+  <div><p class="kicker">The story of one day</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">How the pieces work together</h2></div>
+  <p class="lede">Read this once and the diagram stops looking like spaghetti. Power flows from left to right. Signals flow from the brain outwards.</p>
+  <ol class="steps">
+    <li><h3>The battery pushes</h3><p>The <button type="button" class="term" data-t="sla">sealed lead-acid battery</button> pushes at about 12 <button type="button" class="term" data-t="volt">volts</button>. The <button type="button" class="term" data-t="fuse">fuse</button> sits in the red lead. If a wire ever shorts, the fuse melts and the battery cannot start a fire.</p></li>
+    <li><h3>The 12 V line feeds three things</h3><p>After the fuse, the red wire is called the <button type="button" class="term" data-t="v12line">+12 V line</button>. It feeds the buck, the motor driver's POWER terminal, and the top of the battery sense divider.</p></li>
+    <li><h3>The buck makes 5 V for the brain</h3><p>The <button type="button" class="term" data-t="buck">buck converter</button> takes 12 V in and gives a steady 5 V out. The XIAO board needs 5 V. Feed it 12 V and it dies instantly.</p></li>
+    <li><h3>The brain asks the clock what time it is</h3><p>The <button type="button" class="term" data-t="mcu">XIAO ESP32-C3</button> is a tiny computer. It talks to the <button type="button" class="term" data-t="rtc">clock module</button> over two wires, <button type="button" class="term" data-t="i2c">SDA and SCL</button>. From the date and your latitude it works out today's sunrise and sunset.</p></li>
+    <li><h3>The brain tells the driver to move</h3><p>When it is time, the XIAO raises one of two <button type="button" class="term" data-t="signal">signal</button> pins, <button type="button" class="term" data-t="in1in2">IN1 or IN2</button>. The <button type="button" class="term" data-t="driver">motor driver</button> sees that and connects the battery's full 12 V to the <button type="button" class="term" data-t="actuator">actuator</button>, in one direction or the other.</p></li>
+    <li><h3>The brain keeps an eye on the battery</h3><p>All day, the XIAO peeks at the battery voltage through the <button type="button" class="term" data-t="divider">battery sense divider</button>. When the battery drops below 11.9 V, the code parks the boxes open and stops moving. A flat battery therefore never locks the hens out.</p></li>
+  </ol>
+</section>
+
+<!-- ───────────── BOARDS ───────────── -->
+<section class="section" id="boards">
+  <div><p class="kicker">Modules</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">The four boards</h2></div>
+  <p class="lede">The same content as the diagram pop-ups, laid out to read straight through.
+  <span class="pin">Green text</span> marks a pin you use. <span class="no">Red text</span> marks a pin that must stay empty.</p>
+
+  <div class="card overflow-hidden">
+    <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/xiao-pinmap.png" alt="Official Seeed pin map for the XIAO ESP32-C3"></div>
+    <div class="p-5 flex flex-col gap-4">
+      <h3 class="text-[1.15rem] font-bold">Seeed XIAO ESP32-C3, the brain</h3>
+      <p class="text-muted text-[15px]">It measures 21 × 17.8 mm. The USB-C socket sits at the top. The pin names are printed on the underside.</p>
+      <div class="scroller"><table class="tbl">
+        <thead><tr><th>Pin</th><th><button type="button" class="term" data-t="gpio">GPIO</button></th><th>Goes to</th></tr></thead>
         <tbody>
-          <tr><td class="no">D0</td><td class="mono">GPIO2</td><td class="no">LEAVE EMPTY — boot strapping pin</td></tr>
+          <tr><td class="no">D0</td><td class="mono">GPIO2</td><td class="no">LEAVE EMPTY. It is a <button type="button" class="term" data-t="strapping">strapping pin</button>.</td></tr>
           <tr><td class="pin">D1</td><td class="mono">GPIO3</td><td>driver <span class="pin">IN1</span></td></tr>
-          <tr><td class="pin">D2</td><td class="mono">GPIO4</td><td>battery sense divider</td></tr>
+          <tr><td class="pin">D2</td><td class="mono">GPIO4</td><td>the <button type="button" class="term" data-t="sensenode">sense node</button> of the battery divider</td></tr>
           <tr><td class="pin">D3</td><td class="mono">GPIO5</td><td>driver <span class="pin">IN2</span></td></tr>
           <tr><td class="pin">D4</td><td class="mono">GPIO6</td><td>clock <span class="pin">SDA</span></td></tr>
           <tr><td class="pin">D5</td><td class="mono">GPIO7</td><td>clock <span class="pin">SCL</span></td></tr>
-          <tr><td class="dim">D6</td><td class="mono dim">GPIO21</td><td class="dim">spare</td></tr>
+          <tr><td class="text-muted">D6</td><td class="mono text-muted">GPIO21</td><td class="text-muted">spare</td></tr>
           <tr><td class="pin">5V</td><td class="mono">—</td><td>buck <span class="pin">VOUT</span></td></tr>
-          <tr><td class="pin">GND</td><td class="mono">—</td><td>the ground spine</td></tr>
+          <tr><td class="pin">GND</td><td class="mono">—</td><td>the <button type="button" class="term" data-t="spine">ground spine</button></td></tr>
           <tr><td class="pin">3V3</td><td class="mono">—</td><td>clock <span class="pin">VCC</span></td></tr>
-          <tr><td class="dim">D10</td><td class="mono dim">GPIO10</td><td class="dim">spare</td></tr>
-          <tr><td class="no">D9</td><td class="mono">GPIO9</td><td class="no">LEAVE EMPTY — boot button</td></tr>
-          <tr><td class="no">D8</td><td class="mono">GPIO8</td><td class="no">LEAVE EMPTY — boot strapping pin</td></tr>
-          <tr><td class="dim">D7</td><td class="mono dim">GPIO20</td><td class="dim">spare</td></tr>
+          <tr><td class="text-muted">D10</td><td class="mono text-muted">GPIO10</td><td class="text-muted">spare</td></tr>
+          <tr><td class="no">D9</td><td class="mono">GPIO9</td><td class="no">LEAVE EMPTY. It is the boot button.</td></tr>
+          <tr><td class="no">D8</td><td class="mono">GPIO8</td><td class="no">LEAVE EMPTY. It is a strapping pin.</td></tr>
+          <tr><td class="text-muted">D7</td><td class="mono text-muted">GPIO20</td><td class="text-muted">spare</td></tr>
         </tbody>
       </table></div>
-      <div class="warn"><p class="eyebrow" style="color:var(--alert)">The three red pins</p>
-      <p style="max-width:60ch">The chip reads D0, D8 and D9 at power-up to decide how to boot. A
-      pull-down on any of them and the board will not start — which is why IN1 and IN2 go to D1 and
-      D3 rather than the obvious D0 and D1.</p></div>
+      <div class="warn"><p class="kicker text-danger">The three red pins</p>
+      <p class="max-w-[60ch]">The chip reads D0, D8 and D9 at the instant it powers up to decide how to boot. A resistor to ground on any of them stops the board from starting.
+      That is why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1.</p></div>
     </div>
-    <p class="cap">Photo: <a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed Studio wiki</a></p>
+    <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed Studio wiki</a></p>
   </div>
 
-  <div class="board">
-    <div class="photo"><img src="img/drv8871.jpg" alt="Adafruit DRV8871 showing MOTOR and POWER screw terminals and the IN2 IN1 VM GND header"></div>
-    <div class="body">
-      <h3>Adafruit DRV8871 — the motor driver</h3>
-      <p class="dim" style="font-size:14px">Read the silkscreen in the photo: <span class="mono">MOTOR</span>
-      with screws <span class="mono">2</span> and <span class="mono">1</span>, <span class="mono">POWER</span>
-      with <span class="mono">+</span> and <span class="mono">−</span>, four header holes along the bottom.</p>
-      <div class="scroller"><table>
-        <thead><tr><th>Terminal / pin</th><th>Goes to</th><th>Solder?</th></tr></thead>
+  <div class="card overflow-hidden">
+    <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/drv8871.jpg" alt="Adafruit DRV8871 showing MOTOR and POWER screw terminals and the IN2 IN1 VM GND header"></div>
+    <div class="p-5 flex flex-col gap-4">
+      <h3 class="text-[1.15rem] font-bold">Adafruit DRV8871, the motor driver</h3>
+      <p class="text-muted text-[15px]">Read the <button type="button" class="term" data-t="silkscreen">printed labels</button> in the photo. The <span class="mono">MOTOR</span> block has screws <span class="mono">2</span> and <span class="mono">1</span>.
+      The <span class="mono">POWER</span> block has <span class="mono">+</span> and <span class="mono">−</span>. Four <button type="button" class="term" data-t="header">header</button> holes run along the bottom edge.</p>
+      <div class="scroller"><table class="tbl">
+        <thead><tr><th>Terminal or pin</th><th>Goes to</th><th>Solder?</th></tr></thead>
         <tbody>
-          <tr><td class="pin">POWER +</td><td>+12 V, from the fuse</td><td class="dim">no — screw terminal</td></tr>
-          <tr><td class="pin">POWER −</td><td>ground spine</td><td class="dim">no — screw terminal</td></tr>
-          <tr><td class="pin">MOTOR 1</td><td>actuator wire A</td><td class="dim">no — screw terminal</td></tr>
-          <tr><td class="pin">MOTOR 2</td><td>actuator wire B</td><td class="dim">no — screw terminal</td></tr>
-          <tr><td class="pin">IN2</td><td>XIAO <span class="pin">D3</span></td><td>yes</td></tr>
-          <tr><td class="pin">IN1</td><td>XIAO <span class="pin">D1</span></td><td>yes</td></tr>
-          <tr><td class="dim">VM</td><td class="dim">skip — the POWER terminal already feeds it</td><td class="dim">no</td></tr>
-          <tr><td class="pin">GND</td><td>ground spine, plus both 10 kΩ pull-downs</td><td>yes</td></tr>
+          <tr><td class="pin">POWER +</td><td>the +12 V line, from the fuse</td><td class="text-muted">No. It is a <button type="button" class="term" data-t="screwterm">screw terminal</button>.</td></tr>
+          <tr><td class="pin">POWER −</td><td>ground spine</td><td class="text-muted">No. Screw terminal.</td></tr>
+          <tr><td class="pin">MOTOR 1</td><td>actuator wire A</td><td class="text-muted">No. Screw terminal.</td></tr>
+          <tr><td class="pin">MOTOR 2</td><td>actuator wire B</td><td class="text-muted">No. Screw terminal.</td></tr>
+          <tr><td class="pin">IN2</td><td>XIAO <span class="pin">D3</span></td><td>Yes</td></tr>
+          <tr><td class="pin">IN1</td><td>XIAO <span class="pin">D1</span></td><td>Yes</td></tr>
+          <tr><td class="text-muted">VM</td><td class="text-muted">Skip it. The POWER terminal already feeds it.</td><td class="text-muted">No</td></tr>
+          <tr><td class="pin">GND</td><td>ground spine, plus one leg of each 10 kΩ <button type="button" class="term" data-t="pulldown">pull-down</button></td><td>Yes</td></tr>
         </tbody>
       </table></div>
-      <div class="note"><p class="eyebrow">Good news</p>
-      <p style="max-width:60ch">The green screw terminals arrive already soldered, so the two
-      highest-current connections need no iron at all.</p></div>
+      <div class="note"><p class="kicker text-accentdeep">Good news</p>
+      <p class="max-w-[60ch]">The green screw terminals arrive already soldered on. The two connections that carry the most current therefore need no soldering iron at all.</p></div>
     </div>
-    <p class="cap">Photo: <a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit Learning System</a></p>
+    <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit Learning System</a></p>
   </div>
 
-  <div class="board">
-    <div class="photo"><img src="img/pololu.jpg" alt="Underside of the Pololu D36V6F5 showing pads VOUT GND VIN SHDN beside a coin"></div>
-    <div class="body">
-      <h3>Pololu D36V6F5 — the 5 V buck</h3>
-      <p class="dim" style="font-size:14px">10 × 13 mm — that's a US quarter beside it. Names are printed
-      on the <strong>underside</strong>, the face shown here.</p>
-      <div class="scroller"><table>
+  <div class="card overflow-hidden">
+    <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/pololu.jpg" alt="Underside of the Pololu D36V6F5 showing pads VOUT GND VIN SHDN beside a coin"></div>
+    <div class="p-5 flex flex-col gap-4">
+      <h3 class="text-[1.15rem] font-bold">Pololu D36V6F5, the 5 V buck</h3>
+      <p class="text-muted text-[15px]">It measures 10 × 13 mm. The coin in the photo is a US quarter. The names are printed on the <strong>underside</strong>, which is the face shown here.</p>
+      <div class="scroller"><table class="tbl">
         <thead><tr><th>Pad</th><th>Goes to</th></tr></thead>
         <tbody>
           <tr><td class="pin">VOUT</td><td>XIAO <span class="pin">5V</span></td></tr>
           <tr><td class="pin">GND</td><td>ground spine</td></tr>
-          <tr><td class="pin">VIN</td><td>+12 V, from the fuse</td></tr>
-          <tr><td class="no">SHDN</td><td class="no">leave empty</td></tr>
+          <tr><td class="pin">VIN</td><td>the +12 V line, from the fuse</td></tr>
+          <tr><td class="no">SHDN</td><td class="no">Leave it empty.</td></tr>
         </tbody>
       </table></div>
-      <div class="warn"><p class="eyebrow" style="color:var(--alert)">Read this order twice</p>
-      <p style="max-width:60ch">Left to right: <span class="mono">VOUT · GND · VIN · SHDN</span>.
-      VIN and VOUT are two pads apart with ground between them. Swap them and 12 V goes into the
-      ESP32. Measure VOUT before you connect the XIAO.</p></div>
+      <div class="warn"><p class="kicker text-danger">Read this order twice</p>
+      <p class="max-w-[60ch]">Left to right the pads read <span class="mono">VOUT · GND · VIN · SHDN</span>. <button type="button" class="term" data-t="vinvout">VIN and VOUT</button> sit two pads apart with ground between them.
+      Swap them and 12 V goes straight into the XIAO. Measure VOUT with the meter before you connect the XIAO.</p></div>
     </div>
-    <p class="cap">Photo: <a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu</a></p>
+    <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu</a></p>
   </div>
 
-  <div class="board">
-    <div class="photo"><img src="img/ds3231m.jpg" alt="DFRobot Fermion DS3231M MEMS RTC breakout board"></div>
-    <div class="body">
-      <h3>DFRobot DS3231M — the clock</h3>
-      <p class="dim" style="font-size:14px">22.5 × 21 mm. CR1220 coin cell on the reverse, seven pads
-      in one row.</p>
-      <div class="scroller"><table>
+  <div class="card overflow-hidden">
+    <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/ds3231m.jpg" alt="DFRobot Fermion DS3231M MEMS RTC breakout board"></div>
+    <div class="p-5 flex flex-col gap-4">
+      <h3 class="text-[1.15rem] font-bold">DFRobot DS3231M, the clock</h3>
+      <p class="text-muted text-[15px]">It measures 22.5 × 21 mm. A CR1220 coin cell sits on the reverse. Seven pads run in one row.</p>
+      <div class="scroller"><table class="tbl">
         <thead><tr><th>Pad</th><th>Position</th><th>Goes to</th></tr></thead>
         <tbody>
           <tr><td class="pin">VCC</td><td class="mono">1st</td><td>XIAO <span class="pin">3V3</span></td></tr>
           <tr><td class="pin">GND</td><td class="mono">2nd</td><td>ground spine</td></tr>
           <tr><td class="pin">SCL</td><td class="mono">3rd</td><td>XIAO <span class="pin">D5</span></td></tr>
           <tr><td class="pin">SDA</td><td class="mono">4th</td><td>XIAO <span class="pin">D4</span></td></tr>
-          <tr><td class="dim">INT</td><td class="mono dim">5th</td><td class="dim">not used</td></tr>
-          <tr><td class="dim">RST</td><td class="mono dim">6th</td><td class="dim">not used</td></tr>
-          <tr><td class="dim">32K</td><td class="mono dim">7th</td><td class="dim">not used</td></tr>
+          <tr><td class="text-muted">INT</td><td class="mono text-muted">5th</td><td class="text-muted">not used</td></tr>
+          <tr><td class="text-muted">RST</td><td class="mono text-muted">6th</td><td class="text-muted">not used</td></tr>
+          <tr><td class="text-muted">32K</td><td class="mono text-muted">7th</td><td class="text-muted">not used</td></tr>
         </tbody>
       </table></div>
-      <div class="warn"><p class="eyebrow" style="color:var(--alert)">SCL comes before SDA</p>
-      <p style="max-width:60ch">The opposite of most clock modules. Wire it from muscle memory and
-      you'll get it backwards — the clock just won't answer.</p></div>
+      <div class="warn"><p class="kicker text-danger">SCL comes before SDA</p>
+      <p class="max-w-[60ch]">Most clock modules print them the other way round. If you wire it from habit you will swap them, and the clock will simply not answer.</p></div>
     </div>
-    <p class="cap">Photo: <a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot, DFR0641</a></p>
+    <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot, DFR0641</a></p>
+  </div>
+</section>
+
+<!-- ───────────── LOOSE PARTS ───────────── -->
+<section class="section" id="loose">
+  <div><p class="kicker">No board, no labels</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">The loose parts</h2></div>
+  <p class="lede">Four resistors, one capacitor and one fuse. They come in a bag with no names printed on them, so this is where beginners get lost.
+  Match the coloured bands to the pictures. Click any picture for the full explanation.</p>
+
+  <div class="card p-5 sm:p-6 flex flex-col gap-5">
+    <div><p class="kicker">The confusing one</p><h3 class="text-[1.3rem] font-bold">What the battery sense divider is</h3></div>
+    <div class="grid gap-6 md:grid-cols-[240px_1fr] items-start">
+      <div id="divider-figure" class="mx-auto"></div>
+      <div class="flex flex-col gap-3 text-[16px]">
+        <p>The XIAO wants to know how full the battery is. The only way it can "see" anything is by measuring a <button type="button" class="term" data-t="volt">voltage</button> on one of its pins, with a part inside it called the <button type="button" class="term" data-t="adc">ADC</button>.</p>
+        <p>There is a catch. The ADC on pin <button type="button" class="term" data-t="d2">D2</button> can only measure between 0 and about 2.5 V. The battery sits at 12 to 13 V. Connect the battery straight to D2 and you destroy the chip.</p>
+        <p>So we shrink the voltage first. Two <button type="button" class="term" data-t="resistor">resistors</button> in a row, one big (220 kΩ) and one small (33 kΩ), split the battery voltage between them like two people sharing a rope. The small one gets a small share: 33 ÷ (220 + 33) = 0.13, about one eighth.</p>
+        <p>The point where the two resistors meet is the <button type="button" class="term" data-t="sensenode">sense node</button>. A wire runs from there to D2. A full battery at 12.6 V shows up at D2 as 12.6 × 0.13 = <strong>1.64 V</strong>, which the ADC can read comfortably. The code multiplies the reading back up by 7.7 to get the real battery voltage.</p>
+        <p>The <button type="button" class="term" data-t="capacitor">100 nF capacitor</button> sits across the small resistor and smooths out flicker, so the reading holds still.</p>
+        <p class="text-muted text-[15px]">The resistors are huge on purpose. Only about 0.00005 A trickles through them, so the battery does not notice the divider at all.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-3 sm:grid-cols-2" id="loose-grid"></div>
+
+  <div class="card p-5 flex flex-col gap-3">
+    <p class="kicker">How to read the coloured bands</p>
+    <p class="max-w-[62ch]">Hold the resistor so the gold band sits on the right. The first two bands are digits. The third band says how many zeros to add. The gold band means "accurate to 5%".
+    Your pack may have five bands instead of four. Both versions are shown when you click a resistor.</p>
+    <div class="scroller" id="band-key"></div>
+    <p class="text-muted text-[15px]">Cannot tell orange from red under your lamp? Set the multimeter to Ω, touch one probe to each leg, and read the number. That is quicker than squinting.</p>
   </div>
 </section>
 
 <!-- ───────────── WIRE ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">03</span><h2>Which wire goes where</h2></div>
-  <p class="lede">Two wire types, and the difference matters: the thin stuff carries 0.6 A and drops
-  voltage badly on the motor run.</p>
-  <div class="scroller"><table>
+<section class="section" id="wire">
+  <div><p class="kicker">Two thicknesses</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Which wire goes where</h2></div>
+  <p class="lede">You need two types of wire, and the difference matters. The thin wire carries only tiny <button type="button" class="term" data-t="signal">signals</button>. The thick wire carries the <button type="button" class="term" data-t="amp">current</button> for the motor.</p>
+  <div class="scroller"><table class="tbl">
     <thead><tr><th>Run</th><th>Wire</th><th>Colour</th><th>Buy</th></tr></thead>
     <tbody>
-      <tr><td>Battery + and − to the board, via the fuse</td><td>Figure-8, medium duty <span class="dim">≈1 mm²</span></td><td>red / black</td><td class="mono">1 m</td></tr>
-      <tr><td>Board to the driver's POWER terminal</td><td>Figure-8, medium duty</td><td>red / black</td><td class="mono">0.3 m</td></tr>
-      <tr><td>Driver's MOTOR terminal to the actuator</td><td>Figure-8, medium duty</td><td>brown / grey</td><td class="mono">your run + 1 m</td></tr>
-      <tr><td>5 V, 3V3, SDA, SCL, IN1, IN2, sense</td><td>Light-duty hook-up <span class="dim">26 AWG</span></td><td>one colour each</td><td class="mono">8-colour pack</td></tr>
-      <tr><td>Grounds between modules</td><td>Light-duty hook-up</td><td>black</td><td class="mono">from the pack</td></tr>
+      <tr><td>Battery + and − to the box, through the fuse</td><td><button type="button" class="term" data-t="fig8">Figure-8</button>, medium duty <span class="text-muted">about 1 mm²</span></td><td>red / black</td><td class="mono">1 m</td></tr>
+      <tr><td>The 12 V line to the driver's POWER terminal</td><td>Figure-8, medium duty</td><td>red / black</td><td class="mono">0.3 m</td></tr>
+      <tr><td>The driver's MOTOR terminal to the actuator</td><td>Figure-8, medium duty</td><td>brown / grey</td><td class="mono">your run + 1 m</td></tr>
+      <tr><td>5 V, 3V3, SDA, SCL, IN1, IN2, sense</td><td><button type="button" class="term" data-t="hookup">Hook-up wire</button>, light duty <span class="text-muted">26 <button type="button" class="term" data-t="awg">AWG</button></span></td><td>one colour each</td><td class="mono">8-colour pack</td></tr>
+      <tr><td>Grounds between the boards</td><td>Hook-up wire, light duty</td><td>black</td><td class="mono">from the pack</td></tr>
     </tbody>
   </table></div>
-  <div class="note"><p class="eyebrow">On the actuator run</p>
-  <p style="max-width:62ch">Ten metres of figure-8 at 1 mm² drops about a third of a volt at 2 A,
-  which is nothing. The same run in 26 AWG would drop over three volts and cook the wire.</p></div>
+  <div class="note"><p class="kicker text-accentdeep">Why the actuator run needs the thick wire</p>
+  <p class="max-w-[62ch]">Ten metres of 1 mm² figure-8 loses about a third of a volt while the motor pulls 2 A. That loss is nothing. The same run in thin 26 AWG hook-up wire would lose over three volts and get hot. This effect is called <button type="button" class="term" data-t="vdrop">voltage drop</button>.</p></div>
 </section>
 
 <!-- ───────────── TOOLS ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">04</span><h2>Tools and consumables</h2></div>
-  <p class="lede">Two ways to buy it. Jaycar you can walk into today; Amazon is cheaper on more
-  than half the list. Prices and ratings checked 15 September 2026; ≈ means close but not verified.
-  <strong>Bold is the better buy.</strong></p>
-  <div class="scroller"><table>
+<section class="section" id="tools">
+  <div><p class="kicker">Shopping</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Tools and consumables</h2></div>
+  <p class="lede">There are two ways to buy it all. You can walk into Jaycar today. Amazon is cheaper on more than half the list.
+  Prices and ratings were checked on 15 September 2026. The ≈ sign means close but not verified. <strong>Bold marks the better buy.</strong></p>
+  <div class="scroller"><table class="tbl">
     <thead><tr><th>Item</th><th>Jaycar</th><th>Amazon AU</th><th>Why</th></tr></thead>
     <tbody>
       <tr>
-        <td>Soldering station<br><span class="dim" style="font-size:13px">adjustable temperature</span></td>
-        <td><a href="https://www.jaycar.com.au/duratech-48w-temperature-controlled-soldering-station/p/TS1620" target="_blank" rel="noopener">TS1620</a><br><strong class="mono">$61.95</strong> <span class="dim">48 W</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0FP5GN667" target="_blank" rel="noopener">75 W digital station</a><br><span class="mono">$79.98</span> <span class="dim">4.6★</span></td>
-        <td style="font-size:13.5px">The purchase that decides whether this is pleasant or miserable — a $20 pencil iron can't hold temperature, so solder won't flow, so you press harder, so you tear a pad off. <strong>Jaycar wins on price.</strong> Want to spend less? The <a href="https://www.amazon.com.au/dp/B0GWMSKJ1S" target="_blank" rel="noopener">60 W 12-in-1 kit, $39.59, 4.7★</a> has a temperature dial and throws in tips, stand, solder and a pump.</td>
+        <td>Soldering station<br><span class="text-muted text-[13px]">adjustable temperature</span></td>
+        <td><a href="https://www.jaycar.com.au/duratech-48w-temperature-controlled-soldering-station/p/TS1620" target="_blank" rel="noopener">TS1620</a><br><strong class="mono">$61.95</strong> <span class="text-muted">48 W</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B0FP5GN667" target="_blank" rel="noopener">75 W digital station</a><br><span class="mono">$79.98</span> <span class="text-muted">4.6★</span></td>
+        <td class="text-[14px]">This purchase decides whether the evening is pleasant or miserable. A $20 pencil iron cannot hold its temperature, so the solder will not flow, so you press harder, so you tear a pad off the board. <strong>Jaycar wins on price.</strong> If you want to spend less, the <a href="https://www.amazon.com.au/dp/B0GWMSKJ1S" target="_blank" rel="noopener">60 W 12-in-1 kit, $39.59, 4.7★</a> has a temperature dial and includes tips, a stand, solder and a pump.</td>
       </tr>
       <tr>
         <td>Solder, 0.8 mm leaded</td>
-        <td><a href="https://www.jaycar.com.au/0-71mm-duratech-solder-200gm/p/NS3005" target="_blank" rel="noopener">NS3005</a><br><span class="mono">≈$25</span> <span class="dim">200 g</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0H4FQMW5L" target="_blank" rel="noopener">Sn63/Pb37, 4 × 30 g</a><br><strong class="mono">$12.99</strong> <span class="dim">4.8★</span></td>
-        <td style="font-size:13.5px">Leaded flows cooler and is far more forgiving than lead-free. Sn63/Pb37 is even better than 60/40 — it sets instantly instead of going through a pasty stage, so a nudged joint is less likely to come out grainy.</td>
+        <td><a href="https://www.jaycar.com.au/0-71mm-duratech-solder-200gm/p/NS3005" target="_blank" rel="noopener">NS3005</a><br><span class="mono">≈$25</span> <span class="text-muted">200 g</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B0H4FQMW5L" target="_blank" rel="noopener">Sn63/Pb37, 4 × 30 g</a><br><strong class="mono">$12.99</strong> <span class="text-muted">4.8★</span></td>
+        <td class="text-[14px]">Leaded solder melts at a lower temperature and forgives mistakes far better than lead-free. Sn63/Pb37 beats 60/40 too. It sets instantly instead of going through a pasty stage, so a nudged joint is less likely to come out grainy.</td>
       </tr>
       <tr>
         <td>Hook-up wire, one colour per net</td>
-        <td><a href="https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009" target="_blank" rel="noopener">WH3009</a><br><strong class="mono">$39.95</strong> <span class="dim">8 × 25 m, 26 AWG</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B07TX6BX47" target="_blank" rel="noopener">TUOFENG 22 AWG solid</a><br><span class="mono">$41.99</span> <span class="dim">6 × 9 m · 4.7★</span></td>
-        <td style="font-size:13.5px">Line ball. Jaycar gives far more wire and two extra colours; the Amazon one is solid-core, which pokes through perfboard holes more obligingly than stranded.</td>
+        <td><a href="https://www.jaycar.com.au/light-duty-hook-up-wire-pack-8-colours/p/WH3009" target="_blank" rel="noopener">WH3009</a><br><strong class="mono">$39.95</strong> <span class="text-muted">8 × 25 m, 26 AWG</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B07TX6BX47" target="_blank" rel="noopener">TUOFENG 22 AWG solid</a><br><span class="mono">$41.99</span> <span class="text-muted">6 × 9 m · 4.7★</span></td>
+        <td class="text-[14px]">This one is a line-ball call. Jaycar gives far more wire and two extra colours. The Amazon wire is solid-core, which pokes through <button type="button" class="term" data-t="perfboard">perfboard</button> holes more easily than stranded wire does.</td>
       </tr>
       <tr>
         <td>2-core wire for battery and motor</td>
         <td><a href="https://www.jaycar.com.au/medium-duty-fig-8-speaker-cable/p/WB1706" target="_blank" rel="noopener">WB1706</a><br><span class="mono">≈$2.50/m</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B01LZRV0HV" target="_blank" rel="noopener">TYUMEN 18 AWG red/black, 12 m</a><br><strong class="mono">$14.61</strong> <span class="dim">4.7★</span></td>
-        <td style="font-size:13.5px">Twelve metres for the price of six. Covers the battery leads, the driver feed and the actuator run in one roll — mark one end of the motor pair with tape so you don't mix it up with the 12 V.</td>
+        <td><a href="https://www.amazon.com.au/dp/B01LZRV0HV" target="_blank" rel="noopener">TYUMEN 18 AWG red/black, 12 m</a><br><strong class="mono">$14.61</strong> <span class="text-muted">4.7★</span></td>
+        <td class="text-[14px]">You get twelve metres for the price of six. One roll covers the battery leads, the driver feed and the actuator run. Mark one end of the motor pair with tape so you do not mix it up with the 12 V pair.</td>
       </tr>
       <tr>
         <td>Prototyping board</td>
-        <td><a href="https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556" target="_blank" rel="noopener">HP9556</a><br><strong class="mono">$8.25</strong> <span class="dim">2 boards</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0772FK81G" target="_blank" rel="noopener">Elegoo 32 pcs, 5 sizes</a><br><span class="mono">$19.99</span> <span class="dim">4.8★</span></td>
-        <td style="font-size:13.5px">Jaycar if you want one board and a spare. Elegoo if you'd rather have thirty and never think about it again — double-sided with plated holes, which is kinder to solder to.</td>
+        <td><a href="https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556" target="_blank" rel="noopener">HP9556</a><br><strong class="mono">$8.25</strong> <span class="text-muted">2 boards</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B0772FK81G" target="_blank" rel="noopener">Elegoo 32 pcs, 5 sizes</a><br><span class="mono">$19.99</span> <span class="text-muted">4.8★</span></td>
+        <td class="text-[14px]">Choose Jaycar if you want one board and a spare. Choose Elegoo if you would rather own thirty and never think about it again. The Elegoo boards are double-sided with plated holes, which makes soldering kinder.</td>
       </tr>
       <tr>
-        <td>Header pins</td>
-        <td><a href="https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211" target="_blank" rel="noopener">HM3211</a><br><strong class="mono">≈$1.50</strong> <span class="dim">male only</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B07CWSXY7P" target="_blank" rel="noopener">Glarks 112 pcs male + female</a><br><span class="mono">$19.99</span> <span class="dim">4.6★</span></td>
-        <td style="font-size:13.5px">Buy three Jaycar strips and you're done for $4.50. The Glarks kit includes <em>female</em> sockets, which is what you want if you'd rather plug the modules in than solder them down — worth the extra if you think you'll ever kill one.</td>
+        <td><button type="button" class="term" data-t="header">Header pins</button></td>
+        <td><a href="https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211" target="_blank" rel="noopener">HM3211</a><br><strong class="mono">≈$1.50</strong> <span class="text-muted">male only</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B07CWSXY7P" target="_blank" rel="noopener">Glarks 112 pcs male + female</a><br><span class="mono">$19.99</span> <span class="text-muted">4.6★</span></td>
+        <td class="text-[14px]">Buy three Jaycar strips and you are done for $4.50. The Glarks kit includes <em>female</em> sockets, which you want if you would rather plug the boards in than solder them down. That is worth the extra if you think you might ever kill one.</td>
       </tr>
       <tr>
-        <td>Multimeter</td>
+        <td><button type="button" class="term" data-t="multimeter">Multimeter</button></td>
         <td><a href="https://www.jaycar.com.au/cat-iii-multimeter-with-temperature/p/QM1323" target="_blank" rel="noopener">QM1323</a><br><span class="mono">$61.95</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0DKXTR485" target="_blank" rel="noopener">AstroAI 4000-count auto-ranging</a><br><strong class="mono">$29.99</strong> <span class="dim">4.6★</span></td>
-        <td style="font-size:13.5px"><strong>Not optional.</strong> Checks the buck before it touches the ESP32, calibrates the divider, finds every mistake you make. Half price and auto-ranging, which matters more than accuracy here.</td>
+        <td><a href="https://www.amazon.com.au/dp/B0DKXTR485" target="_blank" rel="noopener">AstroAI 4000-count auto-ranging</a><br><strong class="mono">$29.99</strong> <span class="text-muted">4.6★</span></td>
+        <td class="text-[14px]"><strong>This one is not optional.</strong> It checks the buck before the buck touches the XIAO, it calibrates the divider, and it finds every mistake you make. The Amazon one costs half as much and picks its own range, which matters more than accuracy here.</td>
       </tr>
       <tr>
-        <td>Heatshrink</td>
-        <td><a href="https://www.jaycar.com.au/heatshrink-assortment-trade-pack/p/WH5524" target="_blank" rel="noopener">WH5524</a><br><span class="mono">$29.95</span> <span class="dim">160 pcs</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B0BC11VBWV" target="_blank" rel="noopener">300 pcs 3:1 glue-lined</a><br><strong class="mono">$16.48</strong> <span class="dim">4.0★</span></td>
-        <td style="font-size:13.5px">Get the <strong>glue-lined 3:1</strong>, not plain 2:1. It melts a seal around the wire instead of just hugging it, which is the difference between a joint that survives a wet winter in a coop and one that doesn't.</td>
+        <td><button type="button" class="term" data-t="heatshrink">Heatshrink</button></td>
+        <td><a href="https://www.jaycar.com.au/heatshrink-assortment-trade-pack/p/WH5524" target="_blank" rel="noopener">WH5524</a><br><span class="mono">$29.95</span> <span class="text-muted">160 pcs</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B0BC11VBWV" target="_blank" rel="noopener">300 pcs 3:1 glue-lined</a><br><strong class="mono">$16.48</strong> <span class="text-muted">4.0★</span></td>
+        <td class="text-[14px]">Get the <strong>glue-lined 3:1</strong> type, not plain 2:1. It melts a seal around the wire instead of just hugging it. That is the difference between a joint that survives a wet winter in a coop and one that does not.</td>
       </tr>
       <tr>
         <td>Wire strippers and crimper</td>
-        <td><span class="dim">—</span><br><span class="mono">≈$30</span></td>
-        <td><a href="https://www.amazon.com.au/dp/B075CS4QXK" target="_blank" rel="noopener">HORUSDY 8" auto stripper/crimper</a><br><strong class="mono">$18.50</strong> <span class="dim">4.3★</span></td>
-        <td style="font-size:13.5px">Strippers save more time than they cost. This one crimps too, which covers the battery terminals.</td>
+        <td><span class="text-muted">—</span><br><span class="mono">≈$30</span></td>
+        <td><a href="https://www.amazon.com.au/dp/B075CS4QXK" target="_blank" rel="noopener">HORUSDY 8" auto stripper/crimper</a><br><strong class="mono">$18.50</strong> <span class="text-muted">4.3★</span></td>
+        <td class="text-[14px]">Strippers save more time than they cost. This one <button type="button" class="term" data-t="crimp">crimps</button> too, which covers the battery terminals.</td>
       </tr>
       <tr>
-        <td>6.35 mm female spade crimps</td>
-        <td><span class="dim">—</span><br><span class="mono">≈$8</span></td>
-        <td><a href="https://www.amazon.com.au/s?k=6.35mm+female+spade+crimp+terminals" target="_blank" rel="noopener">search — any assorted kit</a></td>
-        <td style="font-size:13.5px">SLA posts are 6.35 mm blades, sometimes called F2. Any assorted crimp kit with that size will do; I haven't picked one because the listings churn.</td>
+        <td>6.35 mm female <button type="button" class="term" data-t="crimp">spade crimps</button></td>
+        <td><span class="text-muted">—</span><br><span class="mono">≈$8</span></td>
+        <td><a href="https://www.amazon.com.au/s?k=6.35mm+female+spade+crimp+terminals" target="_blank" rel="noopener">search for any assorted kit</a></td>
+        <td class="text-[14px]">The battery posts are 6.35 mm blades, sometimes called F2. Any assorted crimp kit with that size will do. I have not picked one because the listings change every week.</td>
       </tr>
     </tbody>
   </table></div>
   <div class="note">
-    <p class="eyebrow">If you buy the whole list</p>
-    <p style="max-width:62ch">Amazon comes out about <strong>$40 cheaper</strong> overall, almost all
-    of it in the multimeter, the solder and the 2-core wire. Jaycar is the better buy on the
-    station, the protoboard and the header strips — and you can have it this afternoon rather
-    than next week.</p>
+    <p class="kicker text-accentdeep">If you buy the whole list</p>
+    <p class="max-w-[62ch]">Amazon comes out about <strong>$40 cheaper</strong> overall. Almost all of that saving sits in the multimeter, the solder and the 2-core wire.
+    Jaycar is the better buy on the station, the protoboard and the header strips, and you can have it this afternoon rather than next week.</p>
   </div>
 </section>
 
 <!-- ───────────── SOLDERING ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">05</span><h2>Soldering, if you never have</h2></div>
-  <p class="lede">Practise on the spare half of the experimenters board. Twenty throwaway joints and
-  you'll have it.</p>
+<section class="section" id="solder">
+  <div><p class="kicker">Skill</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Soldering, if you never have</h2></div>
+  <p class="lede">Practise on the spare half of the experimenters board first. Twenty throwaway <button type="button" class="term" data-t="joint">joints</button> and you will have it.</p>
   <ol class="steps">
-    <li><h3>350 °C, wet sponge</h3><p class="dim">Not hotter. Hotter doesn't make it faster, it makes it lift pads.</p></li>
-    <li><h3>Tin the tip</h3><p class="dim">Melt a little solder on, wipe on the sponge. Bright silver. A dull grey tip transfers almost no heat — re-tin every few joints.</p></li>
-    <li><h3>Heat the metal, not the solder</h3><p class="dim">Tip against the pad <em>and</em> the pin at once. Count two.</p></li>
-    <li><h3>Feed solder into the joint, not onto the iron</h3><p class="dim">Touch it to the far side from the tip. It should run and wrap the pin in half a second.</p></li>
-    <li><h3>Solder away first, then the iron</h3><p class="dim">Hold still three seconds. Move it while setting and you get a grainy joint that fails in the coop.</p></li>
-    <li><h3>Look at it</h3><p class="dim">Shiny and cone-shaped, like a tiny volcano hugging the pin. A dull ball sitting on top is a cold joint — reheat until it collapses and flows.</p></li>
+    <li><h3>Set the iron to 350 °C and wet the sponge</h3><p>Do not go hotter. Hotter does not make it faster. Hotter lifts the copper pads off the board.</p></li>
+    <li><h3>Tin the tip</h3><p>Melt a little solder onto the tip and wipe it on the sponge. It should look bright silver. A dull grey tip transfers almost no heat, so re-tin it every few joints. This is called <button type="button" class="term" data-t="tinning">tinning</button>.</p></li>
+    <li><h3>Heat the metal, not the solder</h3><p>Press the tip against the pad <em>and</em> the pin at the same time. Count to two.</p></li>
+    <li><h3>Feed solder into the joint, not onto the iron</h3><p>Touch the solder to the far side of the pin, away from the tip. It should run around the pin and wrap it in half a second.</p></li>
+    <li><h3>Take the solder away first, then the iron</h3><p>Hold everything still for three seconds. If you move it while it sets, you get a grainy joint that fails in the coop.</p></li>
+    <li><h3>Look at it</h3><p>A good joint is shiny and cone-shaped, like a tiny volcano hugging the pin. A dull ball sitting on top is a <button type="button" class="term" data-t="coldjoint">cold joint</button>. Reheat it until it collapses and flows.</p></li>
   </ol>
-  <div class="warn"><p class="eyebrow" style="color:var(--alert)">The four ways this goes wrong</p>
-  <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;max-width:60ch">
-    <li><strong>Carrying a blob over on the tip.</strong> It sticks, it looks finished, it isn't connected.</li>
-    <li><strong>Ten seconds on one pad.</strong> The copper lifts off and that module is scrap. Not flowing in three seconds? Iron away, cool, retry.</li>
-    <li><strong>Bridging two pads.</strong> Easy on 2.54 mm headers. Check every adjacent pair on continuity before powering anything.</li>
-    <li><strong>No strain relief.</strong> A wire flexing at the joint snaps in about a month, usually in the rain.</li>
+  <div class="warn"><p class="kicker text-danger">The four ways this goes wrong</p>
+  <ol class="m-0 pl-5 flex flex-col gap-2 max-w-[60ch]">
+    <li><strong>You carry a blob over on the tip.</strong> It sticks, it looks finished, and it is not connected.</li>
+    <li><strong>You sit ten seconds on one pad.</strong> The copper lifts off and that board is scrap. If it has not flowed in three seconds, lift the iron, let it cool, and try again.</li>
+    <li><strong>You bridge two pads.</strong> This happens easily on 2.54 mm headers. Check every neighbouring pair with the meter on <button type="button" class="term" data-t="continuity">continuity</button> before you power anything.</li>
+    <li><strong>You leave no <button type="button" class="term" data-t="strainrelief">strain relief</button>.</strong> A wire that flexes at the joint snaps in about a month, usually in the rain.</li>
   </ol></div>
 </section>
 
 <!-- ───────────── BUILD ORDER ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">06</span><h2>Build it in stages</h2></div>
-  <p class="lede">Never wire the whole thing and then switch on. Add one module, test, add the next —
-  then a fault is always in the thing you just touched.</p>
+<section class="section" id="build">
+  <div><p class="kicker">Order of work</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Build it in stages</h2></div>
+  <p class="lede">Never wire the whole thing and then switch it on. Add one board, test it, then add the next. A fault is then always in the thing you just touched.</p>
   <ol class="steps">
-    <li><h3>Headers on all four modules. Nothing else.</h3><p class="dim">Meter on continuity: every pin to its own pad, and <em>not</em> to its neighbour.</p></li>
-    <li><h3>The buck alone</h3><p class="dim">Battery → fuse → VIN and GND. Meter VOUT to GND: <span class="mono">5.0 V ± 0.1</span>. If it reads 12 V you have VIN and VOUT swapped — and you just saved your ESP32.</p></li>
-    <li><h3>Add the XIAO</h3><p class="dim">VOUT → 5V, GND → GND. Upload Blink.</p></li>
-    <li><h3>Add the clock</h3><p class="dim">3V3, GND, SDA, SCL. Print <span class="mono">rtc.now()</span>. If the time counts up, I²C is sound.</p></li>
-    <li><h3>Add the divider</h3><p class="dim">220 kΩ, 33 kΩ, 100 nF. Compare <span class="mono">batteryVolts()</span> to the meter, set <span class="mono">VBAT_CAL</span>.</p></li>
-    <li><h3>Driver and actuator — on the bench, off the panel</h3><p class="dim">Both pull-downs in. <span class="mono">TEST_MODE = true</span>. Ten cycles before it goes near the coop.</p></li>
-    <li><h3>Now mount it</h3><p class="dim">IP65 box under cover, glands down. Battery in a ventilated crate below, on spade terminals.</p></li>
+    <li><h3>Solder headers onto all four boards. Do nothing else yet.</h3><p>Set the meter to continuity. Check that every pin connects to its own pad and <em>not</em> to its neighbour.</p></li>
+    <li><h3>Power the buck on its own</h3><p>Connect battery → fuse → VIN and GND. Put the meter across VOUT and GND. It must read <span class="mono">5.0 V ± 0.1</span>. If it reads 12 V, you have VIN and VOUT swapped, and you have just saved your XIAO.</p></li>
+    <li><h3>Add the XIAO</h3><p>Connect VOUT → 5V and GND → GND. Upload the <button type="button" class="term" data-t="blink">Blink</button> program. If the light blinks, the power chain works.</p></li>
+    <li><h3>Add the clock</h3><p>Connect 3V3, GND, SDA and SCL. Print <button type="button" class="term" data-t="rtcnow">rtc.now()</button> to the <button type="button" class="term" data-t="serial">Serial monitor</button>. If the time counts up, the two clock wires are right.</p></li>
+    <li><h3>Add the divider</h3><p>Fit the 220 kΩ, the 33 kΩ and the 100 nF. Compare what <button type="button" class="term" data-t="batteryvolts">batteryVolts()</button> prints against the meter on the battery, then set <button type="button" class="term" data-t="vbatcal">VBAT_CAL</button>.</p></li>
+    <li><h3>Add the driver and actuator, on the bench, not on the door</h3><p>Fit both pull-downs. Set <button type="button" class="term" data-t="testmode">TEST_MODE</button> to true. Run ten open-and-close cycles before it goes anywhere near the coop.</p></li>
+    <li><h3>Now mount it</h3><p>Use an <button type="button" class="term" data-t="ip65">IP65 box</button> under cover with the <button type="button" class="term" data-t="gland">cable glands</button> pointing down. Put the battery in a ventilated crate below the box, on spade terminals.</p></li>
   </ol>
 </section>
 
 <!-- ───────────── CHECKLIST ───────────── -->
-<section>
-  <div class="head"><span class="eyebrow">07</span><h2>Tick them off</h2></div>
-  <div class="scroller"><table>
-    <thead><tr><th></th><th>From</th><th>To</th><th>Wire</th></tr></thead>
+<section class="section" id="checklist">
+  <div><p class="kicker">Every wire, once</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Tick them off</h2></div>
+  <p class="lede">Twenty-three connections. Tick each one as you make it. The ticks stay saved in this browser.</p>
+  <div class="scroller card"><table class="tbl" id="checks">
+    <thead><tr><th class="pl-4"></th><th>From</th><th>To</th><th class="pr-4">Wire</th></tr></thead>
     <tbody>
-      <tr><td class="box">☐</td><td>Battery +</td><td class="pin">fuse → +12 V</td><td>fig-8 red</td></tr>
-      <tr><td class="box">☐</td><td>Battery −</td><td class="pin">ground spine</td><td>fig-8 black</td></tr>
-      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">buck VIN</td><td>fig-8 red</td></tr>
-      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">driver POWER +</td><td>fig-8 red</td></tr>
-      <tr><td class="box">☐</td><td>Ground spine</td><td class="pin">buck GND</td><td>hook-up black</td></tr>
-      <tr><td class="box">☐</td><td>Ground spine</td><td class="pin">driver POWER −</td><td>fig-8 black</td></tr>
-      <tr><td class="box">☐</td><td>Buck VOUT</td><td class="pin">XIAO 5V</td><td>hook-up orange</td></tr>
-      <tr><td class="box">☐</td><td>XIAO GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
-      <tr><td class="box">☐</td><td>XIAO 3V3</td><td class="pin">clock VCC</td><td>hook-up pink</td></tr>
-      <tr><td class="box">☐</td><td>Clock GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
-      <tr><td class="box">☐</td><td>XIAO D4</td><td class="pin">clock SDA</td><td>hook-up yellow</td></tr>
-      <tr><td class="box">☐</td><td>XIAO D5</td><td class="pin">clock SCL</td><td>hook-up green</td></tr>
-      <tr><td class="box">☐</td><td>XIAO D1</td><td class="pin">driver IN1</td><td>hook-up blue</td></tr>
-      <tr><td class="box">☐</td><td>XIAO D3</td><td class="pin">driver IN2</td><td>hook-up white</td></tr>
-      <tr><td class="box">☐</td><td>Driver IN1</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
-      <tr><td class="box">☐</td><td>Driver IN2</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
-      <tr><td class="box">☐</td><td>Driver GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
-      <tr><td class="box">☐</td><td>+12 V</td><td class="pin">220 kΩ → sense node</td><td>resistor legs</td></tr>
-      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">33 kΩ → ground spine</td><td>resistor legs</td></tr>
-      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">100 nF → ground spine</td><td>cap legs</td></tr>
-      <tr><td class="box">☐</td><td>Sense node</td><td class="pin">XIAO D2</td><td>hook-up violet</td></tr>
-      <tr><td class="box">☐</td><td>Driver MOTOR 1</td><td class="pin">actuator wire A</td><td>fig-8 brown</td></tr>
-      <tr><td class="box">☐</td><td>Driver MOTOR 2</td><td class="pin">actuator wire B</td><td>fig-8 grey</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Battery +</td><td class="pin">fuse → +12 V line</td><td>fig-8 red</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Battery −</td><td class="pin">ground spine</td><td>fig-8 black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>+12 V line</td><td class="pin">buck VIN</td><td>fig-8 red</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>+12 V line</td><td class="pin">driver POWER +</td><td>fig-8 red</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Ground spine</td><td class="pin">buck GND</td><td>hook-up black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Ground spine</td><td class="pin">driver POWER −</td><td>fig-8 black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Buck VOUT</td><td class="pin">XIAO 5V</td><td>hook-up orange</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO 3V3</td><td class="pin">clock VCC</td><td>hook-up pink</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Clock GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO D4</td><td class="pin">clock SDA</td><td>hook-up yellow</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO D5</td><td class="pin">clock SCL</td><td>hook-up green</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO D1</td><td class="pin">driver IN1</td><td>hook-up blue</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>XIAO D3</td><td class="pin">driver IN2</td><td>hook-up white</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Driver IN1</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Driver IN2</td><td class="pin">10 kΩ → driver GND</td><td>resistor legs</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Driver GND</td><td class="pin">ground spine</td><td>hook-up black</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>+12 V line</td><td class="pin">220 kΩ → sense node</td><td>resistor legs</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Sense node</td><td class="pin">33 kΩ → ground spine</td><td>resistor legs</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Sense node</td><td class="pin">100 nF → ground spine</td><td>capacitor legs</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Sense node</td><td class="pin">XIAO D2</td><td>hook-up violet</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Driver MOTOR 1</td><td class="pin">actuator wire A</td><td>fig-8 brown</td></tr>
+      <tr><td class="pl-4"><input type="checkbox"></td><td>Driver MOTOR 2</td><td class="pin">actuator wire B</td><td>fig-8 grey</td></tr>
     </tbody>
   </table></div>
+  <p class="text-muted text-[14px]"><button type="button" class="term" id="clear-checks">Clear all ticks</button></p>
 </section>
 
-<footer style="border-top:1px solid var(--line);margin-top:46px;padding-top:28px;
-  display:flex;flex-direction:column;gap:10px">
-  <p class="eyebrow">Where the pinouts came from</p>
-  <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--soft)">
-    <li><a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed wiki — XIAO ESP32C3 pin map</a></li>
-    <li><a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot wiki — DFR0641</a></li>
-    <li><a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit — DRV8871 pinouts</a></li>
-    <li><a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu — D36V6F5</a></li>
+<!-- ───────────── GLOSSARY ───────────── -->
+<section class="section" id="glossary">
+  <div><p class="kicker">Reference</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Every word on this page</h2></div>
+  <p class="lede">The same explanations that pop up when you click a word, laid out to read straight through. Grouped by topic, not alphabetically, so the basics come first.</p>
+  <div id="glossary-list" class="flex flex-col gap-8"></div>
+</section>
+
+<footer class="border-t border-rule mt-12 pt-7 flex flex-col gap-3">
+  <p class="kicker">Where the pinouts came from</p>
+  <ul class="m-0 pl-5 flex flex-col gap-1.5 text-[14px] text-muted">
+    <li><a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed wiki, XIAO ESP32C3 pin map</a></li>
+    <li><a href="https://wiki.dfrobot.com/dfr0641/" target="_blank" rel="noopener">DFRobot wiki, DFR0641</a></li>
+    <li><a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit, DRV8871 pinouts</a></li>
+    <li><a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu, D36V6F5</a></li>
   </ul>
-  <p class="dim" style="font-size:13.5px;max-width:62ch">Board photos are the manufacturers' own,
-  reproduced for reference while building. Boards get revised — check the printed labels against
-  the tables before the iron comes out.</p>
+  <p class="text-muted text-[14px] max-w-[62ch]">Board photos belong to the manufacturers and are reproduced for reference while building. Boards get revised, so check the printed labels against the tables before the iron comes out.</p>
 </footer>
 
 </div>
 
-<dialog id="modal" aria-labelledby="m-title">
+<dialog id="part-dialog" aria-labelledby="p-title">
   <div class="m-top">
-    <h3 id="m-title"></h3>
-    <button class="m-close" id="m-close" type="button">CLOSE ✕</button>
+    <div class="flex flex-col gap-0.5"><p class="kicker">Part</p><h3 id="p-title" class="text-[1.25rem] font-extrabold leading-tight"></h3></div>
+    <button class="m-close" id="p-close" type="button">Close ✕</button>
   </div>
-  <div class="m-body" id="m-body"></div>
+  <div class="m-body" id="p-body"></div>
+</dialog>
+
+<dialog id="term-dialog" aria-labelledby="t-title">
+  <div class="m-top">
+    <div class="flex flex-col gap-0.5"><p class="kicker" id="t-kicker">What this means</p><h3 id="t-title" class="text-[1.25rem] font-extrabold leading-tight"></h3></div>
+    <button class="m-close" id="t-close" type="button">Close ✕</button>
+  </div>
+  <div class="m-body" id="t-body"></div>
 </dialog>
 
 <script>
+/* ────────────────────────────────────────────────────────────────────
+   Drawings of the loose parts. The band colours are the real colour
+   code, so the picture matches the part in your hand.
+   ──────────────────────────────────────────────────────────────────── */
+const BAND = {
+  black: '#111111', brown: '#6B3A1E', red: '#D0342C', orange: '#F0801A',
+  yellow: '#F3C623', green: '#2E7D32', blue: '#1E5AA8', violet: '#7B3FA0',
+  grey: '#8C8C8C', white: '#F5F5F5', gold: '#C9A227', silver: '#BDBDBD',
+};
+const DIGIT = ['black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white'];
+
+function resistorSVG(bands, label, cls) {
+  const xs = bands.length === 4 ? [80, 102, 124, 168] : [74, 92, 110, 128, 170];
+  let s = '<svg viewBox="0 0 260 70" class="' + (cls || 'w-full max-w-[260px]') + '" role="img" aria-label="' + esc(label) + '">';
+  s += '<line x1="6" y1="35" x2="60" y2="35" stroke="#9AA0A6" stroke-width="4" stroke-linecap="round"/>';
+  s += '<line x1="200" y1="35" x2="254" y2="35" stroke="#9AA0A6" stroke-width="4" stroke-linecap="round"/>';
+  s += '<rect x="60" y="16" width="140" height="38" rx="15" fill="#E8D9B5" stroke="#B9A77C" stroke-width="1.5"/>';
+  bands.forEach((b, i) => { s += '<rect x="' + xs[i] + '" y="16" width="10" height="38" fill="' + BAND[b] + '"/>'; });
+  s += '<rect x="60" y="16" width="140" height="38" rx="15" fill="none" stroke="#B9A77C" stroke-width="1.5"/>';
+  return s + '</svg>';
+}
+
+function capacitorSVG(cls) {
+  let s = '<svg viewBox="0 0 260 70" class="' + (cls || 'w-full max-w-[260px]') + '" role="img" aria-label="100 nanofarad ceramic capacitor, a small disc marked 104">';
+  s += '<line x1="118" y1="40" x2="118" y2="68" stroke="#9AA0A6" stroke-width="4" stroke-linecap="round"/>';
+  s += '<line x1="142" y1="40" x2="142" y2="68" stroke="#9AA0A6" stroke-width="4" stroke-linecap="round"/>';
+  s += '<ellipse cx="130" cy="28" rx="30" ry="24" fill="#E4B65A" stroke="#B48A2E" stroke-width="1.5"/>';
+  s += '<text x="130" y="33" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="600" fill="#3A2A08">104</text>';
+  return s + '</svg>';
+}
+
+function fuseSVG(cls) {
+  let s = '<svg viewBox="0 0 260 70" class="' + (cls || 'w-full max-w-[260px]') + '" role="img" aria-label="Inline blade fuse holder with a 2 amp fuse">';
+  s += '<line x1="6" y1="35" x2="70" y2="35" stroke="#D0342C" stroke-width="5" stroke-linecap="round"/>';
+  s += '<line x1="190" y1="35" x2="254" y2="35" stroke="#D0342C" stroke-width="5" stroke-linecap="round"/>';
+  s += '<rect x="70" y="14" width="120" height="42" rx="8" fill="#2B2F36"/>';
+  s += '<rect x="112" y="4" width="36" height="30" rx="3" fill="#8C8C8C"/>';
+  s += '<text x="130" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="600" fill="#fff">2A</text>';
+  return s + '</svg>';
+}
+
+function dividerFigure() {
+  // A vertical picture of the divider: 12 V at the top, ground at the bottom.
+  const vres = (y, bands) => {
+    let s = '<rect x="88" y="' + y + '" width="24" height="60" rx="8" fill="#E8D9B5" stroke="#B9A77C" stroke-width="1.5"/>';
+    [6, 16, 26, 44].forEach((o, i) => { s += '<rect x="88" y="' + (y + o) + '" width="24" height="6" fill="' + BAND[bands[i]] + '"/>'; });
+    return s;
+  };
+  let s = '<svg viewBox="0 0 240 330" class="w-[220px]" role="img" aria-label="The battery sense divider: 220 kilohm from the 12 volt line to the sense node, 33 kilohm from the sense node to ground, 100 nanofarad across the 33 kilohm, sense node to XIAO pin D2">';
+  s += '<line x1="20" y1="20" x2="140" y2="20" stroke="#D0342C" stroke-width="4" stroke-linecap="round"/>';
+  s += '<text x="20" y="12" font-family="JetBrains Mono,monospace" font-size="11" fill="#D0342C" font-weight="600">+12 V line · 12.6 V</text>';
+  s += '<line x1="100" y1="20" x2="100" y2="50" stroke="#D0342C" stroke-width="4"/>';
+  s += vres(50, ['red', 'red', 'yellow', 'gold']);
+  s += '<text x="120" y="84" font-family="JetBrains Mono,monospace" font-size="12" fill="#16191D" font-weight="600">220 kΩ</text>';
+  s += '<line x1="100" y1="110" x2="100" y2="170" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<circle cx="100" cy="140" r="6" fill="#7B3FA0"/>';
+  s += '<line x1="100" y1="140" x2="200" y2="140" stroke="#7B3FA0" stroke-width="4" stroke-linecap="round"/>';
+  s += '<text x="120" y="130" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B3FA0" font-weight="600">sense node</text>';
+  s += '<text x="120" y="160" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B3FA0" font-weight="600">→ D2 · 1.64 V</text>';
+  s += vres(170, ['orange', 'orange', 'orange', 'gold']);
+  s += '<text x="120" y="204" font-family="JetBrains Mono,monospace" font-size="12" fill="#16191D" font-weight="600">33 kΩ</text>';
+  // capacitor in parallel with the 33 k
+  s += '<line x1="100" y1="140" x2="50" y2="140" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<line x1="50" y1="140" x2="50" y2="188" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<line x1="36" y1="188" x2="64" y2="188" stroke="#3A4149" stroke-width="3"/>';
+  s += '<line x1="36" y1="198" x2="64" y2="198" stroke="#3A4149" stroke-width="3"/>';
+  s += '<line x1="50" y1="198" x2="50" y2="250" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<text x="30" y="216" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#16191D">100 nF</text>';
+  s += '<line x1="100" y1="230" x2="100" y2="250" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<line x1="50" y1="250" x2="100" y2="250" stroke="#7B3FA0" stroke-width="4"/>';
+  s += '<circle cx="100" cy="250" r="6" fill="#7B3FA0"/>';
+  s += '<line x1="100" y1="250" x2="100" y2="280" stroke="#22262B" stroke-width="4"/>';
+  s += '<line x1="60" y1="280" x2="140" y2="280" stroke="#22262B" stroke-width="5" stroke-linecap="round"/>';
+  s += '<text x="100" y="302" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#22262B" font-weight="600">ground spine · 0 V</text>';
+  s += '<text x="100" y="322" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#5B6470">33 ÷ (220 + 33) = 0.13</text>';
+  return s + '</svg>';
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   Every word you can click. [[key]] or [[key|shown text]] inside a
+   string becomes another clickable word.
+   ──────────────────────────────────────────────────────────────────── */
+const GROUPS = [
+  ['basics', 'Electricity basics'],
+  ['parts', 'The loose parts'],
+  ['boards', 'The boards and their pins'],
+  ['wire', 'Wire, tools and joints'],
+  ['code', 'Words in the code'],
+];
+
+const TERMS = {
+  term: { g: 'basics', name: 'A clickable word', short: 'Words with a dotted underline open a box like this one.',
+    body: ['Anything on this page with a dotted line under it explains itself when you click it. Boxes can open on top of each other, so you can chase a word inside a word. Press Escape or the close button to go back.'] },
+
+  volt: { g: 'basics', name: 'Voltage (volts, V)', short: 'How hard the electricity pushes. Water version: pressure in a pipe.',
+    body: ['Voltage is the push. A battery with more volts pushes harder. It does not say how much electricity flows, only how hard it is trying.',
+      'Three voltages matter in this build. The battery pushes at about 12 V. The XIAO board wants 5 V on its 5V pin. The chip itself, the clock and every signal pin live at 3.3 V.',
+      'Put a higher voltage into something built for a lower one and you break it, the way high pressure bursts a garden hose. That is why the [[buck]] exists and why the [[divider]] exists.',
+      'You always measure a voltage between two points. On this page the second point is nearly always [[ground]]. "VOUT reads 5 V" means "5 V between VOUT and ground".'] },
+
+  amp: { g: 'basics', name: 'Current (amps, A)', short: 'How much electricity is flowing. Water version: litres per minute.',
+    body: ['Current is the amount of flow. The motor pulls about 2 A while it moves. The XIAO and the clock together pull well under 0.1 A. The divider lets through 0.00005 A, which is nothing.',
+      'A thick wire carries a big current without heating up. A thin wire carrying a big current gets warm and loses [[vdrop|voltage along its length]]. That is why the motor and battery runs use the thick [[fig8|figure-8]] wire.',
+      'Milliamps (mA) are thousandths of an amp. "Ah" on the battery means amp-hours: a 7.2 Ah battery can supply 1 A for about 7 hours.'] },
+
+  ohm: { g: 'basics', name: 'Resistance (ohms, Ω)', short: 'How much a part holds the flow back. Water version: a narrow section of pipe.',
+    body: ['Resistance is the push-back. A [[resistor]] is a part made to have a fixed, known resistance. Push a voltage across it and a fixed current flows.',
+      'kΩ means a thousand ohms. 220 kΩ is 220,000 ohms, which is a lot. Almost nothing flows through it.',
+      'You do not need to do the maths. You need to fit the right resistor in the right place. The pictures on this page show the exact colour bands.'] },
+
+  ground: { g: 'basics', name: 'Ground (GND, −, 0 V)', short: 'The way back to the battery\'s − post. Every part shares it.',
+    body: ['Electricity only flows in a loop. It leaves the battery at the + post, does its work, and must come back to the − post. "Ground" is simply the name for the − side of the loop.',
+      'Every board has a pin marked GND. All of them, and the battery\'s − post, get wired together into one [[spine|ground spine]]. That makes ground the same everywhere, which is what lets the boards talk to each other.',
+      'Ground counts as 0 V. Every other voltage on this page is measured against it. Put the black probe of the [[multimeter]] on ground and the red probe anywhere else, and the meter tells you that point\'s voltage.',
+      'Nothing here connects to the earth in your garden. "Ground" is just a word.'] },
+
+  polarity: { g: 'basics', name: 'Polarity (+ and −)', short: 'Which way round a part goes. Most parts break if you swap + and −.',
+    body: ['The battery, the buck, the XIAO, the clock and the driver all have a + side and a − side. Feed them backwards and they die, usually instantly and silently.',
+      'Red wire is always +. Black wire is always −. Keep to that and you will not get confused at the battery.',
+      'A few parts do not care. [[resistor|Resistors]], the ceramic [[capacitor]], the fuse and the motor can go either way round.'] },
+
+  signal: { g: 'basics', name: 'Signal versus power', short: 'Thin wires carry messages. Thick wires carry the muscle.',
+    body: ['Power wires carry current to make something happen: the 12 V to the motor, the 5 V to the XIAO. They need thick wire.',
+      'Signal wires carry information: "what time is it", "start the motor", "how full is the battery". Almost no current flows in them. Thin hook-up wire is fine, and one colour per signal keeps you sane.',
+      'The XIAO can only make signals. Its pins can push 3.3 V at a few thousandths of an amp. That is why the [[driver|motor driver]] exists: it takes a signal from the XIAO and switches real power to the motor.'] },
+
+  net: { g: 'basics', name: 'Net', short: 'One set of wires that are all joined together and sit at the same voltage.',
+    body: ['On the diagram every colour is one net. All the black wires join somewhere, so they are all ground. All the red wires join, so they are all +12 V.',
+      'A net can be one wire or twenty. What matters is that they connect. That is why the checklist gives each net its own colour of hook-up wire.'] },
+
+  circuit: { g: 'basics', name: 'Circuit', short: 'A complete loop from + back to −.',
+    body: ['If the loop is broken anywhere, nothing flows. That is what a switch does, and what a blown [[fuse]] does.',
+      'A [[short|short circuit]] is the opposite problem: a loop with nothing in it to slow the flow down.'] },
+
+  short: { g: 'basics', name: 'Short circuit', short: 'A bare + wire touching a bare − wire. Huge current, heat, and possibly fire.',
+    body: ['A battery pushes as much current as the loop lets through. With a resistor in the loop, a tiny current flows. With just a wire, the battery pushes hundreds of amps and the wire glows.',
+      'A 7 Ah lead-acid battery can start a fire this way. The [[fuse]] is there for exactly this case. It melts long before the wire does.'] },
+
+  /* ── loose parts ─────────────────────────────────────────────── */
+  resistor: { g: 'parts', name: 'Resistor', short: 'A small beige tube with coloured stripes and a wire out each end. It holds current back by a fixed amount.',
+    body: ['You need four: one 220 kΩ, one 33 kΩ and two 10 kΩ. They look almost identical. Only the colour bands tell them apart.',
+      'They have no + or − side. Either way round is fine.',
+      'Click a resistor picture on the page to see its bands close up. See also [[bandcode|how to read the bands]].'],
+    svg: () => resistorSVG(['red', 'red', 'yellow', 'gold'], 'a 220 kilohm resistor') },
+
+  r220k: { g: 'parts', name: '220 kΩ resistor', short: 'Red, red, yellow, gold. The big top half of the battery sense divider.',
+    body: ['<strong>Where it goes:</strong> one leg to the +12 V line, the other leg to the [[sensenode|sense node]].',
+      '<strong>Four-band version:</strong> red (2), red (2), yellow (add 4 zeros), gold (5%). That reads 22 followed by four zeros, which is 220,000 Ω.',
+      '<strong>Five-band version:</strong> red, red, black, orange, brown. That reads 220 followed by three zeros.',
+      'To check it, set the [[multimeter]] to Ω and touch a probe to each leg. It should read somewhere between 209 k and 231 k.'],
+    svg: () => '<div class="flex flex-col gap-3">' + resistorSVG(['red', 'red', 'yellow', 'gold'], '220 kilohm, four band') + '<p class="font-mono text-[12px] text-muted">four bands: red · red · yellow · gold</p>' + resistorSVG(['red', 'red', 'black', 'orange', 'brown'], '220 kilohm, five band') + '<p class="font-mono text-[12px] text-muted">five bands: red · red · black · orange · brown</p></div>' },
+
+  r33k: { g: 'parts', name: '33 kΩ resistor', short: 'Orange, orange, orange, gold. The small bottom half of the battery sense divider.',
+    body: ['<strong>Where it goes:</strong> one leg to the [[sensenode|sense node]], the other leg to the [[spine|ground spine]].',
+      '<strong>Four-band version:</strong> orange (3), orange (3), orange (add 3 zeros), gold (5%). That reads 33 followed by three zeros, which is 33,000 Ω.',
+      '<strong>Five-band version:</strong> orange, orange, black, red, brown.',
+      'The [[capacitor|100 nF capacitor]] goes across this resistor, meaning one capacitor leg joins each resistor leg.',
+      'On the meter it should read between 31 k and 35 k.'],
+    svg: () => '<div class="flex flex-col gap-3">' + resistorSVG(['orange', 'orange', 'orange', 'gold'], '33 kilohm, four band') + '<p class="font-mono text-[12px] text-muted">four bands: orange · orange · orange · gold</p>' + resistorSVG(['orange', 'orange', 'black', 'red', 'brown'], '33 kilohm, five band') + '<p class="font-mono text-[12px] text-muted">five bands: orange · orange · black · red · brown</p></div>' },
+
+  r10k: { g: 'parts', name: '10 kΩ resistor (you need two)', short: 'Brown, black, orange, gold. The two pull-downs on the driver\'s IN1 and IN2.',
+    body: ['<strong>Where they go:</strong> one from driver IN1 to driver GND, the other from driver IN2 to driver GND. They are [[pulldown|pull-down resistors]].',
+      '<strong>Four-band version:</strong> brown (1), black (0), orange (add 3 zeros), gold (5%). That reads 10 followed by three zeros, which is 10,000 Ω.',
+      '<strong>Five-band version:</strong> brown, black, black, red, brown.',
+      'On the meter each should read between 9.5 k and 10.5 k.'],
+    svg: () => '<div class="flex flex-col gap-3">' + resistorSVG(['brown', 'black', 'orange', 'gold'], '10 kilohm, four band') + '<p class="font-mono text-[12px] text-muted">four bands: brown · black · orange · gold</p>' + resistorSVG(['brown', 'black', 'black', 'red', 'brown'], '10 kilohm, five band') + '<p class="font-mono text-[12px] text-muted">five bands: brown · black · black · red · brown</p></div>' },
+
+  bandcode: { g: 'parts', name: 'Reading the colour bands', short: 'Each colour is a digit. Two digits, then the number of zeros, then how accurate it is.',
+    body: ['Hold the resistor with the gold (or silver) band on the right. That band usually sits a little apart from the others.',
+      'Read left to right. Band 1 and band 2 are digits. Band 3 says how many zeros to add. Band 4 is the accuracy: gold means within 5%, silver within 10%.',
+      'Five-band resistors work the same way with three digits instead of two. The last band is then usually brown, meaning within 1%.',
+      'The colour-to-digit table: black 0, brown 1, red 2, orange 3, yellow 4, green 5, blue 6, violet 7, grey 8, white 9.',
+      'When in doubt, measure it. The [[multimeter]] on Ω never lies about a resistor.'],
+    svg: () => bandKeyHTML() },
+
+  capacitor: { g: 'parts', name: 'Capacitor (100 nF ceramic, marked 104)', short: 'A tiny bucket that stores a little charge. Here it smooths the battery reading.',
+    body: ['It looks like a small flat disc or a little blob, usually yellow or blue, with two legs. It is marked <span class="mono">104</span>, which means 10 with 4 zeros in picofarads, which is 100 nF.',
+      '<strong>Where it goes:</strong> across the 33 kΩ resistor. One leg joins the [[sensenode|sense node]], the other joins the [[spine|ground spine]].',
+      'The battery voltage twitches a little every time the motor starts. The capacitor soaks up those twitches so the ADC sees a steady number.',
+      'This ceramic type has no + or − side. Either way round is fine.'],
+    svg: () => capacitorSVG() },
+
+  fuse: { g: 'parts', name: 'Fuse (2 A, inline)', short: 'A thin strip of metal that melts if too much current flows. It protects against fire, not against mistakes.',
+    body: ['It lives in a small plastic holder spliced into the red battery lead, as close to the battery + post as the holder allows.',
+      'If a wire ever shorts, hundreds of amps try to flow. The fuse melts in a fraction of a second and breaks the loop. Without it, a 7 Ah battery can set the coop on fire.',
+      'It does not protect the boards from a wrong connection. Only your eyes and the [[multimeter]] do that.',
+      'It has no + or − side.'],
+    svg: () => fuseSVG() },
+
+  divider: { g: 'parts', name: 'Battery sense divider', short: 'Two resistors that shrink the 12 V battery voltage down to something the XIAO can safely measure.',
+    body: ['The XIAO can only measure voltages between 0 and about 2.5 V. The battery sits at 12 to 13 V. So two resistors in a row split the battery voltage between them.',
+      'The 220 kΩ takes the big share. The 33 kΩ takes the small share: 33 ÷ (220 + 33) = 0.13. Whatever the battery is doing, the point between the two resistors sits at 0.13 times that. A full battery at 12.6 V becomes 1.64 V.',
+      'That point is called the [[sensenode|sense node]], and a wire runs from it to pin [[d2|D2]]. The code multiplies the reading back up by 7.7 to recover the real battery voltage.',
+      'A [[capacitor|100 nF capacitor]] across the 33 kΩ steadies the reading.',
+      'Why bother? A lead-acid battery left flat is ruined. The code watches this number and parks the boxes open below 11.9 V, so the hens are never locked out by a flat battery.'],
+    svg: () => dividerFigure() },
+
+  sensenode: { g: 'parts', name: 'Sense node', short: '"Node" just means a spot where wires meet. The sense node is the point between the two divider resistors.',
+    body: ['Three things join there: the bottom leg of the 220 kΩ, the top leg of the 33 kΩ, and one leg of the 100 nF capacitor. A fourth wire, violet on the diagram, leads from that spot to XIAO pin D2.',
+      'On a [[perfboard]] this is one solder pad, or two pads bridged, with all four legs in it.',
+      'Its voltage is the shrunken copy of the battery voltage: about 1.64 V with a full battery.'] },
+
+  pulldown: { g: 'parts', name: 'Pull-down resistor', short: 'A resistor from a signal pin to ground, so the pin reads "off" unless the XIAO actively says "on".',
+    body: ['When the XIAO boots, its pins spend a moment doing nothing. A driver input with nothing holding it low will "float", picking up noise, and the motor twitches at power-up.',
+      'A 10 kΩ resistor from the input to ground gently holds it at 0 V. When the XIAO drives the pin to 3.3 V, the resistor is far too weak to stop it. So the pin is off by default and on when commanded.',
+      'You need two: one on IN1 and one on IN2. Both go to the driver\'s GND pin.'],
+    svg: () => resistorSVG(['brown', 'black', 'orange', 'gold'], '10 kilohm pull-down') },
+
+  pulldowns: { g: 'parts', name: 'The two pull-downs', short: 'Both 10 kΩ resistors, one on each driver input.',
+    body: ['See [[pulldown]] for what they do and [[r10k]] for the colour bands.'] },
+
+  /* ── boards ─────────────────────────────────────────────────── */
+  mcu: { g: 'boards', name: 'XIAO ESP32-C3 (the brain, a microcontroller)', short: 'A tiny computer on a stamp-sized board. It runs your program and controls everything else.',
+    body: ['"ESP32-C3" is the chip. "XIAO" is Seeed\'s name for the little board it comes on, with the USB-C socket and the two rows of pins.',
+      'It runs the program you upload over USB. The program asks the [[rtc|clock]] for the time, works out sunrise and sunset, watches the battery through the [[divider]], and raises [[in1in2|IN1 or IN2]] when the door should move.',
+      'It needs 5 V on its 5V pin, from the [[buck]]. It makes its own 3.3 V, and shares that out through the 3V3 pin to power the clock.'] },
+
+  pin: { g: 'boards', name: 'Pin', short: 'One metal leg or hole on the edge of a board. Each has a name and a job.',
+    body: ['Boards talk to the outside world through their pins. Some carry power in (5V, VIN). Some carry power out (3V3, VOUT). Some carry signals (D1, SDA, IN1). One on every board is ground.',
+      'On the XIAO the pin names are printed on the underside. On the buck they are on the underside too. Turn the board over before you solder.'] },
+
+  gpio: { g: 'boards', name: 'GPIO number', short: 'The chip maker\'s own number for a pin. The board prints D-numbers; the code uses GPIO numbers.',
+    body: ['GPIO stands for general-purpose input/output. Every pin the chip can control has a GPIO number.',
+      'Seeed prints friendlier labels, D0 to D10, on the board. The two numbering schemes do not match. D2 is GPIO4. D1 is GPIO3.',
+      'The code uses the GPIO number. The table in the boards section translates between them.'] },
+
+  d2: { g: 'boards', name: 'Pin D2 (also called A2, GPIO4)', short: 'The XIAO pin that measures the battery voltage.',
+    body: ['D2 is the third pin down the left side of the XIAO. Its "A2" name means it can measure an analogue voltage, which most pins cannot.',
+      'The violet wire from the [[sensenode|sense node]] goes here. Never connect anything above 3.3 V to it.'] },
+
+  adc: { g: 'boards', name: 'ADC (analogue-to-digital converter)', short: 'The part inside the chip that turns a voltage on a pin into a number the program can use.',
+    body: ['A program can only handle numbers. The ADC measures the voltage on a pin and reports it as a number from 0 to 4095. About 0 V gives 0. About 2.5 V gives 4095.',
+      'On this chip the ADC reads reliably between 0 and about 2.5 V. Above that the number just sticks at the top. Above 3.3 V the pin is damaged.',
+      'The [[divider]] exists to bring the 12 V battery down into that window.'] },
+
+  strapping: { g: 'boards', name: 'Strapping pin', short: 'A pin the chip checks at the instant of power-up to decide how to start. Anything connected to it can stop the board booting.',
+    body: ['In the first millisecond after power arrives, the chip looks at D0, D8 and D9. Their state tells it "start normally" or "wait for a new program". After that they behave like any other pin.',
+      'A pull-down resistor, a motor driver input, or even a long wire on one of them can trick the chip into the wrong mode. The board then sits there dead with no error.',
+      'That is why this design leaves D0, D8 and D9 empty and uses D1 and D3 for the driver.'] },
+
+  rtc: { g: 'boards', name: 'Clock module (RTC, DS3231M)', short: 'A chip with its own coin cell that keeps the date and time even when the power is off.',
+    body: ['RTC stands for real-time clock. The XIAO has no idea what day it is when it wakes up. It asks this module.',
+      'The CR1220 coin cell keeps the time ticking for years, including while you take the battery away to charge it.',
+      'DS3231M is the part number. "MEMS" on the DFRobot page refers to the type of timing element inside. Neither matters for wiring.',
+      'It talks to the XIAO over [[i2c|two wires, SDA and SCL]].'] },
+
+  i2c: { g: 'boards', name: 'I²C (the two clock wires, SDA and SCL)', short: 'A two-wire way for chips to talk. SDA carries the data. SCL carries the timing beat.',
+    body: ['I²C is pronounced "eye squared see". It needs exactly two signal wires plus a shared ground.',
+      'SDA (yellow) carries the actual message. SCL (green) is a steady tick that tells both ends when to read each bit.',
+      'They must go SDA to SDA and SCL to SCL. Swap them and nothing breaks, but the clock never answers. On the DFRobot board SCL is printed <em>before</em> SDA, the opposite of most modules.'] },
+
+  buck: { g: 'boards', name: 'Buck converter (5 V regulator, Pololu D36V6F5)', short: 'A small board that takes 12 V in and gives a steady 5 V out.',
+    body: ['"Buck" means step-down. Feed it anything from about 6 to 36 V and it outputs 5 V, efficiently, without getting hot.',
+      'The XIAO must have 5 V. Feed it the battery\'s 12 V directly and it is destroyed. So the buck sits between them.',
+      'Its pads read [[vinvout|VOUT · GND · VIN · SHDN]]. Measure VOUT with the meter before the XIAO goes anywhere near it.'] },
+
+  vinvout: { g: 'boards', name: 'VIN and VOUT', short: 'Voltage in and voltage out. VIN takes the 12 V. VOUT gives the 5 V.',
+    body: ['VIN is where the battery\'s 12 V arrives. VOUT is where the clean 5 V leaves, on its way to the XIAO.',
+      'They sit two pads apart with GND between them. Swapping them sends 12 V into the XIAO. The fourth pad, SHDN, is a shutdown switch you do not use. Leave it empty.'] },
+
+  driver: { g: 'boards', name: 'Motor driver (DRV8871)', short: 'Takes a tiny signal from the XIAO and switches the battery\'s full 12 V to the motor, in either direction.',
+    body: ['The XIAO cannot drive a motor. Its pins push 3.3 V at a few milliamps. The motor needs 12 V at 2 A. The driver bridges that gap.',
+      'It has four inputs: [[in1in2|IN1 and IN2]] from the XIAO, POWER from the battery, and MOTOR out to the actuator. Raise IN1 and the motor runs one way. Raise IN2 and it runs the other way. Both low and it coasts.',
+      'Inside is an "H-bridge", four electronic switches arranged so the current can go through the motor in either direction. You never need to think about that.',
+      'The green screw terminals for POWER and MOTOR come already soldered on.'] },
+
+  in1in2: { g: 'boards', name: 'IN1 and IN2', short: 'The two signal wires from the XIAO to the driver. One means "open", the other means "shut".',
+    body: ['IN1 (blue) comes from XIAO D1. IN2 (cyan) comes from XIAO D3.',
+      'The program sets one high and the other low to move the door, then sets both low to stop. If the door moves the wrong way, swap the two motor wires rather than rewriting anything.',
+      'Each has a 10 kΩ [[pulldown]] to ground so it stays off while the XIAO boots.'] },
+
+  actuator: { g: 'boards', name: 'Linear actuator', short: 'A motor with a screw inside. It pushes a rod out or pulls it in, slowly and with a lot of force.',
+    body: ['"300 mm stroke" means the rod travels 300 mm from fully in to fully out. It takes about a minute to do so.',
+      'It has two wires and no + or − side. Swap them and it simply runs the other way.',
+      '[[limitswitch|Limit switches]] inside stop the motor automatically at each end of travel, so the program just runs it for a fixed time and cannot overrun it.',
+      'Drive the door panel through a cord over a pulley, never bolted rigidly. The actuator then only ever lifts, and gravity closes the door with the panel\'s own weight. A rigid link pushes 100 N onto whatever is underneath.'] },
+
+  limitswitch: { g: 'boards', name: 'Limit switch', short: 'A small switch inside the actuator that cuts the motor when the rod reaches the end.',
+    body: ['There is one at each end of the travel. When the rod hits it, the switch opens and the motor stops, even if the driver is still pushing power in.',
+      'That is why the code can just run the motor for a fixed number of seconds without any position sensor.'] },
+
+  sla: { g: 'boards', name: 'Sealed lead-acid battery (SLA, 12 V 7.2 Ah)', short: 'The same type of battery as a burglar alarm or a UPS. Heavy, cheap, and happy outdoors.',
+    body: ['12 V is its nominal voltage. Fully charged and rested it reads about 12.6 to 12.8 V. On the charger it reads up to 14.4 V. At 11.9 V it is roughly one third full and the code stops moving the door.',
+      '"7.2 Ah" is its capacity: about 7 amps for one hour, or 1 amp for 7 hours. This controller draws so little that one charge lasts many weeks.',
+      'Its posts are 6.35 mm blades. Push [[crimp|crimped spade terminals]] onto them. Never solder to a battery post.',
+      'Leaving it flat for weeks ruins it, which is what the [[divider|battery guard]] is for. Charge it every ten weeks regardless.'] },
+
+  spine: { g: 'boards', name: 'Ground spine', short: 'One long black wire along the bottom of the diagram that every ground pin plugs into.',
+    body: ['It is not a special part. It is just a name for the black wire that runs along the bottom of the board, from the battery − post to the driver\'s POWER − terminal.',
+      'Every board\'s GND pin, the bottom of the 33 kΩ, the capacitor and the two pull-downs all drop a short black wire down to it.',
+      'On a [[perfboard]], run it as one bare copper wire along an edge and solder each ground wire to it.'] },
+
+  v12line: { g: 'boards', name: 'The +12 V line', short: 'The red wire that carries battery + everywhere after the fuse.',
+    body: ['Battery + goes through the fuse and becomes the +12 V line. From there it feeds three things: the buck\'s VIN, the driver\'s POWER +, and the top of the 220 kΩ resistor.',
+      'Use thick figure-8 wire for the run to the driver. Hook-up wire is fine for the short tap to the resistor.'] },
+
+  v12: { g: 'boards', name: 'The +12 V line', short: 'The red wire that carries battery + everywhere after the fuse.',
+    body: ['See [[v12line]].'] },
+
+  silkscreen: { g: 'boards', name: 'Silkscreen (the printed labels)', short: 'The white writing printed on a board that names each pin.',
+    body: ['Always trust the printing on the board over any diagram, including this one. Boards get revised.'] },
+
+  header: { g: 'boards', name: 'Header pins', short: 'A row of metal pins, 2.54 mm apart, that you solder into the holes along a board\'s edge.',
+    body: ['They come as a long strip you snap to length. Push the short side through the board\'s holes and solder each one to its pad on the other side.',
+      'Once fitted, the board can plug into a female socket or take a soldered wire on each pin.',
+      'The XIAO needs two strips of seven. The clock needs one strip of four. The buck needs one strip of three. The driver needs one strip of four.'] },
+
+  screwterm: { g: 'boards', name: 'Screw terminal', short: 'A little green block with a screw on top. Loosen it, push the bare wire in, tighten. No soldering.',
+    body: ['Strip about 6 mm of insulation, twist the strands, push them into the hole under the screw, and tighten firmly. Tug the wire to check.',
+      'The driver\'s POWER and MOTOR connections are screw terminals. They arrive already soldered to the board.'] },
+
+  /* ── wire and tools ─────────────────────────────────────────── */
+  fig8: { g: 'wire', name: 'Figure-8 wire', short: 'Two thick wires side by side in one flat jacket. The cross-section looks like an 8.',
+    body: ['Also sold as speaker cable or 2-core. One side usually has a stripe or a ridge so you can tell them apart. Use it for the battery leads and the motor run.',
+      'Medium duty means about 1 mm² of copper per side, which carries the motor\'s 2 A with almost no [[vdrop|loss]].'] },
+
+  hookup: { g: 'wire', name: 'Hook-up wire', short: 'Thin single wire in coloured insulation, for signals between boards.',
+    body: ['26 AWG is thin, about the thickness of a pencil lead. It is right for 5 V, 3V3, SDA, SCL, IN1, IN2 and the sense wire, all of which carry tiny currents.',
+      'Never use it for the motor or the battery leads.'] },
+
+  awg: { g: 'wire', name: 'AWG (wire gauge)', short: 'An American size scale for wire. A smaller number means thicker wire.',
+    body: ['26 AWG is thin signal wire, about 0.13 mm² of copper. 18 AWG is about 0.8 mm², close to the 1 mm² figure-8 this build uses for power.',
+      'Thicker wire carries more current without heating up or losing voltage.'] },
+
+  vdrop: { g: 'wire', name: 'Voltage drop', short: 'A long thin wire loses some of the push along its length.',
+    body: ['Every wire has a little resistance. Push 2 A through ten metres of thin wire and a few volts disappear as heat before they reach the motor.',
+      'Thick wire has less resistance, so it loses less. That is the entire reason for buying two kinds of wire.'] },
+
+  perfboard: { g: 'wire', name: 'Perfboard (prototyping board, experimenters board)', short: 'A board full of holes on a 2.54 mm grid with a copper ring around each hole.',
+    body: ['You push component legs and header pins through the holes and solder them to the copper on the back. Short wires on the back join things together.',
+      'It is the cheap, permanent alternative to a plug-in breadboard, which would not survive a coop.'] },
+
+  multimeter: { g: 'wire', name: 'Multimeter', short: 'The meter that tells you the voltage between two points, the resistance of a part, or whether two points are connected.',
+    body: ['Three settings matter here. <strong>V</strong> (DC volts): black probe on ground, red probe on the point, read the voltage. <strong>Ω</strong>: a probe on each leg of a resistor, read its value. <strong>Continuity</strong>, marked with a speaker symbol: it beeps when the two probes touch something connected.',
+      'Auto-ranging means it picks the scale for you. You just choose V, Ω or the beep.',
+      'It is the single tool that catches the mistake before the mistake catches a board.'] },
+
+  continuity: { g: 'wire', name: 'Continuity', short: 'The multimeter\'s beep mode. It beeps when the two probes are connected through something.',
+    body: ['Use it to check that a soldered pin connects to its wire, and that it does not connect to the pin next to it.',
+      'Always test with the power off.'] },
+
+  joint: { g: 'wire', name: 'Solder joint', short: 'One soldered connection between a pin and a pad, or a wire and a pin.',
+    body: ['This build has about thirty of them. A good one is shiny and shaped like a small cone.'] },
+
+  coldjoint: { g: 'wire', name: 'Cold joint', short: 'A solder joint that looks done but is not actually connected. Dull, grainy, or a ball sitting on top.',
+    body: ['It happens when the pad or pin was not hot enough, so the solder never wetted the metal. It may work for a week and then fail.',
+      'Fix: put the iron back on, wait for the solder to collapse and flow, then hold still while it sets.'] },
+
+  tinning: { g: 'wire', name: 'Tinning', short: 'Coating the iron tip, or a wire end, with a thin layer of fresh solder.',
+    body: ['A tinned tip is bright silver and transfers heat well. A dull grey tip barely works. Wipe and re-tin every few joints.',
+      'Tinning a stripped wire end before you solder it stops the strands splaying and makes the joint quicker.'] },
+
+  heatshrink: { g: 'wire', name: 'Heatshrink', short: 'Plastic tube that shrinks tight around a joint when you warm it.',
+    body: ['Slide it over the wire before you make the joint, then warm it with the side of the iron or a lighter. Glue-lined 3:1 melts a seal against water.',
+      'Every joint that lives outside the box, especially on the actuator run, gets a piece.'] },
+
+  crimp: { g: 'wire', name: 'Crimp terminal (spade crimp)', short: 'A metal connector you squash onto a wire end with a crimping tool. No solder.',
+    body: ['The battery posts are 6.35 mm blades. A 6.35 mm female spade crimp pushes onto them firmly and pulls off when you need to charge the battery.',
+      'Strip 6 mm, push the wire into the barrel, squeeze with the crimper, tug to check.'] },
+
+  strainrelief: { g: 'wire', name: 'Strain relief', short: 'Anything that stops a wire flexing right at its solder joint.',
+    body: ['A cable tie to the board, a cable gland in the box wall, or a loop of tape. The joint itself is stiff and brittle. If the wire can wave about, it snaps there.'] },
+
+  ip65: { g: 'wire', name: 'IP65 box', short: 'A plastic enclosure rated to keep dust and rain out.',
+    body: ['"IP65" is the rating: sealed against dust and against jets of water. Any electrical wholesaler or Jaycar sells them. Mount it under cover anyway.'] },
+
+  gland: { g: 'wire', name: 'Cable gland', short: 'A screw-in fitting in the box wall that a cable passes through. It seals and it grips.',
+    body: ['Point them downwards so water runs off, not in. They double as [[strainrelief]] for every cable leaving the box.'] },
+
+  /* ── code ───────────────────────────────────────────────────── */
+  blink: { g: 'code', name: 'Blink', short: 'The "hello world" of Arduino. It makes the board\'s own light flash once a second.',
+    body: ['Find it under File → Examples → Basics → Blink in the Arduino IDE. If it uploads and the light blinks, the board is alive and the power chain is right.'] },
+
+  serial: { g: 'code', name: 'Serial monitor', short: 'A window in the Arduino IDE where the board prints text back to you over the USB cable.',
+    body: ['Open it under Tools → Serial Monitor and set the speed to 115200. Everything the program prints appears here, which is how you check the clock and the battery reading.'] },
+
+  rtcnow: { g: 'code', name: 'rtc.now()', short: 'The line of code that asks the clock module for the current date and time.',
+    body: ['Print it in the Serial monitor. If the seconds count up, the two clock wires are right and the clock is alive.'] },
+
+  batteryvolts: { g: 'code', name: 'batteryVolts()', short: 'The function in the code that reads pin D2 and turns the number back into battery volts.',
+    body: ['It reads the [[adc|ADC]], multiplies by the divider ratio in reverse, and multiplies by [[vbatcal|VBAT_CAL]]. Print it and compare with the meter on the battery posts.'] },
+
+  vbatcal: { g: 'code', name: 'VBAT_CAL', short: 'A correction number in the code. It fixes the small error in the resistors so the reading matches the meter.',
+    body: ['Resistors are only accurate to 5%, so the divider ratio is not exactly 0.13. Measure the battery with the meter, note what batteryVolts() prints, and set VBAT_CAL to real ÷ reported. If the meter says 12.6 and the code says 12.3, set it to 1.024.',
+      'Get this wrong upwards and the guard never fires, so you kill the battery. Get it wrong downwards and it parks the boxes open on a healthy battery. Check once, against a meter.'] },
+
+  testmode: { g: 'code', name: 'TEST_MODE', short: 'A switch in the code. When true, the controller opens and shuts every minute so you can watch it work on the bench.',
+    body: ['Set it to true for bench testing, watch ten cycles, then set it back to false before the box goes to the coop.'] },
+
+  runms: { g: 'code', name: 'RUN_MS', short: 'How many milliseconds the code runs the motor for each move.',
+    body: ['Time the actuator\'s full stroke with a stopwatch, add 20%, and write that in milliseconds. 55 seconds plus 20% is 66,000.'] },
+};
+
+/* ────────────────────────────────────────────────────────────────────
+   The parts on the diagram.
+   ──────────────────────────────────────────────────────────────────── */
 const PARTS = {
   battery: {
-    title: "12 V 7.2 Ah battery",
-    sub: "Jaycar SB2486 · sealed lead-acid",
-    rows: [["+ post", "red fig-8 → the 2 A fuse", ""],
-           ["− post", "black fig-8 → the ground spine", ""]],
+    title: '12 V 7.2 Ah battery',
+    sub: 'Jaycar SB2486 · a [[sla|sealed lead-acid]] battery',
+    rows: [['+ post', 'red figure-8 wire → the 2 A fuse', ''],
+           ['− post', 'black figure-8 wire → the [[spine|ground spine]]', '']],
     steps: [
-      "Crimp a 6.35 mm female spade onto each wire. The posts on an SLA are 6.35 mm blades — don't solder to them, you'll cook the seal.",
-      "Red on +, black on −. Check twice: this is the one mistake that costs you the whole circuit.",
-      "Put the fuse in the RED lead only, within 100 mm of the post.",
-      "Battery sits in a ventilated crate BELOW the electronics box. Lead-acid vents."
+      '[[crimp|Crimp]] a 6.35 mm female spade terminal onto each wire. The posts on this battery are 6.35 mm blades. Do not solder to them. Soldering cooks the seal.',
+      'Push red onto + and black onto −. Check it twice. This is the one mistake that costs you the whole circuit.',
+      'Put the fuse in the RED lead only, within 100 mm of the post.',
+      'The battery sits in a ventilated crate BELOW the electronics box. Lead-acid batteries vent gas while charging.'
     ],
-    warn: ["Never leave it flat", "An SLA left discharged is a dead SLA. The divider stops the motor at 11.9 V, but set a phone reminder for every 10 weeks anyway."],
-    link: ["Jaycar SB2486", "https://www.jaycar.com.au/12v-7-2ah-sla-back-up-battery-nbn-alarm-ufb/p/SB2486"]
+    warn: ['Never leave it flat', 'A lead-acid battery left discharged is a dead battery. The divider stops the motor at 11.9 V, but set a phone reminder to charge it every 10 weeks anyway.'],
+    link: ['Jaycar SB2486', 'https://www.jaycar.com.au/12v-7-2ah-sla-back-up-battery-nbn-alarm-ufb/p/SB2486']
   },
   fuse: {
-    title: "2 A inline fuse",
-    sub: "In the positive lead, close to the battery",
-    rows: [["In", "battery +", ""], ["Out", "the 12 V line", ""]],
+    title: '2 A inline fuse',
+    sub: 'It sits in the red lead, close to the battery',
+    svg: () => fuseSVG(),
+    rows: [['In', 'battery +', ''], ['Out', 'the [[v12line|+12 V line]]', '']],
     steps: [
-      "Inline blade-fuse holder, 2 A fuse.",
-      "It goes in the RED lead only, as close to the battery post as the holder allows.",
-      "Its job is not to protect the electronics. Its job is to stop a shorted wire turning a 7 Ah battery into a fire."
+      'Buy an inline blade-fuse holder and a 2 A fuse.',
+      'Splice it into the RED lead only, as close to the battery post as the holder allows.',
+      'Its job is not to protect the electronics. Its job is to stop a [[short|shorted wire]] turning a 7 Ah battery into a fire.'
     ]
   },
   buck: {
-    title: "Pololu D36V6F5 — 5 V buck",
-    sub: "10 × 13 mm · names printed on the UNDERSIDE",
-    photo: ["img/pololu.jpg", "Pololu", "https://www.pololu.com/product/3792"],
-    rows: [["VOUT", "XIAO 5V pin", "1st pad"],
-           ["GND", "ground spine", "2nd pad"],
-           ["VIN", "+12 V from the fuse", "3rd pad"],
-           ["SHDN", "leave empty", "4th pad"]],
+    title: 'Pololu D36V6F5, the 5 V buck',
+    sub: '10 × 13 mm · the names are printed on the UNDERSIDE',
+    photo: ['img/pololu.jpg', 'Pololu', 'https://www.pololu.com/product/3792'],
+    rows: [['VOUT', 'XIAO 5V pin', '1st pad'],
+           ['GND', 'ground spine', '2nd pad'],
+           ['VIN', '+12 V line, from the fuse', '3rd pad'],
+           ['SHDN', 'leave empty', '4th pad']],
     steps: [
-      "Solder a 3-pin header into the first three pads. Headers come loose in the bag.",
-      "VIN to the 12 V line, GND to the spine. Nothing else connected yet.",
-      "Power it up and put the meter across VOUT and GND. It must read 5.0 V ± 0.1.",
-      "Only when that reads right do you connect the XIAO's 5V pin."
+      'Solder a 3-pin [[header]] into the first three pads. The headers come loose in the bag.',
+      'Connect VIN to the 12 V line and GND to the spine. Connect nothing else yet.',
+      'Power it up and put the [[multimeter]] across VOUT and GND. It must read 5.0 V ± 0.1.',
+      'Only when that reads right do you connect the XIAO\'s 5V pin.'
     ],
-    warn: ["Read the order twice", "Left to right it is VOUT · GND · VIN · SHDN. VIN and VOUT are two pads apart with ground between them. Swap them and 12 V goes straight into the ESP32."]
+    warn: ['Read the order twice', 'Left to right the pads read VOUT · GND · VIN · SHDN. [[vinvout|VIN and VOUT]] are two pads apart with ground between them. Swap them and 12 V goes straight into the XIAO.']
   },
   clock: {
-    title: "DFRobot DS3231M — the clock",
-    sub: "DFR0641 · 22.5 × 21 mm · seven pads in one row",
-    photo: ["img/ds3231m.jpg", "DFRobot wiki", "https://wiki.dfrobot.com/dfr0641/"],
-    rows: [["VCC", "XIAO 3V3", "1st pad"],
-           ["GND", "ground spine", "2nd pad"],
-           ["SCL", "XIAO D5", "3rd pad"],
-           ["SDA", "XIAO D4", "4th pad"],
-           ["INT · RST · 32K", "not used", "5th–7th"]],
+    title: 'DFRobot DS3231M, the clock',
+    sub: 'DFR0641 · 22.5 × 21 mm · seven pads in one row',
+    photo: ['img/ds3231m.jpg', 'DFRobot wiki', 'https://wiki.dfrobot.com/dfr0641/'],
+    rows: [['VCC', 'XIAO 3V3', '1st pad'],
+           ['GND', 'ground spine', '2nd pad'],
+           ['SCL', 'XIAO D5', '3rd pad'],
+           ['SDA', 'XIAO D4', '4th pad'],
+           ['INT · RST · 32K', 'not used', '5th to 7th']],
     steps: [
-      "The four pads you need are the first four, so one 4-pin header strip covers them.",
-      "Fit the CR1220 cell — it is NOT supplied. Supermarket, about $5.",
-      "Without that cell the clock forgets the time every time you take the battery away to charge it.",
-      "Test it before adding anything else: print rtc.now() to Serial and watch the seconds count up."
+      'The four pads you need are the first four, so one 4-pin [[header]] strip covers them.',
+      'Fit a CR1220 coin cell. It is NOT supplied. Any supermarket sells them for about $5.',
+      'Without that cell the [[rtc|clock]] forgets the time every time you take the battery away to charge it.',
+      'Test it before adding anything else. Print [[rtcnow|rtc.now()]] to the [[serial|Serial monitor]] and watch the seconds count up.'
     ],
-    warn: ["SCL comes BEFORE SDA", "The opposite of most clock modules. Wire it from muscle memory and you will get it backwards, and the clock simply won't answer."]
+    warn: ['SCL comes BEFORE SDA', 'Most clock modules print them the other way round. Wire it from habit and you will swap them, and the clock simply will not answer.']
   },
   xiao: {
-    title: "Seeed XIAO ESP32-C3 — the brain",
-    sub: "21 × 17.8 mm · USB-C at the top · names printed underneath",
-    photo: ["img/xiao-pinmap.png", "Seeed Studio wiki", "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/"],
-    rows: [["D1 · GPIO3", "driver IN1", "left side"],
-           ["D2 · GPIO4", "battery sense divider", "left side"],
-           ["D3 · GPIO5", "driver IN2", "left side"],
-           ["D4 · GPIO6", "clock SDA", "left side"],
-           ["D5 · GPIO7", "clock SCL", "left side"],
-           ["5V", "buck VOUT", "right side"],
-           ["GND", "ground spine", "right side"],
-           ["3V3", "clock VCC", "right side"],
-           ["D0 · D8 · D9", "LEAVE EMPTY", "boot pins"]],
+    title: 'Seeed XIAO ESP32-C3, the brain',
+    sub: '21 × 17.8 mm · USB-C at the top · the names are printed underneath',
+    photo: ['img/xiao-pinmap.png', 'Seeed Studio wiki', 'https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/'],
+    rows: [['D1 · GPIO3', 'driver IN1', 'left side'],
+           ['D2 · GPIO4', 'the [[sensenode|sense node]] of the battery divider', 'left side'],
+           ['D3 · GPIO5', 'driver IN2', 'left side'],
+           ['D4 · GPIO6', 'clock SDA', 'left side'],
+           ['D5 · GPIO7', 'clock SCL', 'left side'],
+           ['5V', 'buck VOUT', 'right side'],
+           ['GND', 'ground spine', 'right side'],
+           ['3V3', 'clock VCC', 'right side'],
+           ['D0 · D8 · D9', 'LEAVE EMPTY', '[[strapping|boot pins]]']],
     steps: [
-      "Solder a 7-pin header strip down each side. The strip holds itself straight; separate pins do not.",
-      "Feed it from the buck on the 5V pin — not the 3V3 pin.",
-      "3V3 is an OUTPUT here: it powers the clock module.",
-      "Upload Blink first. If the light blinks, the power chain is sound and you can add the clock."
+      'Solder a 7-pin [[header]] strip down each side. A strip holds itself straight. Separate pins do not.',
+      'Feed it from the buck on the 5V pin, not the 3V3 pin.',
+      '3V3 is an OUTPUT here. It powers the clock module.',
+      'Upload [[blink|Blink]] first. If the light blinks, the power chain is sound and you can add the clock.'
     ],
-    warn: ["D0, D8 and D9 stay empty", "The chip reads them at power-up to decide how to boot. A pull-down on any of them and the board will not start. That is exactly why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1."]
+    warn: ['D0, D8 and D9 stay empty', 'The chip reads them at power-up to decide how to boot. A pull-down on any of them and the board will not start. That is exactly why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1.']
   },
   driver: {
-    title: "Adafruit DRV8871 — motor driver",
-    sub: "Screw terminals on top, 4-hole header on the bottom",
-    photo: ["img/drv8871.jpg", "Adafruit Learning System", "https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts"],
-    rows: [["POWER +", "+12 V from the fuse", "screw — no solder"],
-           ["POWER −", "ground spine", "screw — no solder"],
-           ["MOTOR 1", "actuator wire A", "screw — no solder"],
-           ["MOTOR 2", "actuator wire B", "screw — no solder"],
-           ["IN1", "XIAO D1", "solder"],
-           ["IN2", "XIAO D3", "solder"],
-           ["VM", "skip it", "fed by POWER already"],
-           ["GND", "spine + both pull-downs", "solder"]],
+    title: 'Adafruit DRV8871, the motor driver',
+    sub: 'Screw terminals on top · a 4-hole header on the bottom',
+    photo: ['img/drv8871.jpg', 'Adafruit Learning System', 'https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts'],
+    rows: [['POWER +', '+12 V line, from the fuse', 'screw, no solder'],
+           ['POWER −', 'ground spine', 'screw, no solder'],
+           ['MOTOR 1', 'actuator wire A', 'screw, no solder'],
+           ['MOTOR 2', 'actuator wire B', 'screw, no solder'],
+           ['IN1', 'XIAO D1', 'solder'],
+           ['IN2', 'XIAO D3', 'solder'],
+           ['VM', 'skip it', 'the POWER terminal already feeds it'],
+           ['GND', 'spine, plus both pull-downs', 'solder']],
     steps: [
-      "The green screw terminals arrive already soldered. The two highest-current connections need no iron at all.",
-      "Solder a 4-pin header into the bottom holes. Reading left to right they are IN2 · IN1 · VM · GND.",
-      "Fit a 10 kΩ resistor from IN1 to GND, and another from IN2 to GND. Do not skip these — without them the inputs float while the ESP32 boots and the motor twitches.",
-      "IN1 drives MOTOR 1, IN2 drives MOTOR 2. If the actuator runs the wrong way, swap either pair."
+      'The green [[screwterm|screw terminals]] arrive already soldered. The two connections that carry the most current need no iron at all.',
+      'Solder a 4-pin [[header]] into the bottom holes. Left to right they read IN2 · IN1 · VM · GND.',
+      'Fit a [[r10k|10 kΩ resistor]] from IN1 to GND, and another from IN2 to GND. Do not skip these. Without them the inputs [[pulldown|float]] while the XIAO boots and the motor twitches.',
+      'IN1 drives MOTOR 1 and IN2 drives MOTOR 2. If the actuator runs the wrong way, swap the two motor wires.'
     ]
   },
   divider: {
-    title: "Battery sense divider",
-    sub: "220 kΩ + 33 kΩ + 100 nF · three components",
-    rows: [["220 kΩ", "+12 V line → sense node", ""],
-           ["33 kΩ", "sense node → ground spine", ""],
-           ["100 nF", "across the 33 kΩ", ""],
-           ["Sense node", "XIAO D2", ""]],
+    title: 'Battery sense divider',
+    sub: '220 kΩ + 33 kΩ + 100 nF · three loose parts, no board',
+    svg: () => dividerFigure(),
+    rows: [['[[r220k|220 kΩ]]', '+12 V line → [[sensenode|sense node]]', 'red · red · yellow · gold'],
+           ['[[r33k|33 kΩ]]', 'sense node → ground spine', 'orange · orange · orange · gold'],
+           ['[[capacitor|100 nF]]', 'across the 33 kΩ', 'marked 104'],
+           ['Sense node', 'XIAO D2', 'violet hook-up wire']],
     steps: [
-      "This is what a solar charge controller would have given you for free: it stops the motor before a flat battery is ruined.",
-      "Solder the two resistors in series between the 12 V line and ground. Where they meet is the sense node.",
-      "Put the 100 nF capacitor across the 33 kΩ — it steadies the reading.",
-      "12.6 V arrives at D2 as about 1.64 V, comfortably inside the ADC's range.",
-      "Calibrate it: compare batteryVolts() against the multimeter and set VBAT_CAL to (real ÷ reported)."
+      'This circuit does what a solar charge controller would have done for free. It stops the motor before a flat battery is ruined.',
+      'Solder the two resistors in a row between the +12 V line and ground. The point where they meet is the sense node. Read [[divider|why this shrinks the voltage]].',
+      'Put the 100 nF capacitor across the 33 kΩ, one leg on each side of it. It steadies the reading.',
+      'A full battery at 12.6 V arrives at D2 as about 1.64 V, comfortably inside the range the [[adc|ADC]] can measure.',
+      'Calibrate it. Compare [[batteryvolts|batteryVolts()]] against the multimeter and set [[vbatcal|VBAT_CAL]] to real ÷ reported.'
     ],
-    warn: ["Get this wrong in either direction", "Too high and the guard never fires and you kill the battery. Too low and it parks the boxes open on a healthy battery. Check it against a meter once."]
+    warn: ['Getting this wrong bites in either direction', 'Too high and the guard never fires, so you kill the battery. Too low and it parks the boxes open on a healthy battery. Check it against a meter once.']
+  },
+  pulldowns: {
+    title: 'The two 10 kΩ pull-downs',
+    sub: 'One on IN1, one on IN2 · both to the driver\'s GND pin',
+    svg: () => resistorSVG(['brown', 'black', 'orange', 'gold'], '10 kilohm resistor, brown black orange gold'),
+    rows: [['[[r10k|10 kΩ]]', 'driver IN1 → driver GND', 'brown · black · orange · gold'],
+           ['[[r10k|10 kΩ]]', 'driver IN2 → driver GND', 'brown · black · orange · gold']],
+    steps: [
+      'These are [[pulldown|pull-down resistors]]. They hold each driver input at 0 V unless the XIAO actively pushes it high.',
+      'Solder one leg of each resistor to the driver\'s IN pin, and the other leg to the driver\'s GND pin. On the header that is pin 2 to pin 4, and pin 1 to pin 4.',
+      'Without them the inputs float while the XIAO boots and the motor twitches at every power-up.'
+    ]
   },
   actuator: {
-    title: "12 V linear actuator",
-    sub: "300 mm stroke · lead screw · limit switches inside",
-    rows: [["Wire A", "driver MOTOR 1", ""],
-           ["Wire B", "driver MOTOR 2", ""]],
+    title: '12 V linear actuator',
+    sub: '300 mm stroke · lead screw · [[limitswitch|limit switches]] inside',
+    rows: [['Wire A', 'driver MOTOR 1', ''],
+           ['Wire B', 'driver MOTOR 2', '']],
     steps: [
-      "Two wires, into the MOTOR screw terminal. Either way round — if it runs backwards, swap them.",
-      "Run it in medium-duty figure-8, not hook-up wire. Measure the real distance and add a metre.",
-      "It stops itself at each end on internal limit switches, so the code just runs it for a fixed time.",
-      "Drive the panel through a CORD over a pulley, never bolted rigidly. Gravity closes the door; the actuator only ever lifts it.",
-      "Time the full stroke with a stopwatch, add 20%, and that is your RUN_MS."
+      'The actuator has two wires. Screw them into the driver\'s MOTOR terminal, one in each hole. It does not matter which wire goes in which hole. If the door runs the wrong way, swap the two wires.',
+      'Run the cable in medium-duty [[fig8|figure-8]], not hook-up wire. Measure the real distance and add a metre.',
+      'It stops itself at each end on its internal limit switches, so the code just runs it for a fixed time.',
+      'Drive the door panel through a CORD over a pulley. Never bolt the actuator rigidly to the panel. Gravity closes the door. The actuator only ever lifts it.',
+      'Time the full stroke with a stopwatch, add 20%, and that number in milliseconds is your [[runms|RUN_MS]].'
     ],
-    warn: ["Never a rigid link", "Bolted straight to the panel it pushes down with 100 N onto whatever is underneath. Through a cord, the closing force is just the panel's own weight — about 10 N."]
+    warn: ['Never a rigid link', 'Bolted straight to the panel, it pushes down with 100 N onto whatever is underneath. Through a cord, the closing force is just the panel\'s own weight, about 10 N.']
+  },
+  spine: {
+    title: 'The ground spine',
+    sub: 'One black wire that every ground pin joins',
+    rows: [['Battery −', 'the start of the spine', 'thick figure-8'],
+           ['Buck GND · XIAO GND · clock GND · driver GND', 'each drops a short black wire to it', 'hook-up'],
+           ['33 kΩ · 100 nF · both 10 kΩ', 'their bottom legs', 'resistor legs'],
+           ['Driver POWER −', 'the far end of the spine', 'thick figure-8']],
+    steps: [
+      'This is not a part you buy. It is just the name for the black wire that runs along the bottom of the board. Read [[ground|what ground means]].',
+      'On a perfboard, run one bare copper wire along an edge and solder every ground wire to it.',
+      'The battery − and the driver POWER − carry the motor current, so those two connections use the thick figure-8. Everything else uses thin black hook-up wire.',
+      'Every voltage you measure with the meter is measured against this wire. Black probe here, red probe wherever you are checking.'
+    ]
+  },
+  v12: {
+    title: 'The +12 V line',
+    sub: 'The red wire that carries battery + everywhere after the fuse',
+    rows: [['Fuse out', 'the start of the line', 'thick figure-8'],
+           ['Buck VIN', 'first customer', 'thick figure-8'],
+           ['Driver POWER +', 'second customer', 'thick figure-8'],
+           ['220 kΩ top leg', 'third customer', 'a short tap']],
+    steps: [
+      'It carries the battery\'s full 12 V, so treat every bare bit of it with respect. Never let it touch the ground spine. That is a [[short|short circuit]].',
+      'Use thick figure-8 to the buck and to the driver. The motor current goes through the driver leg.',
+      'The tap to the 220 kΩ carries almost nothing, so any wire will do.'
+    ]
   }
 };
 
-const modal = document.getElementById('modal');
-const mTitle = document.getElementById('m-title');
-const mBody  = document.getElementById('m-body');
-document.getElementById('m-close').onclick = () => modal.close();
-modal.addEventListener('click', e => { if (e.target === modal) modal.close(); });
+/* ────────────────────────────────────────────────────────────────────
+   Rendering
+   ──────────────────────────────────────────────────────────────────── */
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+// Turns [[key|text]] into a clickable word. The body text may already
+// hold trusted inline HTML like <strong>, so it is not escaped.
+function link(s, escapeIt) {
+  let out = escapeIt ? esc(s) : String(s);
+  return out.replace(/\[\[([a-z0-9]+)(?:\|([^\]]+))?\]\]/g, function (m, k, t) {
+    const d = TERMS[k];
+    if (!d) return t || k;
+    // With no display text, use the name without its bracketed part, lower-cased
+    // for mid-sentence use unless it is an acronym like ADC or I²C.
+    let shown = t;
+    if (!shown) {
+      shown = d.name.split(' (')[0];
+      if (shown.length > 1 && shown[1] === shown[1].toLowerCase() && shown[1] !== shown[1].toUpperCase()) shown = shown[0].toLowerCase() + shown.slice(1);
+    }
+    return '<button type="button" class="term" data-t="' + k + '">' + shown + '</button>';
+  });
+}
 
-function openPart(key){
+function bandKeyHTML() {
+  let h = '<table class="tbl"><thead><tr><th>Colour</th><th>Digit</th><th>As the third band</th></tr></thead><tbody>';
+  DIGIT.forEach((c, i) => {
+    h += '<tr><td><span class="swatch" style="background:' + BAND[c] + '"></span>' + c + '</td><td class="mono">' + i + '</td><td class="text-muted">add ' + i + ' zero' + (i === 1 ? '' : 's') + '</td></tr>';
+  });
+  h += '<tr><td><span class="swatch" style="background:' + BAND.gold + '"></span>gold</td><td class="mono">—</td><td class="text-muted">last band: accurate to 5%</td></tr>';
+  h += '<tr><td><span class="swatch" style="background:' + BAND.silver + '"></span>silver</td><td class="mono">—</td><td class="text-muted">last band: accurate to 10%</td></tr>';
+  return h + '</tbody></table>';
+}
+
+const partDialog = document.getElementById('part-dialog');
+const termDialog = document.getElementById('term-dialog');
+document.getElementById('p-close').onclick = () => partDialog.close();
+document.getElementById('t-close').onclick = () => termDialog.close();
+[partDialog, termDialog].forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
+
+function openTerm(key) {
+  const d = TERMS[key];
+  if (!d) return;
+  document.getElementById('t-title').textContent = d.name;
+  const grp = GROUPS.find(g => g[0] === d.g);
+  document.getElementById('t-kicker').textContent = grp ? grp[1] : 'What this means';
+  let h = '<p class="text-[1.05rem] font-bold max-w-[60ch]">' + link(d.short, false) + '</p>';
+  if (d.svg) h += '<div class="card p-4 bg-ground">' + d.svg() + '</div>';
+  for (const p of d.body) h += '<p class="max-w-[62ch]">' + link(p, false) + '</p>';
+  const body = document.getElementById('t-body');
+  body.innerHTML = h;
+  body.scrollTop = 0;
+  if (termDialog.open) termDialog.close();
+  termDialog.showModal();
+}
+
+function openPart(key) {
   const d = PARTS[key];
   if (!d) return;
-  mTitle.textContent = d.title;
+  document.getElementById('p-title').textContent = d.title;
   let h = '';
-  if (d.sub) h += '<p class="dim" style="font-size:14px;margin-top:-4px">' + esc(d.sub) + '</p>';
+  if (d.sub) h += '<p class="text-muted text-[15px] -mt-2">' + link(d.sub, false) + '</p>';
   if (d.photo) {
-    h += '<div class="m-photo"><img src="' + d.photo[0] + '" alt="' + esc(d.title) + '">' +
-         '<p>Photo: <a href="' + d.photo[2] + '" target="_blank" rel="noopener">' + esc(d.photo[1]) + '</a></p></div>';
-  } else {
-    h += '<div class="m-nophoto">No board photo for this one — it is wire, a fuse holder, or loose components rather than a module.</div>';
+    h += '<div class="card overflow-hidden"><img class="block w-full h-auto" src="' + d.photo[0] + '" alt="' + esc(d.title) + '">' +
+         '<p class="font-mono text-[11.5px] text-muted px-3 py-2 border-t border-rule">Photo: <a href="' + d.photo[2] + '" target="_blank" rel="noopener">' + esc(d.photo[1]) + '</a></p></div>';
+  } else if (d.svg) {
+    h += '<div class="card p-4 bg-ground">' + d.svg() + '</div>';
   }
   if (d.rows && d.rows.length) {
-    h += '<div class="scroller"><table><thead><tr><th>Pin / part</th><th>Goes to</th><th>Note</th></tr></thead><tbody>';
+    h += '<div class="scroller"><table class="tbl"><thead><tr><th>Pin or part</th><th>Goes to</th><th>Note</th></tr></thead><tbody>';
     for (const r of d.rows) {
       const cls = /LEAVE EMPTY|leave empty|skip it|not used/.test(r[1]) ? 'no' : 'pin';
-      h += '<tr><td class="' + cls + '">' + esc(r[0]) + '</td><td>' + esc(r[1]) +
-           '</td><td class="dim" style="font-size:13px">' + esc(r[2] || '') + '</td></tr>';
+      h += '<tr><td class="' + cls + '">' + link(r[0], false) + '</td><td>' + link(r[1], false) +
+           '</td><td class="text-muted text-[13px]">' + link(r[2] || '', false) + '</td></tr>';
     }
     h += '</tbody></table></div>';
   }
   if (d.steps) {
     h += '<ol class="steps">';
-    for (const s of d.steps) h += '<li><p>' + esc(s) + '</p></li>';
+    for (const s of d.steps) h += '<li><p class="text-ink">' + link(s, false) + '</p></li>';
     h += '</ol>';
   }
   if (d.warn) {
-    h += '<div class="warn"><p class="eyebrow" style="color:var(--alert)">' + esc(d.warn[0]) +
-         '</p><p style="max-width:60ch">' + esc(d.warn[1]) + '</p></div>';
+    h += '<div class="warn"><p class="kicker text-danger">' + esc(d.warn[0]) + '</p><p class="max-w-[60ch]">' + link(d.warn[1], false) + '</p></div>';
   }
   if (d.link) {
-    h += '<p style="font-size:14px"><a href="' + d.link[1] + '" target="_blank" rel="noopener">' +
-         esc(d.link[0]) + ' →</a></p>';
+    h += '<p class="text-[15px]"><a href="' + d.link[1] + '" target="_blank" rel="noopener">' + esc(d.link[0]) + ' →</a></p>';
   }
-  mBody.innerHTML = h;
-  mBody.scrollTop = 0;
-  modal.showModal();
+  const body = document.getElementById('p-body');
+  body.innerHTML = h;
+  body.scrollTop = 0;
+  if (termDialog.open) termDialog.close();
+  partDialog.showModal();
 }
+
+// One listener for every clickable word, including ones inside dialogs.
+document.addEventListener('click', e => {
+  const b = e.target.closest('.term[data-t]');
+  if (b) { e.preventDefault(); openTerm(b.getAttribute('data-t')); }
+});
+
+// ── the six basics cards ──
+(function () {
+  const keys = ['volt', 'amp', 'ohm', 'ground', 'polarity', 'signal'];
+  const units = { volt: 'V', amp: 'A', ohm: 'Ω', ground: 'GND', polarity: '+ −', signal: '~' };
+  let h = '';
+  keys.forEach(k => {
+    const d = TERMS[k];
+    h += '<button type="button" class="part-card term-card" data-open="' + k + '">' +
+         '<span class="font-display text-[2rem] font-extrabold leading-none text-accent">' + units[k] + '</span>' +
+         '<span class="font-bold text-[1.05rem]">' + esc(d.name) + '</span>' +
+         '<span class="text-muted text-[15px]">' + esc(d.short) + '</span></button>';
+  });
+  document.getElementById('basics-grid').innerHTML = h;
+})();
+
+// ── the loose parts grid ──
+(function () {
+  const items = [
+    ['r220k', resistorSVG(['red', 'red', 'yellow', 'gold'], '220 kilohm'), '220 kΩ · one', 'Top of the divider. +12 V line to the sense node.', 'red · red · yellow · gold'],
+    ['r33k', resistorSVG(['orange', 'orange', 'orange', 'gold'], '33 kilohm'), '33 kΩ · one', 'Bottom of the divider. Sense node to ground.', 'orange · orange · orange · gold'],
+    ['r10k', resistorSVG(['brown', 'black', 'orange', 'gold'], '10 kilohm'), '10 kΩ · two', 'Pull-downs. Driver IN1 and IN2, each to driver GND.', 'brown · black · orange · gold'],
+    ['capacitor', capacitorSVG(), '100 nF · one', 'Across the 33 kΩ. Steadies the battery reading.', 'a small disc marked 104'],
+    ['fuse', fuseSVG(), '2 A fuse · one', 'In the red battery lead, near the post.', 'in an inline blade holder'],
+  ];
+  let h = '';
+  items.forEach(it => {
+    h += '<button type="button" class="part-card term-card" data-open="' + it[0] + '">' +
+         '<span class="block bg-ground rounded-xl p-3">' + it[1] + '</span>' +
+         '<span class="font-bold text-[1.05rem]">' + esc(it[2]) + '</span>' +
+         '<span class="text-[15px]">' + esc(it[3]) + '</span>' +
+         '<span class="font-mono text-[12px] text-muted">' + esc(it[4]) + '</span></button>';
+  });
+  document.getElementById('loose-grid').innerHTML = h;
+  document.getElementById('band-key').innerHTML = bandKeyHTML();
+  document.getElementById('divider-figure').innerHTML = dividerFigure();
+})();
+
+document.addEventListener('click', e => {
+  const c = e.target.closest('.term-card[data-open]');
+  if (c) openTerm(c.getAttribute('data-open'));
+});
+
+// ── the glossary section, generated from the same list ──
+(function () {
+  let h = '';
+  GROUPS.forEach(([gk, gname]) => {
+    const keys = Object.keys(TERMS).filter(k => TERMS[k].g === gk && !['term', 'v12', 'pulldowns'].includes(k));
+    if (!keys.length) return;
+    h += '<div class="flex flex-col gap-3"><p class="kicker">' + esc(gname) + '</p><div class="grid gap-3 md:grid-cols-2">';
+    keys.forEach(k => {
+      const d = TERMS[k];
+      h += '<details class="card px-5 py-4 group" id="g-' + k + '">' +
+           '<summary class="cursor-pointer list-none flex flex-col gap-1">' +
+           '<span class="font-bold text-[1.02rem]">' + esc(d.name) + '</span>' +
+           '<span class="text-muted text-[15px]">' + link(d.short, false) + '</span>' +
+           '<span class="font-mono text-[11px] text-accent group-open:hidden">read more ↓</span></summary>' +
+           '<div class="flex flex-col gap-3 pt-3 text-[15.5px]">' + (d.svg ? '<div class="bg-ground rounded-xl p-3">' + d.svg() + '</div>' : '') +
+           d.body.map(p => '<p>' + link(p, false) + '</p>').join('') + '</div></details>';
+    });
+    h += '</div></div>';
+  });
+  document.getElementById('glossary-list').innerHTML = h;
+})();
+
+// ── the checklist remembers its ticks in this browser ──
+(function () {
+  const boxes = Array.from(document.querySelectorAll('#checks input[type=checkbox]'));
+  const KEY = 'nestbox-checks';
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+    boxes.forEach((b, i) => { b.checked = !!saved[i]; });
+  } catch (e) { /* storage unavailable, ticks just do not persist */ }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(boxes.map(b => b.checked))); } catch (e) { /* ignore */ }
+  }
+  boxes.forEach(b => b.addEventListener('change', save));
+  document.getElementById('clear-checks').addEventListener('click', e => {
+    e.stopPropagation();
+    boxes.forEach(b => { b.checked = false; });
+    save();
+  });
+})();
 
 // Inline the SVG so its parts become clickable.
 fetch('nestbox-wiring.svg')
@@ -646,6 +1268,7 @@ fetch('nestbox-wiring.svg')
   .then(txt => {
     const host = document.getElementById('diagram');
     host.innerHTML = txt;
+    host.querySelector('svg').setAttribute('style', 'display:block;min-width:960px;width:100%;height:auto');
     host.querySelectorAll('g[data-part]').forEach(g => {
       const key = g.getAttribute('data-part');
       g.addEventListener('click', () => openPart(key));

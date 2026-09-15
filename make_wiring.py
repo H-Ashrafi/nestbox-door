@@ -3,7 +3,7 @@ Nest box controller - wiring diagram generator.
 
 One geometry definition -> two outputs that cannot drift apart:
     nestbox-wiring.svg   standalone, self-contained, prints on A4 landscape
-    nestbox-wiring.dxf   AutoCAD R12 ASCII, one layer per net
+    nestbox-wiring.dxf   AutoCAD R2000 ASCII, one layer per net
 
 Battery version (no solar). Run:  python make_wiring.py
 """
@@ -14,6 +14,8 @@ W, H = 1520.0, 990.0          # SVG canvas, user units
 DXF_SCALE = 0.19              # -> 288.8 x 188.1 mm, fits A4 landscape
 
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
+
+ACCENT = "#0F766E"            # hover / focus colour, matches the bench sheet
 
 # ─────────────────────────────────────────────────────────────────────
 # nets: name -> (svg colour, AutoCAD colour index, legend label)
@@ -35,6 +37,22 @@ NETS = {
     "NOTE":  ("#6B7480", 9,   None),
 }
 
+# ─────────────────────────────────────────────────────────────────────
+# resistor colour bands - the real colours, so the drawing matches
+# the part in your hand
+# ─────────────────────────────────────────────────────────────────────
+BAND_RGB = {
+    "black": "#111111", "brown": "#6B3A1E", "red": "#D0342C", "orange": "#F0801A",
+    "yellow": "#F3C623", "green": "#2E7D32", "blue": "#1E5AA8", "violet": "#7B3FA0",
+    "grey": "#8C8C8C", "white": "#F5F5F5", "gold": "#C9A227", "silver": "#BDBDBD",
+}
+RES_BANDS = {
+    "220 k": ["red", "red", "yellow", "gold"],
+    "33 k":  ["orange", "orange", "orange", "gold"],
+    "10 k":  ["brown", "black", "orange", "gold"],
+}
+RES_BODY = "#E8D9B5"
+
 WIRE_W = 3.2
 
 prims = []   # every drawable, in order
@@ -54,6 +72,11 @@ def hot(x, y, w, h):
 
 def rect(x, y, w, h, net="BODY", fill=None, lw=2.0, r=0):
     prims.append(dict(k="rect", x=x, y=y, w=w, h=h, net=net, fill=fill, lw=lw, r=r, part=PART))
+
+
+def band(x, y, w, h, colour):
+    """Solid colour stripe on a resistor body. Its own colour, not a net colour."""
+    prims.append(dict(k="band", x=x, y=y, w=w, h=h, net="BODY", colour=colour, part=PART))
 
 
 def line(x1, y1, x2, y2, net="BODY", lw=2.0):
@@ -98,25 +121,30 @@ def pin(x, y, label, side, net="BODY"):
     elif side == "r":
         text(x - 14, y + 4.5, label, "TEXT", 12.5, "end")
     elif side == "t":
-        text(x, y + 26, label, "TEXT", 12.5, "middle")
+        # a riser leaves this pin downwards, so the label sits beside it
+        text(x + 12, y + 28, label, "TEXT", 12.5, "start")
     else:
         text(x, y - 16, label, "TEXT", 12.5, "middle")
 
 
 def resistor(x, y, value, net, label="right"):
-    """IEC box resistor centred on (x, y), 46 long."""
-    rect(x - 11, y - 23, 22, 46, "BODY", fill="#FFFFFF", lw=2.0)
-    if label == "above":
-        text(x, y - 32, value, "TEXT", 12.0, "middle")
+    """A real-looking 4-band resistor centred on (x, y), vertical, 46 long.
+    The bands are the true colour code for that value."""
+    rect(x - 11, y - 23, 22, 46, "BODY", fill=RES_BODY, lw=1.8, r=6)
+    for off, colour in zip((-14, -6, 2, 12), RES_BANDS[value]):
+        band(x - 11, y + off, 22, 5, BAND_RGB[colour])
+    if isinstance(label, tuple):          # (dx, dy, anchor) for a tight spot
+        text(x + label[0], y + label[1], value, "TEXT", 12.0, label[2])
     else:
         text(x + 18, y + 4.5, value, "TEXT", 12.0, "start")
 
 
-def capacitor(x, y, value, net):
+def capacitor(x, y, value, marking, net):
     """Vertical non-polarised cap centred on (x, y)."""
     line(x - 16, y - 6, x + 16, y - 6, "BODY", 3.0)
     line(x - 16, y + 6, x + 16, y + 6, "BODY", 3.0)
-    text(x + 23, y - 33, value, "TEXT", 12.0, "start")
+    # one line, up and to the left, in the clear space above the clock block
+    text(x + 41, y - 71, value + ", " + marking, "TEXT", 11.0, "end")
 
 
 # ═════════════════════════════════════════════════════════════════════
@@ -166,7 +194,8 @@ pin(760, 370, "3V3", "l")
 pin(760, 420, "D4 / SDA", "l")
 pin(760, 470, "D5 / SCL", "l")
 pin(760, 660, "5V", "l")
-pin(850, 300, "D2 / A2", "b")
+pin(850, 300, "", "b")
+text(864, 293, "D2 / A2", "TEXT", 12.5, "start")    # beside the sense wire, not under it
 pin(1000, 390, "D1", "r")
 pin(1000, 450, "D3", "r")
 pin(820, 730, "GND", "t")
@@ -177,7 +206,8 @@ hot(750, 290, 260, 452)
 # ── motor driver ─────────────────────────────────────────────────────
 part("driver")
 block(1090, 330, 220, 285, "DRV8871", "Adafruit, 3.6 A")
-pin(1140, 330, "POWER +", "b")
+pin(1140, 330, "", "b")
+text(1154, 318, "POWER +", "TEXT", 12.5, "start")   # beside the 12 V riser
 pin(1090, 390, "IN1", "l")
 pin(1090, 450, "IN2", "l")
 pin(1240, 615, "GND (POWER −)", "t")
@@ -200,8 +230,9 @@ hot(1360, 345, 140, 202)
 part("divider")
 resistor(700, 225, "220 k", "VBAT")
 resistor(700, 345, "33 k", "VBAT")
-capacitor(645, 345, "100 nF", "VBAT")
-hot(616, 188, 130, 244)
+capacitor(645, 345, "100 nF", "marked 104", "VBAT")
+text(722, 279, "sense node", "NOTE", 11.0, "start")
+hot(616, 196, 130, 236)
 part(None)
 
 # ═════════════════════════════════════════════════════════════════════
@@ -245,18 +276,23 @@ wire([(600, 470), (760, 470)], "SCL")
 wire([(1000, 390), (1090, 390)], "IN1")
 wire([(1000, 450), (1090, 450)], "IN2")
 
-# pull-downs, in the clear corridor between the XIAO and the driver
+# pull-downs, in the clear corridor between the XIAO and the driver.
+# Clickable as one part: they are the same job twice.
+part("pulldowns")
 wire([(1015, 390), (1015, 677)], "IN1")
-resistor(1015, 700, "10 k", "IN1", label="above")
+resistor(1015, 700, "10 k", "IN1", label=(-12, 44, "end"))
 wire([(1015, 723), (1015, GND_Y)], "IN1")
 dot(1015, 390, "IN1")
 dot(1015, GND_Y, "IN1")
 
 wire([(1050, 450), (1050, 747)], "IN2")
-resistor(1050, 770, "10 k", "IN2", label="above")
+resistor(1050, 770, "10 k", "IN2", label=(18, 4.5, "start"))
 wire([(1050, 793), (1050, GND_Y)], "IN2")
 dot(1050, 450, "IN2")
 dot(1050, GND_Y, "IN2")
+text(1068, 836, "pull-downs", "NOTE", 11.0, "start")
+hot(996, 655, 72, 190)
+part(None)
 
 # motor
 wire([(1310, 400), (1370, 400)], "MOTA")
@@ -273,6 +309,8 @@ wire([(820, 730), (820, GND_Y)], "GND")
 wire([(1240, 615), (1240, GND_Y)], "GND")
 for gx in (440, 520, 820):
     dot(gx, GND_Y, "GND")
+text(300, 866, "ground spine", "NOTE", 11.0, "middle")
+text(600, 162, "+12 V line", "NOTE", 11.0, "middle")
 
 # ═════════════════════════════════════════════════════════════════════
 # LEGEND + TITLE BLOCK
@@ -297,6 +335,14 @@ text(760, 62, "Every ground goes to the one black spine along the bottom.",
 text(760, 84, "Nothing here is mains powered.  Nothing connects to a network.",
      "NOTE", 13.0, "middle")
 
+# ── click targets for the two long wires, drawn last so they sit on top ──
+part("spine")
+hot(220, 868, 1032, 24)
+part("v12")
+hot(380, 168, 772, 24)
+hot(336, 668, 130, 24)
+part(None)
+
 
 # ═════════════════════════════════════════════════════════════════════
 # SVG
@@ -317,13 +363,13 @@ def to_svg():
              'through a divider, and drives the linear actuator through two '
              'signal wires with pull-down resistors.">' % (W, H, W, H))
     o.append('<style>'
-             'text{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace;}'
+             'text{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace;}'
              'g[data-part]{cursor:pointer}'
-             'g[data-part] .hit{fill:#C77A08;fill-opacity:0;stroke:#C77A08;'
+             'g[data-part] .hit{fill:%s;fill-opacity:0;stroke:%s;'
              'stroke-width:2.5;stroke-opacity:0;transition:.12s}'
-             'g[data-part]:hover .hit,g[data-part]:focus .hit{fill-opacity:.11;stroke-opacity:.95}'
-             '</style>')
-    o.append('<rect x="0" y="0" width="%g" height="%g" fill="#FAFAF7"/>' % (W, H))
+             'g[data-part]:hover .hit,g[data-part]:focus .hit{fill-opacity:.10;stroke-opacity:.95}'
+             '</style>' % (ACCENT, ACCENT))
+    o.append('<rect x="0" y="0" width="%g" height="%g" fill="#FFFFFF"/>' % (W, H))
 
     open_part = None
     for p in prims:
@@ -333,7 +379,7 @@ def to_svg():
                 o.append('</g>')
             if pt is not None:
                 o.append('<g data-part="%s" tabindex="0" role="button" '
-                         'aria-label="%s — how to wire it">' % (pt, pt))
+                         'aria-label="%s — what it is and how to wire it">' % (pt, pt))
             open_part = pt
 
         col = NETS[p["net"]][0]
@@ -346,6 +392,9 @@ def to_svg():
             o.append('<rect x="%g" y="%g" width="%g" height="%g" rx="%g" '
                      'fill="%s" stroke="%s" stroke-width="%g"/>'
                      % (p["x"], p["y"], p["w"], p["h"], p["r"], fill, col, p["lw"]))
+        elif k == "band":
+            o.append('<rect x="%g" y="%g" width="%g" height="%g" fill="%s"/>'
+                     % (p["x"], p["y"], p["w"], p["h"], p["colour"]))
         elif k == "line":
             o.append('<line x1="%g" y1="%g" x2="%g" y2="%g" stroke="%s" '
                      'stroke-width="%g" stroke-linecap="round"/>'
@@ -373,6 +422,7 @@ def to_svg():
 # DXF  (AutoCAD R2000 / AC1015, via ezdxf)
 # ═════════════════════════════════════════════════════════════════════
 import ezdxf
+from ezdxf import colors as dxfcolors
 from ezdxf.enums import TextEntityAlignment
 
 
@@ -395,6 +445,11 @@ ALIGN = {
 }
 
 
+def hex_to_int(h):
+    h = h.lstrip("#")
+    return dxfcolors.rgb2int((int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)))
+
+
 def write_dxf(path):
     doc = ezdxf.new("R2000", setup=True)
     doc.header["$INSUNITS"] = 4          # millimetres
@@ -402,6 +457,7 @@ def write_dxf(path):
 
     for net, (_col, aci, _lbl) in NETS.items():
         doc.layers.add(name=layer_of(net), color=aci)
+    doc.layers.add(name="BANDS", color=7)
 
     for p in prims:
         att = {"layer": layer_of(p["net"])}
@@ -414,6 +470,13 @@ def write_dxf(path):
                 [(dx(x), dy(y)), (dx(x + w), dy(y)),
                  (dx(x + w), dy(y + h)), (dx(x), dy(y + h))],
                 close=True, dxfattribs=att)
+        elif k == "band":
+            x, y, w, h = p["x"], p["y"], p["w"], p["h"]
+            pts = [(dx(x), dy(y)), (dx(x + w), dy(y)),
+                   (dx(x + w), dy(y + h)), (dx(x), dy(y + h))]
+            hatch = msp.add_hatch(dxfattribs={"layer": "BANDS",
+                                              "true_color": hex_to_int(p["colour"])})
+            hatch.paths.add_polyline_path(pts, is_closed=True)
         elif k == "line":
             msp.add_line((dx(p["x1"]), dy(p["y1"])),
                          (dx(p["x2"]), dy(p["y2"])), dxfattribs=att)

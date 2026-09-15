@@ -1,10 +1,10 @@
 """
-Fold site/index.html into ONE self-contained .html file.
+Fold docs/index.html into ONE self-contained .html file.
 
 Images become data: URIs, the wiring SVG is inlined (so the clickable parts work
-without fetch, which file:// forbids), and the DXF/SVG downloads become data
-URIs too. Result opens off a USB stick, an email attachment, or a locked-down
-work laptop with no network at all.
+without fetch, which file:// forbids), the DXF/SVG downloads become data URIs,
+and the Tailwind script is fetched once and pasted in. Result opens off a USB
+stick, an email attachment, or a locked-down work laptop with no network at all.
 
     python bundle.py
 """
@@ -12,12 +12,16 @@ work laptop with no network at all.
 import base64
 import os
 import sys
+import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.join(HERE, "docs")
 OUT = os.path.join(SITE, "nest-box-bench-sheet.html")
 
 MAX_W = 1400          # downscale anything wider, to keep the file sane
+
+TAILWIND_URL = "https://cdn.tailwindcss.com/3.4.17"
+TAILWIND_TAG = '<script src="%s"></script>' % TAILWIND_URL
 
 
 def read(path, mode="r"):
@@ -92,12 +96,17 @@ for name in ("xiao-pinmap.png", "drv8871.jpg", "pololu.jpg", "ds3231m.jpg"):
     print("      inlined  %6.0f kB -> %6.0f kB base64" % (len(data) / 1024, len(uri) / 1024))
 
 # ── the wiring drawing, inlined so the click targets survive file:// ──
+inline_svg = svg.replace(
+    '<?xml version="1.0" encoding="UTF-8"?>\n', "", 1
+).replace(
+    "<svg ", '<svg style="display:block;min-width:960px;width:100%;height:auto" ', 1
+)
 swap(
-    '<div class="diagram" id="diagram">\n'
+    '<div class="card overflow-x-auto" id="diagram">\n'
     '    <img src="nestbox-wiring.svg" alt="Wiring diagram" '
     'style="display:block;min-width:960px;width:100%">\n'
     '  </div>',
-    '<div class="diagram" id="diagram">\n' + svg + '\n  </div>',
+    '<div class="card overflow-x-auto" id="diagram">\n' + inline_svg + '\n  </div>',
     "wiring svg",
 )
 
@@ -110,8 +119,9 @@ swap('href="nestbox-wiring.svg"',
      "svg download")
 
 # the "download me" link makes no sense inside the downloaded copy
-swap('\n    <a href="nest-box-bench-sheet.html" download id="dl-offline">'
-     'this whole page as one offline file</a>',
+swap('\n    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold '
+     'text-ink hover:border-accent" href="nest-box-bench-sheet.html" download '
+     'id="dl-offline">Download this whole page as one offline file</a>',
      "", "self-link removed", required=False)
 
 # ── replace the fetch with direct wiring of the inlined svg ──────────
@@ -133,7 +143,20 @@ html = html[:i] + (
 swaps += 1
 print("  %-28s 1 occurrence(s)" % "fetch -> direct")
 
-# a standalone file needs no robots hint, and the title should say what it is
+# ── Tailwind, pasted in so the offline copy is styled with no network ──
+if TAILWIND_TAG not in html:
+    sys.exit("MISSING TOKEN: tailwind script tag")
+try:
+    req = urllib.request.Request(TAILWIND_URL, headers={"User-Agent": "Mozilla/5.0 nestbox-bundle"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        tw = r.read().decode("utf-8")
+    tw = tw.replace("</script", "<\\/script")
+    swap(TAILWIND_TAG, "<script>" + tw + "</script>", "tailwind inlined")
+    print("      %6.0f kB of script" % (len(tw) / 1024))
+except Exception as e:  # noqa: BLE001 - any network failure just leaves the CDN tag
+    print("  %-28s LEFT AS CDN LINK (%s)" % ("tailwind", e))
+
+# a standalone file needs no robots hint
 html = html.replace('<meta name="robots" content="noindex,nofollow">\n', "")
 
 with open(OUT, "w", encoding="utf-8", newline="\n") as f:
