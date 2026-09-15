@@ -55,7 +55,7 @@ tailwind.config = {
   .tbl th { @apply font-mono text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted text-left pb-2 pr-3 border-b border-rule whitespace-nowrap; }
   .tbl td { @apply py-2.5 pr-3 border-b border-rule align-top; }
   .tbl tr:last-child td { @apply border-b-0; }
-  .scroller { @apply overflow-x-auto; }
+  .scroller { @apply overflow-x-auto min-w-0; }
   .steps { counter-reset: s; @apply list-none p-0 m-0 flex flex-col; }
   .steps > li { counter-increment: s; @apply relative pl-14 pb-6 ml-[18px] border-l border-rule; }
   .steps > li:last-child { @apply border-l-transparent pb-0; }
@@ -65,12 +65,34 @@ tailwind.config = {
   .part-card { @apply card p-5 flex flex-col gap-3 text-left w-full transition-shadow hover:shadow-md hover:border-accent/60 cursor-pointer; }
   .navlink { @apply text-[13px] font-semibold text-muted hover:text-ink whitespace-nowrap px-2.5 py-1.5 rounded-md hover:bg-white; }
   dialog { @apply p-0 m-auto w-[min(700px,94vw)] max-h-[88vh] overflow-auto rounded-2xl border border-rule bg-white text-ink shadow-2xl; }
+  dialog.wide { @apply w-[min(1000px,96vw)]; }
   dialog::backdrop { background: rgba(22, 25, 29, .55); }
   .m-top { @apply sticky top-0 bg-white border-b border-rule px-6 py-4 flex justify-between items-start gap-4 z-10; }
   .m-body { @apply px-6 pt-5 pb-7 flex flex-col gap-5; }
   .m-close { @apply bg-ground border border-rule rounded-lg px-3 py-1.5 font-mono text-[12px] font-semibold cursor-pointer hover:bg-rule shrink-0; }
   .swatch { @apply inline-block w-4 h-4 rounded-sm border border-black/10 align-middle mr-2; }
   summary::-webkit-details-marker { display: none; }
+  /* A pin name in the text. Hover or tap it and the pin lights up on the drawing. */
+  .pinref { font: inherit; @apply inline font-mono font-semibold text-accentdeep bg-accentsoft/80 rounded px-1 py-0 cursor-pointer whitespace-nowrap border-b-2 border-accent/40 transition-colors hover:border-accent; }
+  .pinref.active { @apply bg-accent text-white border-accent; }
+  .pinref.no { @apply text-danger bg-dangersoft border-danger/40; }
+  .pinref.no.active { @apply bg-danger text-white; }
+  /* The pins on a board drawing. */
+  g.pinmark { cursor: pointer; }
+  g.pinmark rect { fill: #fff; stroke: #3A4149; stroke-width: 1.5; }
+  g.pinmark text { fill: #16191D; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px; }
+  g.pinmark.dim text { fill: #9AA0A6; }
+  g.pinmark.no rect { fill: #FDECEA; stroke: #B42318; }
+  g.pinmark.no text { fill: #B42318; }
+  g.pinmark circle { fill: #0F766E; opacity: 0; transition: opacity .15s; }
+  g.pinmark.hot circle { opacity: .28; animation: pinpulse 1.2s ease-in-out infinite; }
+  g.pinmark.hot rect { fill: #0F766E; stroke: #0F766E; }
+  g.pinmark.hot text { fill: #0F766E; font-weight: 700; font-size: 12px; }
+  g.pinmark.no.hot circle { fill: #B42318; }
+  g.pinmark.no.hot rect { fill: #B42318; stroke: #B42318; }
+  g.pinmark.no.hot text { fill: #B42318; }
+  @keyframes pinpulse { 0%, 100% { opacity: .18; } 50% { opacity: .38; } }
+  @media (prefers-reduced-motion: reduce) { g.pinmark.hot circle { animation: none; } }
   .navstrip { scrollbar-width: none; }
   .navstrip::-webkit-scrollbar { display: none; }
 }
@@ -176,11 +198,12 @@ tailwind.config = {
   <p class="lede">The same content as the diagram pop-ups, laid out to read straight through.
   <span class="pin">Green text</span> marks a pin you use. <span class="no">Red text</span> marks a pin that must stay empty.</p>
 
-  <div class="card overflow-hidden">
+  <div class="card overflow-hidden" data-board="xiao" data-pinscope>
     <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/xiao-pinmap.png" alt="Official Seeed pin map for the XIAO ESP32-C3"></div>
     <div class="p-5 flex flex-col gap-4">
       <h3 class="text-[1.15rem] font-bold">Seeed XIAO ESP32-C3, the brain</h3>
       <p class="text-muted text-[15px]">It measures 21 × 17.8 mm. The USB-C socket sits at the top. The pin names are printed on the underside.</p>
+      <div class="grid gap-5 md:grid-cols-[250px_1fr] items-start"><div class="board-fig card p-3 bg-ground md:sticky md:top-16"></div>
       <div class="scroller"><table class="tbl">
         <thead><tr><th>Pin</th><th><button type="button" class="term" data-t="gpio">GPIO</button></th><th>Goes to</th></tr></thead>
         <tbody>
@@ -199,7 +222,7 @@ tailwind.config = {
           <tr><td class="no">D8</td><td class="mono">GPIO8</td><td class="no">LEAVE EMPTY. It is a strapping pin.</td></tr>
           <tr><td class="text-muted">D7</td><td class="mono text-muted">GPIO20</td><td class="text-muted">spare</td></tr>
         </tbody>
-      </table></div>
+      </table></div></div>
       <div class="warn"><p class="kicker text-danger">The three red pins</p>
       <p class="max-w-[60ch]">The chip reads D0, D8 and D9 at the instant it powers up to decide how to boot. A resistor to ground on any of them stops the board from starting.
       That is why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1.</p></div>
@@ -207,12 +230,13 @@ tailwind.config = {
     <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/" target="_blank" rel="noopener">Seeed Studio wiki</a></p>
   </div>
 
-  <div class="card overflow-hidden">
+  <div class="card overflow-hidden" data-board="driver" data-pinscope>
     <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/drv8871.jpg" alt="Adafruit DRV8871 showing MOTOR and POWER screw terminals and the IN2 IN1 VM GND header"></div>
     <div class="p-5 flex flex-col gap-4">
       <h3 class="text-[1.15rem] font-bold">Adafruit DRV8871, the motor driver</h3>
       <p class="text-muted text-[15px]">Read the <button type="button" class="term" data-t="silkscreen">printed labels</button> in the photo. The <span class="mono">MOTOR</span> block has screws <span class="mono">2</span> and <span class="mono">1</span>.
       The <span class="mono">POWER</span> block has <span class="mono">+</span> and <span class="mono">−</span>. Four <button type="button" class="term" data-t="header">header</button> holes run along the bottom edge.</p>
+      <div class="grid gap-5 md:grid-cols-[250px_1fr] items-start"><div class="board-fig card p-3 bg-ground md:sticky md:top-16"></div>
       <div class="scroller"><table class="tbl">
         <thead><tr><th>Terminal or pin</th><th>Goes to</th><th>Solder?</th></tr></thead>
         <tbody>
@@ -225,18 +249,19 @@ tailwind.config = {
           <tr><td class="text-muted">VM</td><td class="text-muted">Skip it. The POWER terminal already feeds it.</td><td class="text-muted">No</td></tr>
           <tr><td class="pin">GND</td><td>ground spine, plus one leg of each 10 kΩ <button type="button" class="term" data-t="pulldown">pull-down</button></td><td>Yes</td></tr>
         </tbody>
-      </table></div>
+      </table></div></div>
       <div class="note"><p class="kicker text-accentdeep">Good news</p>
       <p class="max-w-[60ch]">The green screw terminals arrive already soldered on. The two connections that carry the most current therefore need no soldering iron at all.</p></div>
     </div>
     <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts" target="_blank" rel="noopener">Adafruit Learning System</a></p>
   </div>
 
-  <div class="card overflow-hidden">
+  <div class="card overflow-hidden" data-board="buck" data-pinscope>
     <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/pololu.jpg" alt="Underside of the Pololu D36V6F5 showing pads VOUT GND VIN SHDN beside a coin"></div>
     <div class="p-5 flex flex-col gap-4">
       <h3 class="text-[1.15rem] font-bold">Pololu D36V6F5, the 5 V buck</h3>
       <p class="text-muted text-[15px]">It measures 10 × 13 mm. The coin in the photo is a US quarter. The names are printed on the <strong>underside</strong>, which is the face shown here.</p>
+      <div class="grid gap-5 md:grid-cols-[250px_1fr] items-start"><div class="board-fig card p-3 bg-ground md:sticky md:top-16"></div>
       <div class="scroller"><table class="tbl">
         <thead><tr><th>Pad</th><th>Goes to</th></tr></thead>
         <tbody>
@@ -245,7 +270,7 @@ tailwind.config = {
           <tr><td class="pin">VIN</td><td>the +12 V line, from the fuse</td></tr>
           <tr><td class="no">SHDN</td><td class="no">Leave it empty.</td></tr>
         </tbody>
-      </table></div>
+      </table></div></div>
       <div class="warn"><p class="kicker text-danger">Read this order twice</p>
       <p class="max-w-[60ch]">Left to right the pads read <span class="mono">VOUT · GND · VIN · SHDN</span>. <button type="button" class="term" data-t="vinvout">VIN and VOUT</button> sit two pads apart with ground between them.
       Swap them and 12 V goes straight into the XIAO. Measure VOUT with the meter before you connect the XIAO.</p></div>
@@ -253,11 +278,12 @@ tailwind.config = {
     <p class="font-mono text-[11.5px] text-muted px-5 py-2.5 border-t border-rule">Photo: <a href="https://www.pololu.com/product/3792" target="_blank" rel="noopener">Pololu</a></p>
   </div>
 
-  <div class="card overflow-hidden">
+  <div class="card overflow-hidden" data-board="clock" data-pinscope>
     <div class="bg-white border-b border-rule"><img class="block w-full h-auto" src="img/ds3231m.jpg" alt="DFRobot Fermion DS3231M MEMS RTC breakout board"></div>
     <div class="p-5 flex flex-col gap-4">
       <h3 class="text-[1.15rem] font-bold">DFRobot DS3231M, the clock</h3>
       <p class="text-muted text-[15px]">It measures 22.5 × 21 mm. A CR1220 coin cell sits on the reverse. Seven pads run in one row.</p>
+      <div class="grid gap-5 md:grid-cols-[250px_1fr] items-start"><div class="board-fig card p-3 bg-ground md:sticky md:top-16"></div>
       <div class="scroller"><table class="tbl">
         <thead><tr><th>Pad</th><th>Position</th><th>Goes to</th></tr></thead>
         <tbody>
@@ -269,7 +295,7 @@ tailwind.config = {
           <tr><td class="text-muted">RST</td><td class="mono text-muted">6th</td><td class="text-muted">not used</td></tr>
           <tr><td class="text-muted">32K</td><td class="mono text-muted">7th</td><td class="text-muted">not used</td></tr>
         </tbody>
-      </table></div>
+      </table></div></div>
       <div class="warn"><p class="kicker text-danger">SCL comes before SDA</p>
       <p class="max-w-[60ch]">Most clock modules print them the other way round. If you wire it from habit you will swap them, and the clock will simply not answer.</p></div>
     </div>
@@ -495,7 +521,7 @@ tailwind.config = {
 
 </div>
 
-<dialog id="part-dialog" aria-labelledby="p-title">
+<dialog id="part-dialog" aria-labelledby="p-title" data-pinscope>
   <div class="m-top">
     <div class="flex flex-col gap-0.5"><p class="kicker">Part</p><h3 id="p-title" class="text-[1.25rem] font-extrabold leading-tight"></h3></div>
     <button class="m-close" id="p-close" type="button">Close ✕</button>
@@ -550,6 +576,132 @@ function fuseSVG(cls) {
   s += '<rect x="70" y="14" width="120" height="42" rx="8" fill="#2B2F36"/>';
   s += '<rect x="112" y="4" width="36" height="30" rx="3" fill="#8C8C8C"/>';
   s += '<text x="130" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="600" fill="#fff">2A</text>';
+  return s + '</svg>';
+}
+
+/* ── board drawings with named pins ─────────────────────────────────
+   Each pin is <g class="pinmark" data-pin="NAME">. A {{NAME}} in the
+   text becomes a button that lights that pin up. */
+function svgOpen(w, h, label, cls) {
+  return '<svg viewBox="0 0 ' + w + ' ' + h + '" class="' + (cls || 'w-full') + '" role="img" aria-label="' + esc(label) + '">';
+}
+function mtext(x, y, s, size, fill, anchor, weight) {
+  return '<text x="' + x + '" y="' + y + '" text-anchor="' + (anchor || 'middle') + '" font-family="JetBrains Mono,monospace" font-size="' + (size || 10) + '" fill="' + (fill || '#9CA3AF') + '"' + (weight ? ' font-weight="' + weight + '"' : '') + '>' + esc(s) + '</text>';
+}
+function pinEl(name, x, y, side, opts) {
+  opts = opts || {};
+  const shown = opts.shown || name;
+  let cls = 'pinmark' + (opts.no ? ' no' : '') + (opts.dim ? ' dim' : '');
+  let s = '<g class="' + cls + '" data-pin="' + esc(name) + '" tabindex="0" role="button" aria-label="pin ' + esc(name) + '">';
+  s += '<circle cx="' + x + '" cy="' + y + '" r="13"/>';
+  s += '<rect x="' + (x - 5) + '" y="' + (y - 5) + '" width="10" height="10"/>';
+  if (side === 'l') s += '<text x="' + (x - 12) + '" y="' + (y + 4) + '" text-anchor="end">' + esc(shown) + '</text>';
+  else if (side === 'r') s += '<text x="' + (x + 12) + '" y="' + (y + 4) + '" text-anchor="start">' + esc(shown) + '</text>';
+  else if (side === 'b') s += '<text x="' + x + '" y="' + (y + (opts.dy || 20)) + '" text-anchor="middle">' + esc(shown) + '</text>';
+  else if (side === 't') s += '<text x="' + x + '" y="' + (y - (opts.dy || 12)) + '" text-anchor="middle">' + esc(shown) + '</text>';
+  else if (side === 'rot') s += '<text x="' + (x + 6) + '" y="' + (y - 10) + '" text-anchor="start" transform="rotate(-45 ' + (x + 6) + ' ' + (y - 10) + ')">' + esc(shown) + '</text>';
+  return s + '</g>';
+}
+function hres(cx, cy, bands) {
+  // small horizontal resistor, 44 long, with real bands
+  let s = '<rect x="' + (cx - 22) + '" y="' + (cy - 8) + '" width="44" height="16" rx="6" fill="#E8D9B5" stroke="#B9A77C" stroke-width="1.2"/>';
+  [-14, -7, 0, 11].forEach((o, i) => { s += '<rect x="' + (cx + o - 2) + '" y="' + (cy - 8) + '" width="4" height="16" fill="' + BAND[bands[i]] + '"/>'; });
+  return s;
+}
+
+function xiaoFig() {
+  const L = ['D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6'], R = ['5V', 'GND', '3V3', 'D10', 'D9', 'D8', 'D7'], NO = ['D0', 'D8', 'D9'];
+  let s = svgOpen(260, 300, 'XIAO ESP32-C3 board, seven pins down each side, USB-C at the top');
+  s += '<rect x="72" y="18" width="116" height="264" rx="8" fill="#1F2937"/>';
+  s += '<rect x="103" y="8" width="54" height="20" rx="5" fill="#9AA0A6"/>' + mtext(130, 22, 'USB-C', 9, '#111827');
+  s += '<rect x="100" y="90" width="60" height="60" rx="4" fill="#374151"/>' + mtext(130, 116, 'ESP32', 9, '#D1D5DB') + mtext(130, 128, 'C3', 9, '#D1D5DB');
+  s += mtext(130, 268, 'names are printed', 8) + mtext(130, 278, 'on the underside', 8);
+  L.forEach((n, i) => { s += pinEl(n, 72, 60 + i * 32, 'l', { no: NO.includes(n) }); });
+  R.forEach((n, i) => { s += pinEl(n, 188, 60 + i * 32, 'r', { no: NO.includes(n) }); });
+  return s + '</svg>';
+}
+function driverFig() {
+  let s = svgOpen(260, 236, 'DRV8871 driver board: MOTOR and POWER screw terminals along the top, a four-pin header along the bottom');
+  s += '<rect x="30" y="40" width="200" height="160" rx="6" fill="#1F2937"/>';
+  s += '<rect x="48" y="22" width="84" height="44" rx="3" fill="#2E7D32"/><rect x="138" y="22" width="84" height="44" rx="3" fill="#2E7D32"/>';
+  s += mtext(90, 82, 'MOTOR', 10, '#E5E7EB', 'middle', 700) + mtext(180, 82, 'POWER', 10, '#E5E7EB', 'middle', 700);
+  s += '<rect x="100" y="100" width="60" height="50" rx="4" fill="#374151"/>' + mtext(130, 129, 'DRV8871', 9, '#D1D5DB');
+  s += pinEl('MOTOR 2', 70, 44, 'b', { shown: '2', dy: 24 }) + pinEl('MOTOR 1', 110, 44, 'b', { shown: '1', dy: 24 });
+  s += pinEl('POWER +', 160, 44, 'b', { shown: '+', dy: 24 }) + pinEl('POWER −', 200, 44, 'b', { shown: '−', dy: 24 });
+  s += mtext(130, 176, 'screw terminals above, header below', 8);
+  s += pinEl('IN2', 80, 200, 'b') + pinEl('IN1', 115, 200, 'b') + pinEl('VM', 150, 200, 'b', { dim: true }) + pinEl('GND', 185, 200, 'b');
+  return s + '</svg>';
+}
+function buckFig() {
+  let s = svgOpen(260, 136, 'Pololu D36V6F5 buck: four pads in a row, VOUT GND VIN SHDN');
+  s += '<rect x="70" y="26" width="120" height="66" rx="5" fill="#1F2937"/>';
+  s += '<rect x="92" y="38" width="36" height="28" rx="3" fill="#374151"/><circle cx="160" cy="52" r="12" fill="#374151"/>';
+  s += mtext(130, 82, 'D36V6F5', 8) + mtext(130, 130, 'names are printed on this face, the underside', 8);
+  s += pinEl('VOUT', 85, 92, 'b') + pinEl('GND', 115, 92, 'b') + pinEl('VIN', 145, 92, 'b') + pinEl('SHDN', 175, 92, 'b', { no: true });
+  return s + '</svg>';
+}
+function clockFig() {
+  let s = svgOpen(260, 176, 'DFRobot DS3231M clock board: seven pads in one row, coin cell on the back');
+  s += '<rect x="30" y="20" width="200" height="104" rx="6" fill="#1F2937"/>';
+  s += '<circle cx="130" cy="62" r="30" fill="none" stroke="#9AA0A6" stroke-width="1.5" stroke-dasharray="4 3"/>' + mtext(130, 59, 'CR1220', 9, '#D1D5DB') + mtext(130, 71, 'on the back', 8);
+  s += '<rect x="46" y="40" width="34" height="24" rx="3" fill="#374151"/>' + mtext(63, 55, 'DS3231', 7, '#D1D5DB');
+  const names = ['VCC', 'GND', 'SCL', 'SDA', 'INT', 'RST', '32K'];
+  names.forEach((n, i) => { s += pinEl(n, 55 + i * 25, 124, 'b', { dy: i % 2 ? 36 : 20, dim: i > 3 }); });
+  return s + '</svg>';
+}
+function batteryFig() {
+  let s = svgOpen(260, 176, '12 volt sealed lead-acid battery with a plus post and a minus post, fuse on the red lead');
+  s += '<rect x="40" y="50" width="180" height="112" rx="6" fill="#374151"/>';
+  s += mtext(130, 108, '12 V  7.2 Ah', 12, '#E5E7EB', 'middle', 700) + mtext(130, 124, 'sealed lead-acid', 9, '#D1D5DB');
+  s += '<rect x="80" y="36" width="20" height="16" fill="#9AA0A6"/><rect x="160" y="36" width="20" height="16" fill="#9AA0A6"/>';
+  s += '<line x1="90" y1="36" x2="90" y2="14" stroke="#D0342C" stroke-width="4"/><rect x="60" y="4" width="60" height="16" rx="3" fill="#2B2F36"/>' + mtext(90, 15, '2 A fuse', 8, '#fff');
+  s += '<line x1="170" y1="36" x2="170" y2="10" stroke="#22262B" stroke-width="4"/>';
+  s += pinEl('+ post', 90, 44, 'r', { shown: '+' }) + pinEl('− post', 170, 44, 'r', { shown: '−' });
+  s += mtext(130, 172, 'posts are 6.35 mm blades: use crimped spades', 8);
+  return s + '</svg>';
+}
+function actuatorFig() {
+  let s = svgOpen(260, 120, 'Linear actuator: a motor body with a rod that extends, and two wires');
+  s += '<rect x="30" y="52" width="70" height="14" rx="3" fill="#9AA0A6"/><rect x="24" y="46" width="12" height="26" rx="2" fill="#6B7280"/>';
+  s += '<rect x="96" y="34" width="134" height="50" rx="8" fill="#4B5563"/>' + mtext(163, 54, 'motor + lead screw', 9, '#E5E7EB') + mtext(163, 68, 'limit switches inside', 8, '#D1D5DB');
+  s += '<line x1="190" y1="84" x2="190" y2="96" stroke="#6D4C41" stroke-width="4"/><line x1="214" y1="84" x2="214" y2="96" stroke="#546E7A" stroke-width="4"/>';
+  s += pinEl('Wire A', 190, 100, 'b', { shown: 'A' }) + pinEl('Wire B', 214, 100, 'b', { shown: 'B' });
+  s += mtext(60, 90, 'rod: 300 mm travel', 8);
+  return s + '</svg>';
+}
+function pulldownsFig() {
+  let s = svgOpen(260, 150, 'The driver header with a 10 kilohm resistor from IN1 to GND and another from IN2 to GND');
+  s += '<rect x="60" y="10" width="150" height="30" rx="3" fill="#1F2937"/>';
+  s += pinEl('IN2', 80, 30, 't', { dy: 8 }) + pinEl('IN1', 115, 30, 't', { dy: 8 }) + pinEl('VM', 150, 30, 't', { dy: 8, dim: true }) + pinEl('GND', 185, 30, 't', { dy: 8 });
+  s += '<path d="M115 35 V70 H123" fill="none" stroke="#1565C0" stroke-width="3"/>' + hres(145, 70, ['brown', 'black', 'orange', 'gold']) + '<path d="M167 70 H185 V35" fill="none" stroke="#1565C0" stroke-width="3"/>';
+  s += '<path d="M80 35 V115 H123" fill="none" stroke="#00838F" stroke-width="3"/>' + hres(145, 115, ['brown', 'black', 'orange', 'gold']) + '<path d="M167 115 H185 V70" fill="none" stroke="#00838F" stroke-width="3"/>';
+  s += '<circle cx="185" cy="70" r="4" fill="#22262B"/>' + mtext(145, 95, '10 kΩ', 9, '#16191D') + mtext(145, 140, '10 kΩ', 9, '#16191D');
+  return s + '</svg>';
+}
+function spineFig() {
+  let s = svgOpen(260, 130, 'The ground spine: one black wire with a short drop from every ground pin');
+  s += '<line x1="16" y1="104" x2="244" y2="104" stroke="#22262B" stroke-width="5" stroke-linecap="round"/>' + mtext(130, 124, 'ground spine, 0 V', 9, '#22262B');
+  const drops = [['Battery −', 30], ['Buck GND', 66], ['Clock GND', 102], ['XIAO GND', 138], ['Driver GND', 174], ['Driver POWER −', 210]];
+  drops.forEach(([n, x]) => {
+    s += '<line x1="' + x + '" y1="72" x2="' + x + '" y2="104" stroke="#22262B" stroke-width="3"/>' + pinEl(n, x, 68, 'rot', { shown: n });
+  });
+  return s + '</svg>';
+}
+function v12Fig() {
+  let s = svgOpen(260, 130, 'The plus 12 volt line: from the fuse to the buck, the driver and the 220 kilohm resistor');
+  s += '<line x1="16" y1="40" x2="244" y2="40" stroke="#D0342C" stroke-width="5" stroke-linecap="round"/>' + mtext(130, 26, '+12 V line', 9, '#D0342C');
+  s += '<rect x="20" y="30" width="40" height="20" rx="3" fill="#2B2F36"/>' + mtext(40, 44, '2 A', 8, '#fff');
+  s += pinEl('Fuse out', 66, 40, 'b', { shown: 'fuse', dy: 22 });
+  [['Buck VIN', 110, 'buck VIN'], ['Driver POWER +', 160, 'POWER +'], ['220 kΩ top leg', 215, '220 kΩ']].forEach(([n, x, shown]) => {
+    s += '<line x1="' + x + '" y1="40" x2="' + x + '" y2="86" stroke="#D0342C" stroke-width="3"/>' + pinEl(n, x, 90, 'b', { shown: shown });
+  });
+  return s + '</svg>';
+}
+function fuseFig() {
+  let s = svgOpen(260, 110, 'Inline blade fuse holder in the red battery lead');
+  s += '<line x1="10" y1="50" x2="70" y2="50" stroke="#D0342C" stroke-width="5" stroke-linecap="round"/><line x1="190" y1="50" x2="250" y2="50" stroke="#D0342C" stroke-width="5" stroke-linecap="round"/>';
+  s += '<rect x="70" y="30" width="120" height="40" rx="8" fill="#2B2F36"/><rect x="112" y="18" width="36" height="30" rx="3" fill="#8C8C8C"/>' + mtext(130, 38, '2A', 11, '#fff', 'middle', 700);
+  s += pinEl('In', 40, 50, 'b', { shown: 'from battery +', dy: 24 }) + pinEl('Out', 220, 50, 'b', { shown: 'to +12 V line', dy: 24 });
   return s + '</svg>';
 }
 
@@ -725,7 +877,7 @@ const TERMS = {
 
   /* ── boards ─────────────────────────────────────────────────── */
   mcu: { g: 'boards', name: 'XIAO ESP32-C3 (the brain, a microcontroller)', short: 'A tiny computer on a stamp-sized board. It runs your program and controls everything else.',
-    body: ['"ESP32-C3" is the chip. "XIAO" is Seeed\'s name for the little board it comes on, with the USB-C socket and the two rows of pins.',
+    body: ['"ESP32-C3" is the chip. "XIAO" is Seeed\'s name for the little board it comes on, with the USB-C socket and the two rows of pins. See [[chipvsboard|chip versus board]].',
       'It runs the program you upload over USB. The program asks the [[rtc|clock]] for the time, works out sunrise and sunset, watches the battery through the [[divider]], and raises [[in1in2|IN1 or IN2]] when the door should move.',
       'It needs 5 V on its 5V pin, from the [[buck]]. It makes its own 3.3 V, and shares that out through the 3V3 pin to power the clock.'] },
 
@@ -754,9 +906,21 @@ const TERMS = {
 
   rtc: { g: 'boards', name: 'Clock module (RTC, DS3231M)', short: 'A chip with its own coin cell that keeps the date and time even when the power is off.',
     body: ['RTC stands for real-time clock. The XIAO has no idea what day it is when it wakes up. It asks this module.',
-      'The CR1220 coin cell keeps the time ticking for years, including while you take the battery away to charge it.',
-      'DS3231M is the part number. "MEMS" on the DFRobot page refers to the type of timing element inside. Neither matters for wiring.',
+      'The CR1220 [[coincell|coin cell]] keeps the time ticking for years, including while you take the battery away to charge it.',
+      'DS3231M is the name of the chip on the board. DFRobot is the company that built the board around it. See [[chipvsboard|chip versus board]]. "MEMS" on the DFRobot page refers to the type of timing element inside. Neither matters for wiring.',
       'It talks to the XIAO over [[i2c|two wires, SDA and SCL]].'] },
+
+  coincell: { g: 'boards', name: 'Coin cell (CR1220)', short: 'A small, flat, round battery the size of a coin. It keeps the clock ticking when the main battery is off.',
+    body: ['A CR1220 is about 12 mm across and 2 mm thick. Watches, car key fobs and kitchen scales use the same kind. Supermarkets and chemists sell them for a few dollars. It is not supplied with the clock board.',
+      'Its only job is to keep the clock module counting while the main 12 V battery is disconnected, for example while you take it away to charge. The clock draws almost nothing from it, so it lasts for years.',
+      'It powers nothing else. The controller still runs without it, but the clock would forget the date and time every time the main battery came off.',
+      'It has a + side and a − side. The flat face with the writing is +. The holder on the back of the clock board only takes it one way, so push it in with the writing facing out.'] },
+
+  chipvsboard: { g: 'boards', name: 'Chip versus board (who makes what)', short: 'A chip is the tiny black square that does the work. A board is the chip mounted with pads you can solder. Different companies make each.',
+    body: ['A bare chip has legs too fine to solder by hand. So hobby companies mount it on a small circuit board, add the pads, the holders and any helper parts, and sell the board. The board is what you buy.',
+      'The names on this page follow that pattern. "DFRobot DS3231M" means the board made by DFRobot, built around a chip called DS3231M. DFR0641 is DFRobot\'s product number for that board.',
+      '<table class="tbl"><thead><tr><th>Chip</th><th>Chip maker</th><th>Board you buy</th></tr></thead><tbody><tr><td class="mono">ESP32-C3</td><td>Espressif</td><td>Seeed XIAO ESP32-C3</td></tr><tr><td class="mono">DS3231M</td><td>Analog Devices</td><td>DFRobot DFR0641</td></tr><tr><td class="mono">DRV8871</td><td>Texas Instruments</td><td>Adafruit DRV8871 breakout</td></tr><tr><td class="mono">a small regulator</td><td>various</td><td>Pololu D36V6F5</td></tr></tbody></table>',
+      'Many companies sell boards with the same chip. A different DS3231 board keeps time exactly the same way, but the pad order, the size and the coin cell type can differ. This sheet is written for the exact boards in the table, so if you buy a different one, check its printed labels against the tables before soldering.'] },
 
   i2c: { g: 'boards', name: 'I²C (the two clock wires, SDA and SCL)', short: 'A two-wire way for chips to talk. SDA carries the data. SCL carries the timing beat.',
     body: ['I²C is pronounced "eye squared see". It needs exactly two signal wires plus a shared ground.',
@@ -912,11 +1076,12 @@ const PARTS = {
   battery: {
     title: '12 V 7.2 Ah battery',
     sub: 'Jaycar SB2486 · a [[sla|sealed lead-acid]] battery',
-    rows: [['+ post', 'red figure-8 wire → the 2 A fuse', ''],
-           ['− post', 'black figure-8 wire → the [[spine|ground spine]]', '']],
+    fig: batteryFig,
+    rows: [['{{+ post}}', 'red figure-8 wire → the 2 A fuse', ''],
+           ['{{− post}}', 'black figure-8 wire → the [[spine|ground spine]]', '']],
     steps: [
       '[[crimp|Crimp]] a 6.35 mm female spade terminal onto each wire. The posts on this battery are 6.35 mm blades. Do not solder to them. Soldering cooks the seal.',
-      'Push red onto + and black onto −. Check it twice. This is the one mistake that costs you the whole circuit.',
+      'Push red onto the {{+ post}} and black onto the {{− post}}. Check it twice. This is the one mistake that costs you the whole circuit.',
       'Put the fuse in the RED lead only, within 100 mm of the post.',
       'The battery sits in a ventilated crate BELOW the electronics box. Lead-acid batteries vent gas while charging.'
     ],
@@ -926,8 +1091,8 @@ const PARTS = {
   fuse: {
     title: '2 A inline fuse',
     sub: 'It sits in the red lead, close to the battery',
-    svg: () => fuseSVG(),
-    rows: [['In', 'battery +', ''], ['Out', 'the [[v12line|+12 V line]]', '']],
+    fig: fuseFig,
+    rows: [['{{In}}', 'battery +', ''], ['{{Out}}', 'the [[v12line|+12 V line]]', '']],
     steps: [
       'Buy an inline blade-fuse holder and a 2 A fuse.',
       'Splice it into the RED lead only, as close to the battery post as the holder allows.',
@@ -938,73 +1103,77 @@ const PARTS = {
     title: 'Pololu D36V6F5, the 5 V buck',
     sub: '10 × 13 mm · the names are printed on the UNDERSIDE',
     photo: ['img/pololu.jpg', 'Pololu', 'https://www.pololu.com/product/3792'],
-    rows: [['VOUT', 'XIAO 5V pin', '1st pad'],
-           ['GND', 'ground spine', '2nd pad'],
-           ['VIN', '+12 V line, from the fuse', '3rd pad'],
-           ['SHDN', 'leave empty', '4th pad']],
+    fig: buckFig,
+    rows: [['{{VOUT}}', 'XIAO 5V pin', '1st pad'],
+           ['{{GND}}', 'ground spine', '2nd pad'],
+           ['{{VIN}}', '+12 V line, from the fuse', '3rd pad'],
+           ['{{SHDN}}', 'leave empty', '4th pad']],
     steps: [
-      'Solder a 3-pin [[header]] into the first three pads. The headers come loose in the bag.',
-      'Connect VIN to the 12 V line and GND to the spine. Connect nothing else yet.',
-      'Power it up and put the [[multimeter]] across VOUT and GND. It must read 5.0 V ± 0.1.',
-      'Only when that reads right do you connect the XIAO\'s 5V pin.'
+      'Solder a 3-pin [[header|header]] into the first three pads. The headers come loose in the bag.',
+      'Connect {{VIN}} to the 12 V line and {{GND}} to the spine. Connect nothing else yet.',
+      'Power it up and put the [[multimeter]] across {{VOUT}} and {{GND}}. It must read 5.0 V ± 0.1.',
+      'Only when that reads right do you connect the XIAO\'s 5V pin to {{VOUT}}.'
     ],
-    warn: ['Read the order twice', 'Left to right the pads read VOUT · GND · VIN · SHDN. [[vinvout|VIN and VOUT]] are two pads apart with ground between them. Swap them and 12 V goes straight into the XIAO.']
+    warn: ['Read the order twice', 'Left to right the pads read {{VOUT}} · {{GND}} · {{VIN}} · {{SHDN}}. [[vinvout|VIN and VOUT]] are two pads apart with ground between them. Swap them and 12 V goes straight into the XIAO.']
   },
   clock: {
     title: 'DFRobot DS3231M, the clock',
     sub: 'DFR0641 · 22.5 × 21 mm · seven pads in one row',
     photo: ['img/ds3231m.jpg', 'DFRobot wiki', 'https://wiki.dfrobot.com/dfr0641/'],
-    rows: [['VCC', 'XIAO 3V3', '1st pad'],
-           ['GND', 'ground spine', '2nd pad'],
-           ['SCL', 'XIAO D5', '3rd pad'],
-           ['SDA', 'XIAO D4', '4th pad'],
-           ['INT · RST · 32K', 'not used', '5th to 7th']],
+    fig: clockFig,
+    rows: [['{{VCC}}', 'XIAO 3V3', '1st pad'],
+           ['{{GND}}', 'ground spine', '2nd pad'],
+           ['{{SCL}}', 'XIAO D5', '3rd pad'],
+           ['{{SDA}}', 'XIAO D4', '4th pad'],
+           ['{{INT}} · {{RST}} · {{32K}}', 'not used', '5th to 7th']],
     steps: [
-      'The four pads you need are the first four, so one 4-pin [[header]] strip covers them.',
-      'Fit a CR1220 coin cell. It is NOT supplied. Any supermarket sells them for about $5.',
+      'The four pads you need are the first four, {{VCC}}, {{GND}}, {{SCL}} and {{SDA}}, so one 4-pin [[header|header]] strip covers them.',
+      'Fit a CR1220 [[coincell|coin cell]]. It is NOT supplied. Any supermarket sells them for about $5.',
       'Without that cell the [[rtc|clock]] forgets the time every time you take the battery away to charge it.',
       'Test it before adding anything else. Print [[rtcnow|rtc.now()]] to the [[serial|Serial monitor]] and watch the seconds count up.'
     ],
-    warn: ['SCL comes BEFORE SDA', 'Most clock modules print them the other way round. Wire it from habit and you will swap them, and the clock simply will not answer.']
+    warn: ['SCL comes BEFORE SDA', 'On this board {{SCL}} is the third pad and {{SDA}} is the fourth. Most clock modules print them the other way round. Wire it from habit and you will swap them, and the clock simply will not answer.']
   },
   xiao: {
     title: 'Seeed XIAO ESP32-C3, the brain',
     sub: '21 × 17.8 mm · USB-C at the top · the names are printed underneath',
     photo: ['img/xiao-pinmap.png', 'Seeed Studio wiki', 'https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/'],
-    rows: [['D1 · GPIO3', 'driver IN1', 'left side'],
-           ['D2 · GPIO4', 'the [[sensenode|sense node]] of the battery divider', 'left side'],
-           ['D3 · GPIO5', 'driver IN2', 'left side'],
-           ['D4 · GPIO6', 'clock SDA', 'left side'],
-           ['D5 · GPIO7', 'clock SCL', 'left side'],
-           ['5V', 'buck VOUT', 'right side'],
-           ['GND', 'ground spine', 'right side'],
-           ['3V3', 'clock VCC', 'right side'],
-           ['D0 · D8 · D9', 'LEAVE EMPTY', '[[strapping|boot pins]]']],
+    fig: xiaoFig,
+    rows: [['{{D1}} · GPIO3', 'driver IN1', 'left side'],
+           ['{{D2}} · GPIO4', 'the [[sensenode|sense node]] of the battery divider', 'left side'],
+           ['{{D3}} · GPIO5', 'driver IN2', 'left side'],
+           ['{{D4}} · GPIO6', 'clock SDA', 'left side'],
+           ['{{D5}} · GPIO7', 'clock SCL', 'left side'],
+           ['{{5V}}', 'buck VOUT', 'right side'],
+           ['{{GND}}', 'ground spine', 'right side'],
+           ['{{3V3}}', 'clock VCC', 'right side'],
+           ['{{D0}} · {{D8}} · {{D9}}', 'LEAVE EMPTY', '[[strapping|boot pins]]']],
     steps: [
-      'Solder a 7-pin [[header]] strip down each side. A strip holds itself straight. Separate pins do not.',
-      'Feed it from the buck on the 5V pin, not the 3V3 pin.',
-      '3V3 is an OUTPUT here. It powers the clock module.',
+      'Solder a 7-pin [[header|header]] strip down each side. A strip holds itself straight. Separate pins do not.',
+      'Feed it from the buck on the {{5V}} pin, not the {{3V3}} pin.',
+      '{{3V3}} is an OUTPUT here. It powers the clock module.',
       'Upload [[blink|Blink]] first. If the light blinks, the power chain is sound and you can add the clock.'
     ],
-    warn: ['D0, D8 and D9 stay empty', 'The chip reads them at power-up to decide how to boot. A pull-down on any of them and the board will not start. That is exactly why IN1 and IN2 go to D1 and D3 rather than the obvious D0 and D1.']
+    warn: ['D0, D8 and D9 stay empty', 'The chip reads {{D0}}, {{D8}} and {{D9}} at power-up to decide how to boot. A pull-down on any of them and the board will not start. That is exactly why IN1 and IN2 go to {{D1}} and {{D3}} rather than the obvious D0 and D1.']
   },
   driver: {
     title: 'Adafruit DRV8871, the motor driver',
     sub: 'Screw terminals on top · a 4-hole header on the bottom',
     photo: ['img/drv8871.jpg', 'Adafruit Learning System', 'https://learn.adafruit.com/adafruit-drv8871-brushed-dc-motor-driver-breakout/pinouts'],
-    rows: [['POWER +', '+12 V line, from the fuse', 'screw, no solder'],
-           ['POWER −', 'ground spine', 'screw, no solder'],
-           ['MOTOR 1', 'actuator wire A', 'screw, no solder'],
-           ['MOTOR 2', 'actuator wire B', 'screw, no solder'],
-           ['IN1', 'XIAO D1', 'solder'],
-           ['IN2', 'XIAO D3', 'solder'],
-           ['VM', 'skip it', 'the POWER terminal already feeds it'],
-           ['GND', 'spine, plus both pull-downs', 'solder']],
+    fig: driverFig,
+    rows: [['{{POWER +}}', '+12 V line, from the fuse', 'screw, no solder'],
+           ['{{POWER −}}', 'ground spine', 'screw, no solder'],
+           ['{{MOTOR 1}}', 'actuator wire A', 'screw, no solder'],
+           ['{{MOTOR 2}}', 'actuator wire B', 'screw, no solder'],
+           ['{{IN1}}', 'XIAO D1', 'solder'],
+           ['{{IN2}}', 'XIAO D3', 'solder'],
+           ['{{VM}}', 'skip it', 'the POWER terminal already feeds it'],
+           ['{{GND}}', 'spine, plus both pull-downs', 'solder']],
     steps: [
-      'The green [[screwterm|screw terminals]] arrive already soldered. The two connections that carry the most current need no iron at all.',
-      'Solder a 4-pin [[header]] into the bottom holes. Left to right they read IN2 · IN1 · VM · GND.',
-      'Fit a [[r10k|10 kΩ resistor]] from IN1 to GND, and another from IN2 to GND. Do not skip these. Without them the inputs [[pulldown|float]] while the XIAO boots and the motor twitches.',
-      'IN1 drives MOTOR 1 and IN2 drives MOTOR 2. If the actuator runs the wrong way, swap the two motor wires.'
+      'The green [[screwterm|screw terminals]] arrive already soldered. The two connections that carry the most current, {{POWER +}} and {{POWER −}}, need no iron at all.',
+      'Solder a 4-pin [[header|header]] into the bottom holes. Left to right they read {{IN2}} · {{IN1}} · {{VM}} · {{GND}}.',
+      'Fit a [[r10k|10 kΩ resistor]] from {{IN1}} to {{GND}}, and another from {{IN2}} to {{GND}}. Do not skip these. Without them the inputs [[pulldown|float]] while the XIAO boots and the motor twitches.',
+      '{{IN1}} drives {{MOTOR 1}} and {{IN2}} drives {{MOTOR 2}}. If the actuator runs the wrong way, swap the two motor wires.'
     ]
   },
   divider: {
@@ -1027,22 +1196,23 @@ const PARTS = {
   pulldowns: {
     title: 'The two 10 kΩ pull-downs',
     sub: 'One on IN1, one on IN2 · both to the driver\'s GND pin',
-    svg: () => resistorSVG(['brown', 'black', 'orange', 'gold'], '10 kilohm resistor, brown black orange gold'),
-    rows: [['[[r10k|10 kΩ]]', 'driver IN1 → driver GND', 'brown · black · orange · gold'],
-           ['[[r10k|10 kΩ]]', 'driver IN2 → driver GND', 'brown · black · orange · gold']],
+    fig: pulldownsFig,
+    rows: [['[[r10k|10 kΩ]]', 'driver {{IN1}} → driver {{GND}}', 'brown · black · orange · gold'],
+           ['[[r10k|10 kΩ]]', 'driver {{IN2}} → driver {{GND}}', 'brown · black · orange · gold']],
     steps: [
       'These are [[pulldown|pull-down resistors]]. They hold each driver input at 0 V unless the XIAO actively pushes it high.',
-      'Solder one leg of each resistor to the driver\'s IN pin, and the other leg to the driver\'s GND pin. On the header that is pin 2 to pin 4, and pin 1 to pin 4.',
+      'Solder one leg of each resistor to the driver\'s {{IN1}} or {{IN2}} pin, and the other leg to the driver\'s {{GND}} pin. On the header that is pin 2 to pin 4, and pin 1 to pin 4.',
       'Without them the inputs float while the XIAO boots and the motor twitches at every power-up.'
     ]
   },
   actuator: {
     title: '12 V linear actuator',
     sub: '300 mm stroke · lead screw · [[limitswitch|limit switches]] inside',
-    rows: [['Wire A', 'driver MOTOR 1', ''],
-           ['Wire B', 'driver MOTOR 2', '']],
+    fig: actuatorFig,
+    rows: [['{{Wire A}}', 'driver MOTOR 1', ''],
+           ['{{Wire B}}', 'driver MOTOR 2', '']],
     steps: [
-      'The actuator has two wires. Screw them into the driver\'s MOTOR terminal, one in each hole. It does not matter which wire goes in which hole. If the door runs the wrong way, swap the two wires.',
+      'The actuator has two wires, {{Wire A}} and {{Wire B}}. Screw them into the driver\'s MOTOR terminal, one in each hole. It does not matter which wire goes in which hole. If the door runs the wrong way, swap the two wires.',
       'Run the cable in medium-duty [[fig8|figure-8]], not hook-up wire. Measure the real distance and add a metre.',
       'It stops itself at each end on its internal limit switches, so the code just runs it for a fixed time.',
       'Drive the door panel through a CORD over a pulley. Never bolt the actuator rigidly to the panel. Gravity closes the door. The actuator only ever lifts it.',
@@ -1053,28 +1223,30 @@ const PARTS = {
   spine: {
     title: 'The ground spine',
     sub: 'One black wire that every ground pin joins',
-    rows: [['Battery −', 'the start of the spine', 'thick figure-8'],
-           ['Buck GND · XIAO GND · clock GND · driver GND', 'each drops a short black wire to it', 'hook-up'],
+    fig: spineFig,
+    rows: [['{{Battery −}}', 'the start of the spine', 'thick figure-8'],
+           ['{{Buck GND}} · {{XIAO GND}} · {{Clock GND}} · {{Driver GND}}', 'each drops a short black wire to it', 'hook-up'],
            ['33 kΩ · 100 nF · both 10 kΩ', 'their bottom legs', 'resistor legs'],
-           ['Driver POWER −', 'the far end of the spine', 'thick figure-8']],
+           ['{{Driver POWER −}}', 'the far end of the spine', 'thick figure-8']],
     steps: [
       'This is not a part you buy. It is just the name for the black wire that runs along the bottom of the board. Read [[ground|what ground means]].',
       'On a perfboard, run one bare copper wire along an edge and solder every ground wire to it.',
-      'The battery − and the driver POWER − carry the motor current, so those two connections use the thick figure-8. Everything else uses thin black hook-up wire.',
+      'The {{Battery −}} and the {{Driver POWER −}} carry the motor current, so those two connections use the thick figure-8. Everything else uses thin black hook-up wire.',
       'Every voltage you measure with the meter is measured against this wire. Black probe here, red probe wherever you are checking.'
     ]
   },
   v12: {
     title: 'The +12 V line',
     sub: 'The red wire that carries battery + everywhere after the fuse',
-    rows: [['Fuse out', 'the start of the line', 'thick figure-8'],
-           ['Buck VIN', 'first customer', 'thick figure-8'],
-           ['Driver POWER +', 'second customer', 'thick figure-8'],
-           ['220 kΩ top leg', 'third customer', 'a short tap']],
+    fig: v12Fig,
+    rows: [['{{Fuse out}}', 'the start of the line', 'thick figure-8'],
+           ['{{Buck VIN}}', 'first customer', 'thick figure-8'],
+           ['{{Driver POWER +}}', 'second customer', 'thick figure-8'],
+           ['{{220 kΩ top leg}}', 'third customer', 'a short tap']],
     steps: [
       'It carries the battery\'s full 12 V, so treat every bare bit of it with respect. Never let it touch the ground spine. That is a [[short|short circuit]].',
-      'Use thick figure-8 to the buck and to the driver. The motor current goes through the driver leg.',
-      'The tap to the 220 kΩ carries almost nothing, so any wire will do.'
+      'Use thick figure-8 to the {{Buck VIN}} and to the {{Driver POWER +}}. The motor current goes through the driver leg.',
+      'The tap to the {{220 kΩ top leg}} carries almost nothing, so any wire will do.'
     ]
   }
 };
@@ -1099,8 +1271,32 @@ function link(s, escapeIt) {
       if (shown.length > 1 && shown[1] === shown[1].toLowerCase() && shown[1] !== shown[1].toUpperCase()) shown = shown[0].toLowerCase() + shown.slice(1);
     }
     return '<button type="button" class="term" data-t="' + k + '">' + shown + '</button>';
+  }).replace(/\{\{([^}|]+)(?:\|([^}]+))?\}\}/g, function (m, p, t) {
+    // {{PIN}} or {{PIN|shown text}}: a pin name that lights up on the drawing
+    return '<button type="button" class="pinref" data-pin="' + esc(p.trim()) + '">' + (t || p.trim()) + '</button>';
   });
 }
+
+// After a drawing and its text are on the page, connect the two.
+function wirePins(scope) {
+  const marks = {};
+  scope.querySelectorAll('g.pinmark').forEach(g => { marks[g.getAttribute('data-pin')] = g; });
+  scope.querySelectorAll('.pinref').forEach(b => {
+    const m = marks[b.getAttribute('data-pin')];
+    if (!m) { const s = document.createElement('span'); s.className = 'pin'; s.innerHTML = b.innerHTML; b.replaceWith(s); return; }
+    if (m.classList.contains('no')) b.classList.add('no');
+  });
+}
+function lightPin(scope, name) {
+  scope.querySelectorAll('g.pinmark').forEach(g => g.classList.toggle('hot', g.getAttribute('data-pin') === name));
+  scope.querySelectorAll('.pinref').forEach(b => b.classList.toggle('active', b.getAttribute('data-pin') === name));
+}
+['pointerover', 'focusin', 'click'].forEach(ev => document.addEventListener(ev, e => {
+  const t = e.target.closest ? e.target.closest('.pinref, g.pinmark') : null;
+  if (!t) return;
+  const scope = t.closest('[data-pinscope]');
+  if (scope) lightPin(scope, t.getAttribute('data-pin'));
+}));
 
 function bandKeyHTML() {
   let h = '<table class="tbl"><thead><tr><th>Colour</th><th>Digit</th><th>As the third band</th></tr></thead><tbody>';
@@ -1138,14 +1334,20 @@ function openPart(key) {
   const d = PARTS[key];
   if (!d) return;
   document.getElementById('p-title').textContent = d.title;
-  let h = '';
-  if (d.sub) h += '<p class="text-muted text-[15px] -mt-2">' + link(d.sub, false) + '</p>';
-  if (d.photo) {
-    h += '<div class="card overflow-hidden"><img class="block w-full h-auto" src="' + d.photo[0] + '" alt="' + esc(d.title) + '">' +
-         '<p class="font-mono text-[11.5px] text-muted px-3 py-2 border-t border-rule">Photo: <a href="' + d.photo[2] + '" target="_blank" rel="noopener">' + esc(d.photo[1]) + '</a></p></div>';
+  // Left column: the drawing (and photo). Right column: the words.
+  let fig = '';
+  if (d.fig) {
+    fig += '<div class="card p-3 bg-ground">' + d.fig() +
+           '<p class="font-mono text-[11px] text-muted mt-2 text-center">Hover or tap a highlighted pin name in the text and it lights up here.</p></div>';
   } else if (d.svg) {
-    h += '<div class="card p-4 bg-ground">' + d.svg() + '</div>';
+    fig += '<div class="card p-3 bg-ground">' + d.svg() + '</div>';
   }
+  if (d.photo) {
+    fig += '<div class="card overflow-hidden"><img class="block w-full h-auto" src="' + d.photo[0] + '" alt="' + esc(d.title) + '">' +
+           '<p class="font-mono text-[11px] text-muted px-3 py-2 border-t border-rule">Photo: <a href="' + d.photo[2] + '" target="_blank" rel="noopener">' + esc(d.photo[1]) + '</a></p></div>';
+  }
+  let h = '';
+  if (d.sub) h += '<p class="text-muted text-[15px] -mt-1">' + link(d.sub, false) + '</p>';
   if (d.rows && d.rows.length) {
     h += '<div class="scroller"><table class="tbl"><thead><tr><th>Pin or part</th><th>Goes to</th><th>Note</th></tr></thead><tbody>';
     for (const r of d.rows) {
@@ -1167,7 +1369,16 @@ function openPart(key) {
     h += '<p class="text-[15px]"><a href="' + d.link[1] + '" target="_blank" rel="noopener">' + esc(d.link[0]) + ' →</a></p>';
   }
   const body = document.getElementById('p-body');
-  body.innerHTML = h;
+  if (fig) {
+    body.innerHTML = '<div class="grid gap-6 md:grid-cols-[280px_1fr] items-start">' +
+      '<div class="md:sticky md:top-[84px] flex flex-col gap-3">' + fig + '</div>' +
+      '<div class="flex flex-col gap-5 min-w-0">' + h + '</div></div>';
+    partDialog.classList.add('wide');
+  } else {
+    body.innerHTML = h;
+    partDialog.classList.remove('wide');
+  }
+  wirePins(body);
   body.scrollTop = 0;
   if (termDialog.open) termDialog.close();
   partDialog.showModal();
@@ -1241,6 +1452,28 @@ document.addEventListener('click', e => {
     h += '</div></div>';
   });
   document.getElementById('glossary-list').innerHTML = h;
+})();
+
+// ── the four board cards get the same drawings as the pop-ups ──
+(function () {
+  const figs = { xiao: xiaoFig, driver: driverFig, buck: buckFig, clock: clockFig };
+  document.querySelectorAll('[data-board]').forEach(card => {
+    const f = figs[card.getAttribute('data-board')];
+    const slot = card.querySelector('.board-fig');
+    if (!f || !slot) return;
+    slot.innerHTML = f() + '<p class="font-mono text-[11px] text-muted mt-2 text-center">Hover or tap a pin in the table and it lights up here.</p>';
+    card.querySelectorAll('td:first-child.pin, td:first-child.no').forEach(td => {
+      const name = td.textContent.trim();
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pinref';
+      b.setAttribute('data-pin', name);
+      b.textContent = name;
+      td.textContent = '';
+      td.appendChild(b);
+    });
+    wirePins(card);
+  });
 })();
 
 // ── the checklist remembers its ticks in this browser ──
