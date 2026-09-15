@@ -57,6 +57,8 @@ MIME = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg"}
 html = read(os.path.join(SITE, "index.html"))
 svg = read(os.path.join(SITE, "nestbox-wiring.svg"))
 dxf = read(os.path.join(SITE, "nestbox-wiring.dxf"), "rb")
+board_svg = read(os.path.join(SITE, "nestbox-board.svg"))
+board_js = read(os.path.join(SITE, "board-wires.js"))
 
 swaps = 0
 
@@ -110,6 +112,14 @@ swap(
     "wiring svg",
 )
 
+# ── the board layout drawing, and the wire list it generated ─────────
+swap('src="nestbox-board.svg"',
+     'src="data:image/svg+xml;base64,%s"' % base64.b64encode(board_svg.encode()).decode(),
+     "board svg")
+swap('<script src="board-wires.js"></script>',
+     "<script>" + board_js.replace("</script", "<\\/script") + "</script>",
+     "board wire list")
+
 # ── downloads, so they still work with no server ─────────────────────
 swap('href="nestbox-wiring.dxf"',
      'href="data:image/vnd.dxf;base64,%s"' % base64.b64encode(dxf).decode(),
@@ -117,6 +127,9 @@ swap('href="nestbox-wiring.dxf"',
 swap('href="nestbox-wiring.svg"',
      'href="data:image/svg+xml;base64,%s"' % base64.b64encode(svg.encode()).decode(),
      "svg download")
+swap('href="nestbox-board.svg"',
+     'href="data:image/svg+xml;base64,%s"' % base64.b64encode(board_svg.encode()).decode(),
+     "board svg download")
 
 # the "download me" link makes no sense inside the downloaded copy
 swap('\n    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold '

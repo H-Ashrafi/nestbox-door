@@ -68,14 +68,14 @@ tailwind.config = {
   .steps h3 { @apply text-[1.05rem] font-bold; }
   .steps p { @apply text-muted; }
   .part-card { @apply card p-5 flex flex-col gap-3 text-left w-full transition-shadow hover:shadow-md hover:border-accent/60 cursor-pointer; }
-  .navlink { @apply text-[13px] font-semibold text-muted hover:text-ink whitespace-nowrap px-2.5 py-1.5 rounded-md hover:bg-white; }
+  .navlink { @apply text-[12.5px] font-semibold text-muted hover:text-ink whitespace-nowrap px-2 py-1.5 rounded-md hover:bg-white; }
   dialog { @apply p-0 m-auto w-[min(700px,94vw)] max-h-[88vh] overflow-auto rounded-2xl border border-rule bg-white text-ink shadow-2xl; }
   dialog.wide { @apply w-[min(1000px,96vw)]; }
   dialog::backdrop { background: rgba(22, 25, 29, .55); }
   .m-top { @apply sticky top-0 bg-white border-b border-rule px-6 py-4 flex justify-between items-start gap-4 z-10; }
   .m-body { @apply px-6 pt-5 pb-7 flex flex-col gap-5; }
   .m-close { @apply bg-ground border border-rule rounded-lg px-3 py-1.5 font-mono text-[12px] font-semibold cursor-pointer hover:bg-rule shrink-0; }
-  .swatch { @apply inline-block w-4 h-4 rounded-sm border border-black/10 align-middle mr-2; }
+  .swatch { @apply inline-block w-4 h-4 rounded-sm border border-black/25 align-middle mr-2; }
   summary::-webkit-details-marker { display: none; }
   /* A pin name in the text. Hover or tap it and the pin lights up on the drawing. */
   .pinref { font: inherit; @apply inline font-mono font-semibold text-accentdeep bg-accentsoft/80 rounded px-1 py-0 cursor-pointer whitespace-nowrap border-b-2 border-accent/40 transition-colors hover:border-accent; }
@@ -120,6 +120,7 @@ tailwind.config = {
         <option value="#parts">Shopping list: the parts</option>
         <option value="#tools">Shopping list: the tools</option>
         <option value="#solder">Soldering</option>
+        <option value="#board">The board layout</option>
         <option value="#build">Build it in stages</option>
         <option value="#checklist">Tick them off</option>
         <option value="#glossary">Glossary</option>
@@ -138,6 +139,7 @@ tailwind.config = {
       <a class="navlink no-underline text-accentdeep" href="#tools">Tools</a>
       <span class="w-px h-4 bg-rule mx-1.5" aria-hidden="true"></span>
       <a class="navlink no-underline" href="#solder">Solder</a>
+      <a class="navlink no-underline" href="#board">Board layout</a>
       <a class="navlink no-underline" href="#build">Build</a>
       <a class="navlink no-underline" href="#checklist">Checklist</a>
       <a class="navlink no-underline" href="#glossary">Glossary</a>
@@ -162,7 +164,7 @@ tailwind.config = {
   <div class="flex flex-wrap gap-x-8 gap-y-3">
     <div><p class="kicker">Joints to solder</p><p class="mono text-[15px]">about 30</p></div>
     <div><p class="kicker">Bench time</p><p class="mono text-[15px]">one evening</p></div>
-    <div><p class="kicker">Parts</p><p class="mono text-[15px]">$360 to $472</p></div>
+    <div><p class="kicker">Parts</p><p class="mono text-[15px]">$372 to $483</p></div>
     <div><p class="kicker">Tools, if you own none</p><p class="mono text-[15px]">about $166</p></div>
   </div>
   <div class="flex flex-wrap gap-3">
@@ -471,6 +473,64 @@ tailwind.config = {
   </ol></div>
 </section>
 
+<!-- ───────────── BOARD LAYOUT ───────────── -->
+<section class="section" id="board">
+  <div><p class="kicker">Where everything sits</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">The board layout</h2></div>
+  <p class="lede">The wiring diagram tells you what connects to what. This tells you where to physically put it.
+  The board is a 70 × 90 mm <button type="button" class="term" data-t="perfboard">perfboard</button>, which is 35 holes across and 27 down.
+  It must be the plain kind, where no hole connects to any other. Stripboard, which links whole rows together, would short this layout out.
+  Holes are named like a map: column letter, then row number. <span class="mono">M10</span> is column M, row 10.</p>
+
+  <div class="note">
+    <p class="kicker text-accentdeep">Solder the two rails first, before any module goes on</p>
+    <p class="max-w-[62ch]">The <button type="button" class="term" data-t="v12line">+12 V rail</button> runs along row 3 and the
+    <button type="button" class="term" data-t="spine">ground spine</button> runs along row 26. Both are single bare wires threaded along the row and soldered at every hole they pass.
+    Two modules sit over the top of them, so once those modules are on you cannot reach those holes again.</p>
+  </div>
+
+  <div class="card overflow-x-auto p-2" id="board-figure">
+    <img src="nestbox-board.svg" alt="Perfboard layout, top view and underside view" style="display:block;min-width:820px;width:100%;height:auto">
+  </div>
+
+  <div class="grid gap-3 sm:grid-cols-3 text-[15px]">
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">The top panel</p><p>Where each part sits. The yellow squares are the holes its pins go through.</p></div>
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">The bottom panel</p><p>The same board flipped over left to right, which is what you see when you turn it to solder. Every coloured line is one wire.</p></div>
+    <div class="card p-4 flex flex-col gap-1"><p class="kicker">The colours</p><p>The same as the wiring diagram, so a violet line here is the violet line there.</p></div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <h3 class="text-[1.15rem] font-bold">Do it in this order</h3>
+    <ol class="steps">
+      <li><h3>Both rails</h3><p>Bare wire along row 3 for +12 V, and along row 26 for ground. Solder every hole the wire passes. Nothing else is on the board yet, so this is easy now and impossible later.</p></li>
+      <li><h3>The five loose components</h3><p>The two divider resistors, the capacitor and the two pull-downs. They lie flat against the board. Bend the legs over on the underside to hold them while you solder.</p></li>
+      <li><h3>Headers for the four modules</h3><p>Do not push the modules on yet. Solder the header strips alone, then check with the meter on <button type="button" class="term" data-t="continuity">continuity</button> that no pin touches its neighbour.</p></li>
+      <li><h3>Every wire on the underside</h3><p>Work down the list below. Tick each one off as you go. Twenty-one wires.</p></li>
+      <li><h3>Only now push the modules in</h3><p>Then follow <a href="#build">build it in stages</a>, which powers them up one at a time.</p></li>
+    </ol>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <h3 class="text-[1.15rem] font-bold">The twenty-one wires</h3>
+    <p class="lede">Every one of these is a short length of thin hook-up wire soldered between two holes on the underside. The colour column is the colour to use, so the finished board reads like the diagram.</p>
+    <div class="scroller card"><table class="tbl" id="wirelist">
+      <thead><tr><th class="pl-4"></th><th>From</th><th>To</th><th>Colour</th><th class="pr-4">What it is</th></tr></thead>
+      <tbody id="wirelist-body"></tbody>
+    </table></div>
+    <p class="text-muted text-[14px]"><button type="button" class="term" id="clear-wires">Clear all ticks</button></p>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <a class="no-underline card px-4 py-2.5 font-mono text-[12px] font-semibold text-ink hover:border-accent" href="nestbox-board.svg" download>Download the board layout, to print at full size</a>
+  </div>
+
+  <div class="warn">
+    <p class="kicker text-danger">Four things leave the board</p>
+    <p class="max-w-[62ch]">The battery pair lands on the two rails at the left edge. The driver's POWER pair comes off the two rails at the right edge.
+    Those four use the thick <button type="button" class="term" data-t="fig8">figure-8</button>, not hook-up wire, because they carry the motor current.
+    The two motor wires go straight from the driver's own screw terminals out to the actuator and never touch the perfboard.</p>
+  </div>
+</section>
+
 <!-- ───────────── BUILD ORDER ───────────── -->
 <section class="section" id="build">
   <div><p class="kicker">Order of work</p><h2 class="text-[1.9rem] font-extrabold tracking-tight">Build it in stages</h2></div>
@@ -557,6 +617,7 @@ tailwind.config = {
   <div class="m-body" id="t-body"></div>
 </dialog>
 
+<script src="board-wires.js"></script>
 <script>
 /* ────────────────────────────────────────────────────────────────────
    Drawings of the loose parts. The band colours are the real colour
@@ -1555,11 +1616,11 @@ const PARTS_LIST = [
         buy: { name: 'Male pin header, 2.54 mm, 1 × 40', where: 'Core Electronics', code: 'CE07828', price: '$0.45 each', url: 'https://core-electronics.com.au/male-pin-header-2-54mm-1x40.html' },
         alt: { name: '28-pin header strip', where: 'Jaycar', price: '≈$1.50', url: 'https://www.jaycar.com.au/28-pin-header-terminal-strip/p/HM3211' },
         why: 'The [[header|header pins]] you solder into all four boards. One strip of 40 covers the 25 pins this build uses. Buy two so a bent pin costs you nothing.' },
-      { qty: '1', low: 8.25, high: 8.25,
-        buy: { name: 'Ultra mini experimenters board, 2 pack', where: 'Jaycar', code: 'HP9556', price: '$8.25', url: 'https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556' },
-        alt: { name: 'Elegoo 32 pieces, 5 sizes', where: 'Amazon AU', price: '$19.99', url: 'https://www.amazon.com.au/dp/B0772FK81G' },
-        why: 'The [[perfboard]] everything mounts on. The Jaycar pack gives you one board and a spare, which is exactly right. Practise your soldering on the spare.' },
+      { qty: '1 pack', low: 19.99, high: 19.99,
+        buy: { name: 'Elegoo double-sided PCB prototype kit, 32 pieces, 5 sizes', where: 'Amazon AU', code: 'includes the 7 × 9 cm board', price: '$19.99', url: 'https://www.amazon.com.au/dp/B0772FK81G' },
+        why: 'The [[perfboard]] everything mounts on. The <a href="#board">board layout</a> is drawn for the 7 × 9 cm board in this pack. You get spares to practise your soldering on, and the plated holes are kinder to solder than cheap single-sided board.' },
     ],
+    note: ['Do not buy the tiny Jaycar board for this', 'The HP9556 "ultra mini experimenters board" is 65 × 45 mm for a snap-apart pair, so about half that each, which is far too small. It also has bus strips linking every second hole, which would short this layout together.'],
   },
   {
     kicker: 'Group 5 of 5',
@@ -1651,6 +1712,35 @@ function partsTable(group) {
       td.appendChild(b);
     });
     wirePins(card);
+  });
+})();
+
+// ── the board wire list, generated by make_board.py, ticked off here ──
+(function () {
+  const body = document.getElementById('wirelist-body');
+  if (!body || typeof BOARD_WIRES === 'undefined') return;
+  const SWATCH = { red: '#D0342C', black: '#22262B', orange: '#E07B00', pink: '#B0157A',
+                   yellow: '#B08900', green: '#2E7D32', blue: '#1565C0', white: '#FFFFFF',
+                   violet: '#7B3FA0', brown: '#6D4C41', grey: '#546E7A' };
+  body.innerHTML = BOARD_WIRES.map(w =>
+    '<tr><td class="pl-4"><input type="checkbox"></td>' +
+    '<td class="mono font-semibold">' + esc(w[1]) + '</td>' +
+    '<td class="mono font-semibold">' + esc(w[2]) + '</td>' +
+    '<td class="whitespace-nowrap"><span class="swatch" style="background:' + (SWATCH[w[3]] || '#999') + '"></span>' + esc(w[3]) + '</td>' +
+    '<td class="pr-4 text-[14px]">' + esc(w[4]) + '</td></tr>').join('');
+
+  const boxes = [...body.querySelectorAll('input')];
+  const KEY = 'nestbox-wires';
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+    boxes.forEach((b, i) => { b.checked = !!saved[i]; });
+  } catch (e) { /* storage unavailable, ticks just do not persist */ }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.map(b => b.checked))); } catch (e) { /* ignore */ } };
+  boxes.forEach(b => b.addEventListener('change', save));
+  document.getElementById('clear-wires').addEventListener('click', e => {
+    e.stopPropagation();
+    boxes.forEach(b => { b.checked = false; });
+    save();
   });
 })();
 

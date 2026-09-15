@@ -17,13 +17,16 @@ actuator that shuts every box at once.
 | `docs/nestbox-wiring.svg` | The wiring diagram. Clickable parts are `<g data-part="...">`. |
 | `docs/nestbox-wiring.dxf` | Same drawing, AutoCAD R2000, 288 × 188 mm (A4 landscape). |
 | `docs/nest-box-bench-sheet.html` | The whole page folded into one file — images, diagram and DXF inlined. Opens off a USB stick with no network. |
-| `make_wiring.py` | Generates the SVG and the DXF from one geometry definition, so the drawing and the CAD file can't drift apart. |
+| `docs/nestbox-board.svg` | The perfboard layout: where every part sits on top, and every wire on the underside. |
+| `make_wiring.py` | Generates the wiring SVG and the DXF from one geometry definition, so the drawing and the CAD file can't drift apart. |
+| `make_board.py` | Generates the board layout SVG and `docs/board-wires.js`, the wire list the page renders. It validates the layout first and refuses to write anything if two parts want the same hole, if two modules overlap, if a wire ends in mid-air, or if a connection from the checklist is missing. |
 | `bundle.py` | Folds `docs/index.html` into the single offline file. |
 
 ## Rebuilding
 
 ```
 python make_wiring.py     # -> docs/nestbox-wiring.svg + .dxf
+python make_board.py      # -> docs/nestbox-board.svg + docs/board-wires.js
 python bundle.py          # -> docs/nest-box-bench-sheet.html
 ```
 
@@ -33,7 +36,7 @@ file is styled with no network; run it with internet access.
 
 ## Bill of materials
 
-Australian sourcing, every link checked 15 September 2026. **$360–$472** for the parts,
+Australian sourcing, every link checked 15 September 2026. **$372–$483** for the parts,
 plus about $166 of tools if you own none. The full list with prices, links and a line on
 why each thing is there is on the [bench sheet](https://h-ashrafi.github.io/nestbox-door/#parts).
 
@@ -63,7 +66,7 @@ why each thing is there is on the [bench sheet](https://h-ashrafi.github.io/nest
 | …or the weatherproof one | $199.69 | [Motion Dynamics, IP65](https://www.motiondynamics.com.au/linear-actuator-300mm-stroke-20mm-sec-12v-400n-clevis-end.html) — worth it if rain reaches the actuator |
 | Cord, pulley, two eye bolts, turnbuckle | ≈$20 | any hardware shop |
 
-**Loose components — $27.40**
+**Loose components — $39.14**
 
 | Part | Price | Link |
 |---|---|---|
@@ -71,7 +74,7 @@ why each thing is there is on the [bench sheet](https://h-ashrafi.github.io/nest
 | 100 nF monolithic capacitor | $0.35 | [Jaycar RC5490](https://www.jaycar.com.au/100nf-50vdc-monolithic-capacitor/p/RC5490) |
 | CR1220 coin cell (for the clock) | $4.95 | [Jaycar SB2527](https://www.jaycar.com.au/cr1220-3v-lithium-battery/p/SB2527) |
 | Male header, 2.54 mm, 1×40 — buy two | $0.45 ea | [Core Electronics CE07828](https://core-electronics.com.au/male-pin-header-2-54mm-1x40.html) |
-| Experimenters board, 2 pack | $8.25 | [Jaycar HP9556](https://www.jaycar.com.au/ultra-mini-experimenters-board/p/HP9556) |
+| Double-sided perfboard kit, 32 pcs (has the 7×9 cm board) | $19.99 | [Elegoo, Amazon AU](https://www.amazon.com.au/dp/B0772FK81G) — plain perfboard, **not** stripboard |
 
 **The box and the wire — $104.51**
 
